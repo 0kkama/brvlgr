@@ -1,5 +1,5 @@
 <?php
-    require_once('initialization.php');
+    require_once(__DIR__ . '/initialization.php');
     //    /var/lib/php/sessions
     session_start();
 
@@ -8,8 +8,8 @@
     use App\classes\publication\User;
     use App\classes\publication\Article;
 
-        //заглушка: если пользователь не найден, то создаём новый пустой объект User для избежания ошибки при вызове getLogin из null
-        //    $user = User::getCurrent($config->PATH_TO_SESSIONS) ?? new User();
+    //заглушка: если пользователь не найден, то создаём новый пустой объект User для избежания ошибки при вызове getLogin из null
+    //    $user = User::getCurrent($config->PATH_TO_SESSIONS) ?? new User();
     $user = User::getCurrent(Config::getInstance()->PATH_TO_SESSIONS) ?? new User();
     $title = 'Главная';
     $news =  Article::getLast(5);

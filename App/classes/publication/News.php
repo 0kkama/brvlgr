@@ -1,13 +1,15 @@
 <?php
 
-    namespace classes\publication;
+    namespace App\classes\publication;
 
     use App\classes\Db;
     use App\classes\Govno;
+    use App\interfaces\HasAuthor;
     use App\interfaces\HasId;
-    use App\interfaces\Readable;
+    use App\interfaces\HasTitle;
 
-    class News extends Govno implements Readable, HasId
+
+    class News extends Govno implements HasAuthor, HasId, HasTitle
     {
         protected $id, $title, $text, $author, $category, $date;
         protected const TABLE_NAME = 'news';

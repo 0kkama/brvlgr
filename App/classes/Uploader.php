@@ -52,14 +52,14 @@
         public function upload(string $userName) : void
         {
             if ( empty($this->errorStatus) ) {
-                $directoryPath = PATH_FOR_IMG;
+                $directoryPath = Config::getInstance()->PATH_FOR_IMG;
                 $fileName = $this->file['name'];
                 $currentTime =  date('H:i:s');
                 $currentDate = date('d-m-Y');
 
                 move_uploaded_file($this->file['tmp_name'], $directoryPath . $this->file['name']);
                 $msgStr =  "$currentTime - Пользователь $userName загрузил файл $fileName в $directoryPath\n";
-                file_put_contents(AUTH_LOG_PATH . "$currentDate.log", $msgStr, FILE_APPEND);
+                file_put_contents(Config::getInstance()->AUTH_LOG_PATH . "$currentDate.log", $msgStr, FILE_APPEND);
             }
         }
 
@@ -71,10 +71,3 @@
             return null;
         }
     }
-
-/*
-TODO 1. В конструктор передается имя поля формы, от которого мы ожидаем загрузку файла
-TODO 2. Метод isUploaded() проверяет - был ли загружен файл от данного имени поля
-TODO 3. Метод upload() осуществляет перенос файла (если он был загружен!) из временного места в постоянное
-TODO 4*. Попробуйте некоторые методы заканчивать конструкцией return $this; и придумайте этому применение
-*/

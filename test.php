@@ -1,23 +1,20 @@
 <?php
 
-    require_once('initialization.php');
+    require_once(__DIR__ . '/initialization.php');
 
     use App\classes\Config;
     use App\classes\publication\News;
     use App\classes\publication\User;
     use App\classes\publication\Article;
 
-//    session_start();
+    session_start();
+//
+//    $x = Article::findById(4);
+//    $x->xtor = 'fff';
+//
+//    var_dump($x);
 
-
-
-
-
-
-
-
-
-
+var_dump($value = true);
 
 
 
@@ -35,8 +32,6 @@
 //    var_dump($users);
 //
 //    var_dump(getUsersList());
-
-
 
     //    $user = getCurrentUser($config->PATH_TO_SESSIONS);
 //     $user = User::getCurrentUser($config->PATH_TO_SESSIONS) ?? new User();

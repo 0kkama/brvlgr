@@ -4,23 +4,21 @@
 
     use App\classes\Db;
     use App\classes\Govno;
+    use App\interfaces\HasAuthor;
     use App\interfaces\HasId;
     use App\interfaces\Readable;
+    use App\traits\DebugTrait;
+    use App\traits\GetSetTrait;
+    use App\traits\SetControlTrait;
 
-    class Article extends Govno implements Readable, HasId
+    class Article extends Govno /*implements Readable, HasId, HasAuthor*/
     {
         // TODO поменять имя таблицы на articles в дальнейшем
         protected const TABLE_NAME = 'news';
         protected $id = null,  $date = null;
-        protected $title = '', $text = '', $author = '', $category = '';
+        protected $title = '', $text = '', $author = '', $category = '', $author_id = '';
 
-        public function debugg() : void
-        {
-            $fields = get_object_vars($this);
-            $value = array_filter($fields, static function ($var) { return isset($var); });
-            var_dump($value);
-            var_dump($this);
-        }
+        use  SetControlTrait;
 
         public static function getLast(int $limit) : ?array
         {
@@ -28,6 +26,7 @@
             $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `date` DESC LIMIT ' . $limit;
             return $db->queryAll($sql, [], self::class);
         }
+
 
         public function setTitle(string $title) : Article
         {
@@ -53,6 +52,14 @@
             return $this;
         }
 
+        /**
+         * @param string $author_id
+         */
+        public function setAuthorId(string $author_id): void
+        {
+            $this->author_id = $author_id;
+        }
+
         public function getId() : ?string
         {
             return $this->id;
@@ -66,6 +73,14 @@
         public function getAuthor() : ?string
         {
             return $this->author;
+        }
+
+        /**
+         * @return string
+         */
+        public function getAuthorId(): string
+        {
+            return $this->author_id;
         }
 
         public function getCategory() : ?string
@@ -90,12 +105,12 @@
 
         public function __toString() : string
         {
-            // TODO: Implement __toString() method.
+            return "$this->title <br> $this->author <br> $this->date";
         }
 
         public function __invoke()
         {
-
+            // TODO: Implement __invoke() method.
         }
 
         public function modify(string $id) : ?Article

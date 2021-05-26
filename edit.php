@@ -1,5 +1,5 @@
 <?php
-    require_once('initialization.php');
+    require_once(__DIR__ . '/initialization.php');
 
     session_start();
 
@@ -25,7 +25,7 @@
             header(Config::getInstance()->PROTOCOL . ' 404 Not Found');
             exit('This article doesn\'t exist');
         }
-    }
+     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fields = extractFields(array_keys($_POST),$_POST);

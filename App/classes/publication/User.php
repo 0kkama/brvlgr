@@ -6,6 +6,9 @@
     use App\classes\Db;
     use App\interfaces\HasId;
     use App\interfaces\Shitty;
+    use App\interfaces\UserInterface;
+    use App\traits\GetSetTrait;
+    use App\traits\SetControlTrait;
 
     /**
      * Class User
@@ -16,13 +19,13 @@
      * </ul>
      * @package App\classes\publication
      */
-//    class User extends Govno implements \App\interfaces\User
-    class User extends Govno implements HasId
+    class User extends Govno implements HasId, UserInterface
     {
         protected const TABLE_NAME = 'users';
         protected $id = null, $date = null;
         protected $firstName = '', $middleName = '', $lastName = '', $login = '', $hash = '', $email = '', $rights = '';
 
+        use SetControlTrait;
         /**
          * Возвращает объект с данными пользователя по его $login в случае успеха, либо null
          * @param string $login
@@ -70,6 +73,28 @@
                 return self::findByLogin($userName);
             }
             return null;
+        }
+
+//        public function checkPassword(string $login, string $password) : bool
+//        {
+//
+//        }
+
+
+//        public function checkPassword(string $login, string $password) : bool
+//        {
+//            if (!(empty($login) || empty($password))) {
+//                $user = User::findByLogin($login);
+//                if (isset($user)) {
+//                    return password_verify($password, $user->getHash());
+//                }
+//            }
+//            return false;
+//        }
+
+        public function __toString() : string
+        {
+            return "$this->login <br> $this->email <br> $this->date";
         }
 
         //<editor-fold desc="======================= getters">

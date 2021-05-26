@@ -1,5 +1,5 @@
 <?php
-    require_once('initialization.php');
+    require_once(__DIR__ . '/initialization.php');
     session_start();
     use App\classes\View;
     use App\classes\publication\Article;

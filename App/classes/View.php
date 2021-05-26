@@ -21,7 +21,6 @@
 
         public function render(string $template) : string
         {
-//            $fullPathToTemplate = __DIR__ . "/../views/$template.view.php";
             $fullPathToTemplate = Config::getInstance()->PATH_TO_TEMPLATES . "$template.view.php";
             extract($this->data, EXTR_OVERWRITE);
             ob_start();

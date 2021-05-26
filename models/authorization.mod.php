@@ -1,6 +1,7 @@
 <?php
 
     use App\classes\publication\User;
+    use App\classes\Config;
 
 
     /**
@@ -121,7 +122,7 @@
         $currentTime =  date('H:i:s');
         $currentDate = date('d-m-Y');
         $msgStr =  "$currentTime - Пользователь $userName загрузил файл $fileName в $path\n";
-        file_put_contents(AUTH_LOG_PATH . "$currentDate.log", $msgStr, FILE_APPEND);
+        file_put_contents(Config::getInstance()->AUTH_LOG_PATH . "$currentDate.log", $msgStr, FILE_APPEND);
 //        file_put_contents('/home/proletarian/NBProj/profit/resources/logs/auth/11-01-2021.log', $msgStr, FILE_APPEND);
     }
 

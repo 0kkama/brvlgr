@@ -1,10 +1,10 @@
 <?php
     namespace classes\test;
+    use App\classes\Config;
 
     class Article
     {
         protected $id, $title, $content, $elements , $author, $date, $category;
-        private $pathToFiles = PATH_TO_ARTICLES;
 
         public function __construct($id)
         {
@@ -20,7 +20,7 @@
 
         protected function getArticle() : array
         {
-            $subject = $this->pathToFiles . $this->id . '.json';
+            $subject = Config::getInstance()->PATH_TO_ARTICLES . $this->id . '.json';
 
             if (!is_readable($subject)) {
                 trigger_error('Запрошена не существуюущая статья');
