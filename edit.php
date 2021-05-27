@@ -33,7 +33,7 @@
         $article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category']);
 
         if ($article->save() !== null) {
-            header('Location: /article.php?id=' . $article->getId());
+            header('Location: /article.php?id=' . $article->id);
         }
     }
 

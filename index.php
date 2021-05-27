@@ -17,5 +17,3 @@
 
     $content = $currentPage->assign('news', $news)->render('news');
     $currentPage->assign('title', $title)->assign('content',$content)->assign('name', $user->getLogin())->display('layout');
-
-    //var_dump($user);

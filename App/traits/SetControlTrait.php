@@ -19,15 +19,10 @@
                     $this->$name = $value;
                     return $this;
                 }
-
-//            if(isset($this->$name)) {
-//                $this->$name = $value;
-//                return $this;
-//            }
         }
 
         public function __isset($name)
         {
-            return isset($name);
+            return isset($this->$name);
         }
     }

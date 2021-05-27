@@ -3,8 +3,9 @@
     session_start();
     use App\classes\View;
     use App\classes\publication\Article;
+    use App\classes\publication\User;
 
-     $user = User::getCurrentUser($config->PATH_TO_SESSIONS) ?? new User();
+     $user = User::getCurrent($config->PATH_TO_SESSIONS) ?? new User();
 
     if (empty($user)) {
        exit('No homo!');
@@ -29,14 +30,14 @@
         $article = new Article();
         $article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($fields['author']);
         if ($article->save() !== null) {
-            header('Location: /article.php?id=' . $article->getId());
+            header('Location: /article.php?id=' . $article->id());
         }
     }
 
     $title = 'Формирование статьи';
     $currentPage = new View();
     $content = $currentPage->assign('article', $article)->render('add');
-    $currentPage->assign('title', $title)->assign('content',$content)->assign('name', $user->getLogin()->display('layout');
+    $currentPage->assign('title', $title)->assign('content',$content)->assign('name', $user->getLogin())->display('layout');
 
 //    TODO продумать возможность определения в POST происходит ли редактирование уже существующей или создание новой статьи
 //      так же подумать над возможность реализации в update() обновления только подвергшихся изменению статей

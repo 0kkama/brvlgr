@@ -7,6 +7,7 @@
     use App\interfaces\HasAuthor;
     use App\interfaces\HasId;
     use App\interfaces\Readable;
+    use App\interfaces\UserInterface;
     use App\traits\DebugTrait;
     use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
@@ -26,7 +27,6 @@
             $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `date` DESC LIMIT ' . $limit;
             return $db->queryAll($sql, [], self::class);
         }
-
 
         public function setTitle(string $title) : Article
         {
@@ -60,44 +60,6 @@
             $this->author_id = $author_id;
         }
 
-        public function getId() : ?string
-        {
-            return $this->id;
-        }
-
-        public function getDate() : ?string
-        {
-            return $this->date;
-        }
-
-        public function getAuthor() : ?string
-        {
-            return $this->author;
-        }
-
-        /**
-         * @return string
-         */
-        public function getAuthorId(): string
-        {
-            return $this->author_id;
-        }
-
-        public function getCategory() : ?string
-        {
-            return $this->category;
-        }
-
-        public function getTitle() : ?string
-        {
-            return $this->title;
-        }
-
-        public function getText() : ?string
-        {
-            return $this->text;
-        }
-
         public function getBriefContent() : ?string
         {
             return mb_substr($this->text, 0, 150) . '...';
@@ -106,6 +68,13 @@
         public function __toString() : string
         {
             return "$this->title <br> $this->author <br> $this->date";
+        }
+
+        public function __call($name, $arguments) : object
+        {
+            if ($name === 'author') {
+                return User::findById($this->author_id);
+            }
         }
 
         public function __invoke()

@@ -13,4 +13,3 @@
 </form>
 <?php endif;?>
 <p><?=$errMsg?></p>
-<!--action="/addimage.php"-->

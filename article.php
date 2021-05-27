@@ -20,6 +20,6 @@
         exit('NET TAKOY STATYI');
     }
 
-    $articlePage = new View();
-    $content = $articlePage->assign('title', $article->title)->assign('article',$article)->render('article');
-    $articlePage->assign('content', $content)->assign('name', $user->login)->display('layout');
+    $currentPage = new View();
+    $content = $currentPage->assign('title', $article->title)->assign('article', $article)->assign('author', $article->author())->render('article');
+    $currentPage->assign('content', $content)->assign('name', $user->login)->display('layout');
