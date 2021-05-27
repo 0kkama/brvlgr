@@ -15,22 +15,18 @@
     $loginErr = null;
 
     if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-//        $user->setLogin(val($_POST['login']));
-
-        $login = val($_POST['login']);
-        $password = val($_POST['password']);
-        if (/* existsUser($login) &&*/ checkPassword($login, $password)) {
-//              если пароль и логин верны, то формируем данные
-                $token = makeToken();
-                $fileName = __DIR__ . '/resources/sessions.json';
-                $data = json_encode(['user' => $login, 'token' => $token, 'date' => time()]);
+        $user->setLogin(val($_POST['login']));
+        if ($user->checkPassword(val($_POST['password']))) {
+            $token = makeToken();
+            $fileName = __DIR__ . '/resources/sessions.json';
+            $data = json_encode(['user' => $user->login, 'token' => $token, 'date' => time()]);
 //              помещаем данные в файл сессий, в куки и в массив сессий
-                setcookie('token', $token, time() + 86400, Config::getInstance()->BASE_URL);
-                $_SESSION['user'] = $login;
-                $_SESSION['token'] = $token;
+            setcookie('token', $token, time() + 86400, Config::getInstance()->BASE_URL);
+            $_SESSION['user'] = $user->login;
+            $_SESSION['token'] = $token;
 
-                file_put_contents($fileName, $data . "\n", FILE_APPEND);
-                header('Location: index.php');
+            file_put_contents($fileName, $data . "\n", FILE_APPEND);
+            header('Location: index.php');
         }
         else {
             $loginErr = true;

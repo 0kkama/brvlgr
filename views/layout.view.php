@@ -24,13 +24,12 @@
                             <li> <a href="\news.php"> Новости </a> </li>
                             <li> <a href="\gallery.php"> Котики </a> </li>
                             <li> <a href="\add.php"> Добавить </a> </li>
-<!--                            <li> <a href="\forming.php"> Добавить </a> </li>-->
 
-
-                        <?php for($i = 0 ; $i < 5 ; $i++): ?>
+                        <?php for($i = 0 ; $i < 4 ; $i++): ?>
                                 <li> Navigation </li>
                         <?php endfor; ?>
 
+                            <li> <a href="\logout.php"> Выйти </a> </li>
                             <li> <a href="\test.php"> Тест </a> </li>
                         </ul>
                     </nav>

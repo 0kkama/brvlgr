@@ -75,11 +75,14 @@
             return null;
         }
 
-//        public function checkPassword(string $login, string $password) : bool
-//        {
-//
-//        }
-
+        public function checkPassword(string $password) : ?object
+        {
+            $user = self::findByLogin($this->login);
+            if (isset($user) && password_verify($password, $user->getHash())) {
+                return $user ?? null;
+            }
+                return null;
+        }
 
 //        public function checkPassword(string $login, string $password) : bool
 //        {
