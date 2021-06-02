@@ -3,14 +3,24 @@
 
     use App\classes\Config;
 
-    class View
+    class View implements \Countable, \Iterator
     {
-        private $data = [];
+        /**
+         * @var array $data
+         * @var int $key
+         */
+        private array $data = [];
+        private int $key = 0;
 
         public function assign(string $name, $value) : object
         {
             $this->data[$name] = $value;
             return $this;
+        }
+
+        public function count() : int
+        {
+            return count($this->data);
         }
 
         public function assignArray(array $value) : object
@@ -33,8 +43,33 @@
             echo $this->render($template);
         }
 
-        public function getData()
+        public function getData() : array
         {
             return $this->data;
+        }
+
+        public function current()
+        {
+            return $this->data[$this->key];
+        }
+
+        public function next() : void
+        {
+            ++$this->key;
+        }
+
+        public function key(): int
+        {
+            return $this->key;
+        }
+
+        public function valid() : bool
+        {
+            return isset($this->data[$this->key]);
+        }
+
+        public function rewind() : void
+        {
+            $this->key = 0;
         }
     }

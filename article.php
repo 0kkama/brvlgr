@@ -10,14 +10,17 @@
     $user = User::getCurrent(Config::getInstance()->PATH_TO_SESSIONS) ?? new User();
 
     $artId = $_GET['id'] ?? null;
+
     if ($artId === null) {
-        exit('Некорректный ID');
+        header(Config::getInstance()->PROTOCOL . ' 400 Bad Request');
+        die('Некорректный ID');
     }
 
     $article = Article::findById(val($artId));
 
     if (is_null($article)) {
-        exit('NET TAKOY STATYI');
+        header(Config::getInstance()->PROTOCOL . ' 404 Not Found');
+        die('NET TAKOY STATYI');
     }
 
     $currentPage = new View();

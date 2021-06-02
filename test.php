@@ -8,16 +8,11 @@
     use App\classes\publication\Article;
 
     session_start();
+
+    $x = Article::findById(4);
 //
-//    $x = Article::findById(4);
-//    $x->xtor = 'fff';
-//
-//    var_dump($x);
-
-var_dump($value = true);
-
-
-
+//    header(Config::getInstance()->PROTOCOL . ' 404 Not Found');
+//    die();
 
 //    $fileName = $config->PATH_TO_SESSIONS;
 //    $userName = 'Dunduk';

@@ -31,6 +31,7 @@
 
                             <li> <a href="\logout.php"> Выйти </a> </li>
                             <li> <a href="\test.php"> Тест </a> </li>
+                            <li> <a href="\info.php"> Инфо </a> </li>
                         </ul>
                     </nav>
                 </aside>

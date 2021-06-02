@@ -1,13 +1,15 @@
 <?php
     use App\classes\Config;
+    use App\classes\Errors;
     /** @var App\classes\publication\Article $article  */
+    /** @var App\classes\Errors $errors  */
 ?>
 <div id="content">
-    <?php if(false /*$sendStatus*/): ?>
-        <p>Ваша статья была отправлена!</p>
-        <a href="<?=Config::getInstance()->BASE_URL?>">Вернуться на главную</a><br>
-        <a href="<?=Config::getInstance()->BASE_URL?>add">Добавить еще одну статью</a>
-    <?php else: ?>
+    <?php if($errors()): ?>
+        <div class="alert alert-warning">
+            <p> <?= $errors ?></p>
+        </div>
+    <?php endif; ?>
 
         <form method="post">
             Заголовок статьи:<br>
@@ -27,5 +29,4 @@
         </form>
         <hr>
         <a href="<?=Config::getInstance()->BASE_URL?>">Вернуться на главную</a>
-    <?php endif; ?>
 </div>

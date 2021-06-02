@@ -7,24 +7,24 @@
 //    use App\interfaces\Singleton;
     use App\interfaces\Shitty;
 
-    /**
+/**
  * Class Govno has following methods : <ul>
- * <li><b>findById</b> - return null|object</li>
- * <li><b>getAll</b> - return array contain objects of respective class</li>
- * <li><b>insert</b></li>
- * <li><b>update</b></li>
- * <li><b>delete</b></li>
- * <li><b>save</b></li>
- * <li><b>makeSQL</b></li>
- * <li><b>checkFields</b></li>
- * <li><b>getTableName</b></li></ul>
+ * - <b>findById</b> - return null|object</li>
+ * - <b>getAll</b> - return array contain objects of respective class</li>
+ * - <b>insert</b>
+ * - <b>update</b>
+ * - <b>delete</b>
+ * - <b>save</b>
+ * - <b>makeSQL</b>
+ * - <b>checkFields</b>
+ * - <b>getTableName</b>
  * @package App\classes
  */
     abstract class Govno implements Shitty
     {
 
     /**
-     *@const const TABLE_NAME dynamically changing in
+     *@const const TABLE_NAME dynamically changing in inheriting classes
      */
     protected const TABLE_NAME = 'Govno';
 
@@ -53,9 +53,9 @@
 
         /**
          * метод добавлет новую запись в БД, после чего возвращает  <b>$this</b> или <b>null</b>
-         * @return $this|null объект или null (в случае неудачи)
+         * @return $this|null|array объект или null (в случае неудачи)
          */
-        protected function insert() : ?Govno
+        protected function insert() : null|Govno|Errors
         {
             extract($this->makeSql(), EXTR_OVERWRITE);
 
@@ -77,9 +77,8 @@
 
             $errors = $this->checkFields($data);
 
-            if ($errors !== []) {
-                //            TODO throw new \Exception() ????
-                return null;
+            if ($errors()) {
+                return $errors;
             }
 
             // делаем строку подобную title, text, author, category
@@ -100,16 +99,16 @@
          * обновляет уже существующую запись, , которая ранее была получена из базы данных по id
          * @return $this|null
          */
-        protected function update() : ?Govno
+        protected function update() : null|Govno|Errors
         {
             //   TODO Как реализовать обновление только того поля, которое было изменено?
             // удаляем все пустые поля, после чего передаем массив фу makeSql
             extract($this->makeSql(), EXTR_OVERWRITE);
 
+            // проверяем заполненность всех полей и возвращаем ошибку при необходимости
             $errors = $this->checkFields($data);
-
-            if ($errors !== []) {
-                return null;
+            if ($errors()) {
+                return $errors;
             }
 
             $set = [];
@@ -151,9 +150,9 @@
         /**
          * Определяет, является ли запись новой или уже существующей.
          * Если запись новая, то вызывает метод <b>insert</b>, в противном случае вызывает метод <b>update</b>.
-         * @return $this|null
+         * @return $this|null|array
          */
-        public function save() : ?Govno
+        public function save() : null|Govno|Errors
         {
             //  необходима проверка на наличие такого id в БД
             //            if (isset($this->id) && (static::findById($this->id))) {
@@ -204,12 +203,12 @@
          * @param array $data
          * @return array
          */
-        protected function checkFields (array $data) : array
+        protected function checkFields (array $data) : Errors
         {
-            $emptyes = [];
+            $emptyes = new Errors();
             foreach ($data as $index => $datum) {
                 if (empty($datum)) {
-                    $emptyes[] = "Не указан " . $index . "\n";
+                    $emptyes->add("Отсутствует " . $index . "<br>");
                 }
             }
             return $emptyes;
@@ -223,14 +222,4 @@
         {
             return static::TABLE_NAME;
         }
-
     }
-
-    /*
-    *   ORM - принцип соответствия - класс соответствует таблице,
-    *   а конкретный объект соответствует единичной записи (строке) в таблице.
-    *   Статические методы в таком случае работуют с таблицей в целом,
-    *    а динамические с конкретной записью.
-    *    Active Record - шаблон, при котором объект обладает методами, для того,
-    *    что бы удалить, записать или изменить себя самого.
-    */

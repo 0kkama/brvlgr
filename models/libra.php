@@ -53,6 +53,11 @@
     }
 
     // извлечение данных из форм (массив target) в новый массив, с ключами из массива fields
+    /**
+     * @param array $fields
+     * @param array $target
+     * @return array
+     */
     function extractFields(array $fields, array $target) : array {
         $result = [];
         foreach ($fields as $field) {

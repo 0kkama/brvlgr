@@ -8,8 +8,8 @@
     {
         private static $instance = null;
 
-        public static function getInstance() : self
-        {
+        public static function getInstance() : static
+                {
             return self::$instance ?? (self::$instance = new self());
 //            return static::$instance ?? (static::$instance = new static());
         }
@@ -24,7 +24,7 @@
             //            запрет клонирования объекта
         }
 
-        private function __wakeup()
+        public function __wakeup()
         {
             //           запрет десериализации объекта
         }
