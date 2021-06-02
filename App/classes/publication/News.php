@@ -11,7 +11,8 @@
 
     class News extends Govno implements HasAuthor, HasId, HasTitle
     {
-        protected $id, $title, $text, $author, $category, $date;
+        protected string $title, $text, $author, $category;
+        protected $id = null, $date = null;
         protected const TABLE_NAME = 'news';
 
         public function getId() : string

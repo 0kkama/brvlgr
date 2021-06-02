@@ -67,14 +67,5 @@
         {
             return $this->constants[$param] ?? null;
         }
-
-//        public function __debugInfo() : array
-//        {
-//            return
-//            [
-//                'config' => $this->configurations,
-//                'constants' => $this->constants,
-//            ];
-//        }
     }
 

@@ -1,6 +1,6 @@
 <?php
     // base SETTINGS
-    declare(strict_types=1);
+//    declare(strict_types=1);
 
     use App\classes\Config;
 
@@ -26,7 +26,3 @@
     // include MODEL
     include_once (__DIR__ . '/models/libra.php');
     include_once (__DIR__ . '/models/authorization.mod.php');
-
-    $users = include (__DIR__ . '/resources/users.data.php');
-    define('USERS_LIST', $users);
-    unset($users);

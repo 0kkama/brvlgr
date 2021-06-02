@@ -9,13 +9,12 @@
 
     session_start();
 //
-//    $x = Article::findById(4);
+    $x = Article::findById(4);
 //    $x->xtor = 'fff';
 //
-//    var_dump($x);
-
-var_dump($value = true);
-
+    var_dump($x);
+//
+//var_dump($value = true);
 
 
 

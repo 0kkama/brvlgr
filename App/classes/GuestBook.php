@@ -4,12 +4,19 @@
     class GuestBook extends TextFile
     {
 
-        public function append( array $newRecord ) : object
+        /**
+         * @param array $newRecord
+         * @return object
+         */
+        public function append(array $newRecord ) : object
         {
             $this->fileContent[] = $newRecord;
             return $this;
         }
 
+        /**
+         * @return void
+         */
         public function save() : void
         {
             $wrapper = static function (array $chunk) : string {

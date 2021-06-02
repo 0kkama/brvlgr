@@ -17,7 +17,7 @@
         // TODO поменять имя таблицы на articles в дальнейшем
         protected const TABLE_NAME = 'news';
         protected $id = null,  $date = null;
-        protected $title = '', $text = '', $author = '', $category = '', $author_id = '';
+        protected string $title, $text, $author, $category, $author_id;
 
         use  SetControlTrait;
 
@@ -55,7 +55,7 @@
         /**
          * @param string $author_id
          */
-        public function setAuthorId(string $author_id): void
+        public function setAuthorId(string $author_id) : void
         {
             $this->author_id = $author_id;
         }

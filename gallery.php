@@ -8,7 +8,6 @@
     use App\classes\publication\User;
 
      $user = User::getCurrent(Config::getInstance()->PATH_TO_SESSIONS) ?? new User();
-//    $user = getCurrentUser($config->PATH_TO_SESSIONS);
 
 // TODO подумать, не перемудрил ли я здесь с условием
     if ( !empty($user) && ($_SERVER['REQUEST_METHOD'] = 'POST') && (isset($_FILES['newimage'])) ) {
