@@ -3,7 +3,7 @@
     namespace App\classes;
 //
 //    use classes\Db;
-//    use classes\publication\Article;
+//    use classes\models\Article;
 //    use App\interfaces\Singleton;
     use App\interfaces\Shitty;
 

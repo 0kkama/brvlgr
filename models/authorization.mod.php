@@ -1,6 +1,6 @@
 <?php
 
-    use App\classes\publication\User;
+    use App\classes\models\User;
     use App\classes\Config;
 
 

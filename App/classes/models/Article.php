@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\publication;
+    namespace App\classes\models;
 
     use App\classes\Db;
     use App\classes\Govno;
@@ -15,7 +15,7 @@
     class Article extends Govno /*implements Readable, HasId, HasAuthor*/
     {
         // TODO поменять имя таблицы на articles в дальнейшем
-        protected const TABLE_NAME = 'news';
+        protected const TABLE_NAME = 'articles';
         protected $id = null,  $date = null;
         protected string $title, $text, $author, $category, $author_id;
 

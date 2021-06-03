@@ -3,7 +3,7 @@
     session_start();
 
     use App\classes\Config;
-    use App\classes\publication\User;
+    use App\classes\models\User;
     use App\classes\View;
 
     $user = User::getCurrent(Config::getInstance()->PATH_TO_SESSIONS) ?? new User();

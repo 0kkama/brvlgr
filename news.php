@@ -2,10 +2,10 @@
     include_once(__DIR__ . '/initialization.php');
     session_start();
 
-    use App\classes\publication\Article;
+    use App\classes\models\Article;
     use App\classes\View;
     use App\classes\Config;
-    use App\classes\publication\User;
+    use App\classes\models\User;
 
     $user = User::getCurrent(Config::getInstance()->PATH_TO_SESSIONS) ?? new User();
     $title = 'Новости';

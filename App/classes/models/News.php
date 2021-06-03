@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\publication;
+    namespace App\classes\models;
 
     use App\classes\Db;
     use App\classes\Govno;

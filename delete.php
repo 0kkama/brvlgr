@@ -5,8 +5,8 @@
 
     use App\classes\View;
     use App\classes\Config;
-    use App\classes\publication\User;
-    use App\classes\publication\Article;
+    use App\classes\models\User;
+    use App\classes\models\Article;
 
     $user = User::getCurrent(Config::getInstance()->PATH_TO_SESSIONS) ?? new User();
 

@@ -32,7 +32,6 @@
         protected function newConnection() : PDO
         {
             $config = Config::getInstance();
-            // $config->setInstance(include (PATH_TO_CONFIG));
             return new PDO
             ('mysql:host=' . $config->getDbHost() . ';dbname=' . $config->getDbName() . ';charset=' . $config->getDbChar(),
                 $config->getDbUser(),$config->getDbPass(),

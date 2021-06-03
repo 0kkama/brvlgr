@@ -3,9 +3,9 @@
     require_once(__DIR__ . '/initialization.php');
 
     use App\classes\Config;
-    use App\classes\publication\News;
-    use App\classes\publication\User;
-    use App\classes\publication\Article;
+    use App\classes\models\News;
+    use App\classes\models\User;
+    use App\classes\models\Article;
 
     session_start();
 //

@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\publication;
+    namespace App\classes\models;
 
     use App\classes\Govno;
     use App\classes\Db;
@@ -17,7 +17,7 @@
      * <li><b>findByLogin</b> - return null|object</li>
      * <li><b>CurrentUser</b> - return object containing data of a user by session and cookie or null</li>
      * </ul>
-     * @package App\classes\publication
+     * @package App\classes\models
      */
     class User extends Govno implements HasId, UserInterface
     {

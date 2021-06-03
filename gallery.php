@@ -5,7 +5,7 @@
     use App\classes\Uploader;
     use App\classes\View;
     use App\classes\Config;
-    use App\classes\publication\User;
+    use App\classes\models\User;
 
      $user = User::getCurrent(Config::getInstance()->PATH_TO_SESSIONS) ?? new User();
 
