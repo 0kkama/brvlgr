@@ -1,5 +1,5 @@
-<?php    /** @var App\classes\publication\Article $article  */
-    /** @var App\classes\publication\User $author */
+<?php    /** @var App\classes\models\Article $article  */
+    /** @var App\classes\models\User $author */
 ?>
 <div id="content">
     <?php foreach($news as $article): ?>
@@ -7,7 +7,7 @@
             <h1><?=$article->title?></h1>
             <blockquote><i> <?= $article->date .'<br>'. 'Автор: ' . $article->author()->login . '<br>' .' Категория: ' . $article->category?></i></blockquote>
             <p><?=$article->getBriefContent()?></p>
-            <a href="/article.php?id=<?=$article->id?>">Читать далее...</a>
+            <a href="/?cntrl=articleRead&id=<?=$article->id?>">Читать далее...</a>
         </div>
     <?php endforeach; ?>
 </div>

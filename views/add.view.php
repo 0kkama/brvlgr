@@ -1,8 +1,9 @@
 <?php
     use App\classes\Config;
-    use App\classes\Errors;
-    /** @var App\classes\publication\Article $article  */
-    /** @var App\classes\Errors $errors  */
+    use App\classes\MyErrors;
+    use App\classes\models\Article;
+    /** @var Article $article  */
+    /** @var MyErrors $errors  */
 ?>
 <div id="content">
     <?php if($errors()): ?>

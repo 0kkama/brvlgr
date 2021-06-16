@@ -31,7 +31,7 @@
 
         public function render(string $template) : string
         {
-            $fullPathToTemplate = Config::getInstance()->PATH_TO_TEMPLATES . "$template.view.php";
+            $fullPathToTemplate = Config::getInstance()->TEMPLATES . "$template.view.php";
             extract($this->data, EXTR_OVERWRITE);
             ob_start();
             include ($fullPathToTemplate);

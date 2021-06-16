@@ -1,3 +1,4 @@
+<?php /** @var App\classes\MyErrors $loginErr */ ?>
 <form method="post">
     <div class="form-group">
         <label for="auth-login">Логин</label>
@@ -10,10 +11,11 @@
 
     <hr>
     <button class="btn btn-primary">Войти</button>
-    <?php if($loginErr): ?>
+    <?php if($loginErr()) : ?>
         <hr>
         <div class="alert alert-danger">
-            Некорректный логин или пароль
+            <?= $loginErr ?>
+            <?php unset($loginErr) ?>
         </div>
     <?php endif; ?>
 </form>

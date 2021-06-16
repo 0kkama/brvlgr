@@ -1,5 +1,7 @@
 <?php
 
+    use App\classes\Config;
+
     function addMessage(array $newMessage, string $fileName) : bool
     {
         $newMessage = json_encode($newMessage);
@@ -13,43 +15,6 @@
             return json_decode($line,true);
         };
         return array_map($wrapper, file($fileName));
-    }
-
-    function checkUploadedImage (array $image) : string
-    {
-        $errors = [];
-        $errMssg = '';
-
-        if ($image['size'] == 0) {
-            $errors[] = 'Файл не выбран';
-            return $errors[0];
-        }
-
-        if ($image['size'] > 2000000) {
-            $errors[] = 'Превышен допустимый размер файла';
-            return $errors[0];
-        }
-
-        if ((preg_match("`^[-0-9A-Z_\.]\.jpe?g$`i", $image['name']))) {
-            $errors[] = 'Некорректное расширение или имя файла. Допустим только jpg-формат!';
-        }
-
-        if ((mb_strlen($image['name'], "UTF-8") > 225)) {
-            $errors[] = 'Имя файла больше допустимой длины';
-        }
-
-        if (!($image['type'] === 'image/jpeg' xor $image['type'] === 'image/jpg')) {
-            $errors[] = 'Некорректный формат файла. Допустим только jpg-формат!';
-        }
-
-        if ($errors !== []) {
-            foreach ($errors as $error) {
-                $errMssg .= $error;
-                $errMssg .= "<br>";
-            }
-        }
-
-        return $errMssg;
     }
 
     // извлечение данных из форм (массив target) в новый массив, с ключами из массива fields
@@ -71,3 +36,54 @@
         return $result;
     }
 
+    // короткоименная фуя для простой обработки данных, вводимых пользователем.
+    function val(string $inputStr, int $key = 1) : string {
+        switch ($key) {
+            case 1: $inputStr = trim(strip_tags($inputStr)); break;
+            case 2: $inputStr = trim(htmlspecialchars($inputStr)); break;
+        }
+        return $inputStr;
+    }
+
+    /**
+     * generate random string (token)
+     * @param int $length (by default equal 32)
+     * @return string $token (random string in hexadecimal representation. Max length of token is 128 bytes)
+     **/
+    function makeToken ( int $length = 32 ) : string
+    {
+        if ( $length > 64 ) {
+            $token = substr(bin2hex(random_bytes(64)), 0,128);
+        } else {
+            $token = bin2hex(random_bytes($length));
+        }
+        return $token;
+    }
+
+    /**
+     * Возвращает массив с данными, декодированными из json-файла в случае успеха, либо пустой массив.
+     * @param string $fileName
+     * @return array
+     */
+    function getFileContent (string $fileName) : array
+    {
+        $content = file($fileName);
+        if ( empty($content) ) {
+            return [];
+        }
+
+        $wrapper = static function (string $line) : array {
+            return json_decode($line,true);
+        };
+        return array_map($wrapper, $content);
+    }
+
+    // функция логирования
+    function makeDownloadsLog(string $userName,string $path, string $fileName) : void
+    {
+        $currentTime =  date('H:i:s');
+        $currentDate = date('d-m-Y');
+        $msgStr =  "$currentTime - Пользователь $userName загрузил файл $fileName в $path\n";
+        file_put_contents(Config::getInstance()->AUTH_LOG . "$currentDate.log", $msgStr, FILE_APPEND);
+        //        file_put_contents('/home/proletarian/NBProj/profit/resources/logs/auth/11-01-2021.log', $msgStr, FILE_APPEND);
+    }
