@@ -84,6 +84,7 @@
             $db = new Db();
             $db->execute($sql, $this->meta['data']);
             $this->id = $db->getLastId();
+            unset($this->meta);
             return $this;
         }
 
@@ -113,7 +114,7 @@
 
             $db = new Db();
             $db->execute($sql, $this->meta['data']);
-
+            unset($this->meta);
             return $this;
         }
 

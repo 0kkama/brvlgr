@@ -34,6 +34,14 @@
             $this->errors = [];
         }
 
+        #[Pure] public function getFirst() : string {
+            if ($this->count() !== 0) {
+                return $this->errors[0];
+            } else {
+                return '418';
+            }
+        }
+
 
         /**
          * Replace respective words in array with string $errors if those strings have keywords
