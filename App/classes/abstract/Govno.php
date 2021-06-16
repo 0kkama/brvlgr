@@ -35,12 +35,12 @@
     protected const TABLE_NAME = 'Govno';
     protected MyErrors $errors;
     protected array $replacements;
-//    protected $table = null, $cols = null, $data = null, $separator = null;
+    protected array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
 
-            /**
+        /**
          * Finds needed line in table by given <b>$id</b> and return it like object of respective class
          * @param string $id
-         * @return object
+         * @return Govno
          */
         public static function findById(string $id) : static
         {
@@ -62,61 +62,59 @@
 
         /**
          * метод добавлет новую запись в БД, после чего возвращает  <b>$this</b> или <b>null</b>
-         * @return $this|null|array объект или null (в случае неудачи)
+         * @return Govno
          */
         protected function insert() : static
         {
-            extract($this->makeSql(), EXTR_OVERWRITE);
+//            extract($this->makeSql(), EXTR_OVERWRITE);
+            $this->makeSql();
+            $this->checkFields($this->meta['data']);
 
-            $this->checkFields($data);
             if ($this->errors->__invoke()) {
                 return $this;
             }
 
             // делаем строку подобную title, text, author, category
-            $insertions = implode($separator, array_flip($cols));
+            $insertions = implode($this->meta['separator'], array_flip($this->meta['cols']));
             // делаем строку подобную :title, :text, :author, :category
-            //            $values = implode($separator, $cols);
-            $values = implode($separator, array_keys($data));
+            $values = implode($this->meta['separator'], array_keys($this->meta['data']));
             // создаем шаблон запроса вида INSERT INTO news (title,text,author,category) VALUES (:title,:text,:author,:category)
-            $sql = "INSERT INTO $table ($insertions) VALUES ($values)";
+            $sql = "INSERT INTO {$this->meta['table']} ($insertions) VALUES ($values)";
 
             $db = new Db();
-            $db->execute($sql, $data);
+            $db->execute($sql, $this->meta['data']);
             $this->id = $db->getLastId();
+            unset($this->meta);
             return $this;
         }
 
         /**
          * обновляет уже существующую запись, , которая ранее была получена из базы данных по id
-         * @return $this|null
+         * @return Govno
          */
         protected function update() : static
         {
             //   TODO Как реализовать обновление только того поля, которое было изменено?
-            // удаляем все пустые поля, после чего передаем массив фу makeSql
-            extract($this->makeSql(), EXTR_OVERWRITE);
+            $this->makeSql();
+            $this->checkFields($this->meta['data']);
 
-            // проверяем заполненность всех полей и возвращаем ошибку при необходимости
-            $this->checkFields($data);
             if ($this->errors->__invoke()) {
                 return $this;
             }
 
             $set = [];
-            foreach ($cols as $index => $value) {
+            foreach ($this->meta['cols'] as $index => $value) {
                 $set[] = "$index = $value";
             }
 
-            $data[":id"] = $this->id;
-            $set = implode($separator, $set);
+            $this->meta['data'][":id"] = $this->id;
+            $set = implode($this->meta['separator'], $set);
             // шаблон подобный UPDATE news SET title = :title, text = :text, author = :author WHERE id = :id
-            $sql = "UPDATE $table SET $set WHERE id = :id";
+            $sql = "UPDATE {$this->meta['table']} SET $set WHERE id = :id";
 
-            var_dump($sql);
             $db = new Db();
-            $db->execute($sql, $data);
-            //  $this->id = $db->getLastId();
+            $db->execute($sql, $this->meta['data']);
+            unset($this->meta);
             return $this;
         }
 
@@ -142,12 +140,10 @@
         /**
          * Определяет, является ли запись новой или уже существующей.
          * Если запись новая, то вызывает метод <b>insert</b>, в противном случае вызывает метод <b>update</b>.
-         * @return $this|null|array
+         * @return Govno
          */
         public function save() : static
         {
-            //  необходима проверка на наличие такого id в БД
-            //            if (isset($this->id) && (static::findById($this->id))) {
             if (isset($this->id)) {
                 return $this->update();
             }
@@ -163,30 +159,21 @@
          * <li><b>data</b> - массив данных для подстановки  (':user' => 'Ahmed');</li>
          * <li><b>separator</b> - символ-разделитель, использюущийся в запросе;</li></ul>
          *
-         * @return array
+         * @return void
          */
-        protected function makeSql() : array
+        protected function makeSql() : void
         {
-            // удаляем значения id, date итд не являющиеся строками и генерируемые БД автоматически
+            // удаляем значения id, date итд не являющиеся строками и генерируемые БД автоматически или выполняющие служебные цели
             $fields = array_filter(get_object_vars($this), static function ($var) { return is_string($var); });
-            // var_dump($fields);
-            $cols = $data = [];
+            $this->meta['cols'] = $this->meta['data'] = [];
 
             foreach ($fields as $index => $value) {
-                $cols[$index] = ":$index";
-                $data[":$index"] = $value;
+                $this->meta['cols'][$index] = ":$index"; // массив вида 'index' => ':index'
+                $this->meta['data'][":$index"] = $value; // данные для внедрения ':user' => 'Ahmed'
             }
 
-            $separator = ', ';
-            $table = static::TABLE_NAME;
-
-            return
-                [
-                    'table' => $table, // имя таблицы в БД
-                    'cols' => $cols, // массив вида 'index' => ':index'
-                    'data' => $data, // данные для внедрения ':user' => 'Ahmed'
-                    'separator' => $separator,
-                ];
+            $this->meta['separator'] = ', '; // разделитель, используемый в запросе
+            $this->meta['table'] = static::TABLE_NAME; // имя таблицы в БД
         }
 
         /**

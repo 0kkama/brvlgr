@@ -12,9 +12,7 @@
 
     // set autoload
     spl_autoload_register(static function($className) {
-//        var_dump($className);
         $include = __DIR__ . '/../' . str_replace('\\', '/', $className) . '.php';
-//        var_dump($include);
         require_once $include;
     });
 
@@ -55,7 +53,6 @@
     //<editor-fold desc="TODO">
 //    TODO решить проблему с повторной отправкой данных при F5 на Login и Gallery
 //    TODO сохранится после этго в git !!!!!
-//    TODO попробовать реализовать в Govno использование приватных служебных свойств заместо extract
 //    TODO допилить взаимодействие других классов с MyError
 //    TODO доделать ДЗ по контроллерам
     //</editor-fold>

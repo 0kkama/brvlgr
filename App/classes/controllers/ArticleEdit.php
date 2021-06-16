@@ -31,8 +31,6 @@
                 if (!$this->errors->__invoke()) {
                     header('Location: /?cntrl=articleRead&id=' . $this->article->id);
                 }
-
             }
         }
-
     }

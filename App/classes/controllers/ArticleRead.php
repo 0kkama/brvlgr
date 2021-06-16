@@ -17,13 +17,18 @@
             $id = $_GET['id'] ?? null;
 
             if (!is_numeric($id) || empty($id)) {
-                exit('Некорректный ID');
+//                exit('Некорректный ID');
+//                $this->errors->add('400');
+//                $exit = new BadSignal('Некорректный ID');
+                Relocator::deadEnd('400', 'Некорректный ID');
+                exit();
             }
 
             $this->article = Art::findById($id);
 
             if (!$this->article->exist()) {
-                exit('NET TAKOY STATYI');
+                Relocator::deadEnd('404', 'Запрос несуществующей статьи');
+                exit();
             }
 
             $this->title = $this->article->title;
