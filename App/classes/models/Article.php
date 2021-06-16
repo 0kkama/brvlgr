@@ -17,7 +17,7 @@
     {
         // TODO поменять имя таблицы на articles в дальнейшем
         protected const TABLE_NAME = 'articles';
-        protected $id = null,  $date = null;
+        protected ?string $id = null,  $date = null;
         protected string $title, $text, $author, $category, $author_id;
         protected array $replacements =
             [
