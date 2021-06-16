@@ -1,14 +1,15 @@
 <?php
 
-    namespace App\classes\publication;
+    namespace App\classes\models;
 
-    use App\classes\Govno;
+    use App\classes\abstract\Govno;
     use App\classes\Db;
     use App\interfaces\HasId;
     use App\interfaces\Shitty;
     use App\interfaces\UserInterface;
     use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
+    use JetBrains\PhpStorm\Pure;
 
     /**
      * Class User
@@ -17,13 +18,13 @@
      * <li><b>findByLogin</b> - return null|object</li>
      * <li><b>CurrentUser</b> - return object containing data of a user by session and cookie or null</li>
      * </ul>
-     * @package App\classes\publication
+     * @package App\classes\models
      */
     class User extends Govno implements HasId, UserInterface
     {
         protected const TABLE_NAME = 'users';
-        protected $id = null, $date = null;
-        protected $firstName = '', $middleName = '', $lastName = '', $login = '', $hash = '', $email = '', $rights = '';
+        protected ?string $id = null, $date = null;
+        protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $hash = '', $email = '', $rights = '';
 
         use SetControlTrait;
         /**
@@ -31,12 +32,12 @@
          * @param string $login
          * @return object|null
          */
-        public static function findByLogin(string $login) : ?User
+        public static function findByLogin(string $login) : User
         {
             $db = new Db();
             $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE login = :login';
             $result = $db->queryOne($sql, ['login' => $login], static::class);
-            return $result;
+            return $result ?? new self;
         }
 
         /**
@@ -44,20 +45,21 @@
          * @param string $sessionFile
          * @return object|null
          */
-        public static function getCurrent(string $sessionFile/*, string $cookeToken, string $sessionToken*/) : ?User
+//        TODO обращение к сессии и кики в модели - плохая практика. исправить?
+        public static function getCurrent(string $sessionFile/*, string $cookeToken, string $sessionToken*/) : User
         {
             $cookeToken = $_COOKIE['token'] ?? null; // TODO добавить валидацию токенов?
             $sessionToken = $_SESSION['token'] ?? null;
             // если токен установлен и в сессии и в куки, то проверяем их совпадение
             // если совпадают, то возвращаем имя пользователя из сессии
             if ( ( $cookeToken && $sessionToken ) && ( $cookeToken === $sessionToken) ) {
-                return self::findByLogin($_SESSION['user']);
+                return self::findByLogin($_SESSION['user']) ?? new self;
             }
             // если токен в сессии и куке есть, но они не совпадают, то удаляем оба.
             if ( ( $cookeToken && $sessionToken ) && ( $cookeToken !== $sessionToken ) ) {
                 unset($_SESSION['user'], $_SESSION['token']);
                 setcookie('token', '', time() - 86400, '/');
-                return null;
+                return new self;
             }
             // если есть только куки-токен, или только сессионный токен, то сравниваем его с токеном из файла сессий (БД)
             // если совпадают, то берём имя пользователя из файла сессий (БД) и даём соответствующие права.
@@ -70,21 +72,30 @@
             if (null !== $userName) {
                 $_SESSION['user'] = $userName;
                 $_SESSION['token'] = $tokenOne;
-                return self::findByLogin($userName);
+                return self::findByLogin($userName) ?? new self;
             }
-            return null;
+            return new self;
         }
 
-        public function checkPassword(string $password) : ?object
+        public function checkPassword(string $password) : ?User
         {
             $user = self::findByLogin($this->login);
             if (isset($user) && password_verify($password, $user->getHash())) {
-                return $user ?? null;
+                return $user;
             }
                 return null;
         }
 
-//        public function checkPassword(string $login, string $password) : bool
+
+        /**
+         * Return TRUE only if User has NOT empty fields $id and $login
+         * @return bool */
+        public function __invoke() : bool
+        {
+            return (!empty($this->id) && !empty($this->login));
+        }
+
+        //        public function checkPassword(string $login, string $password) : bool
 //        {
 //            if (!(empty($login) || empty($password))) {
 //                $user = User::findByLogin($login);

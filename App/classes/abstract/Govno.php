@@ -1,10 +1,11 @@
 <?php
 
-    namespace App\classes;
+    namespace App\classes\abstract;
 //
-//    use classes\Db;
-//    use classes\publication\Article;
+//    use classes\models\Article;
 //    use App\interfaces\Singleton;
+    use App\classes\Db;
+    use App\classes\MyErrors;
     use App\interfaces\Shitty;
 
 /**
@@ -25,20 +26,28 @@
 
     /**
      *@const const TABLE_NAME dynamically changing in inheriting classes
+     * @var MyErrors $errors
+     * @var null $table
+     * @var null $cols
+     * @var null $data
+     * @var null $separator
      */
     protected const TABLE_NAME = 'Govno';
+    protected MyErrors $errors;
+    protected array $replacements;
+//    protected $table = null, $cols = null, $data = null, $separator = null;
 
-        /**
+            /**
          * Finds needed line in table by given <b>$id</b> and return it like object of respective class
          * @param string $id
-         * @return object|null
+         * @return object
          */
-        public static function findById(string $id) : ?object
+        public static function findById(string $id) : static
         {
             $db = new Db();
             $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = :id';
             $result = $db->queryOne($sql, ['id' => $id], static::class);
-            return $result;
+            return $result ?? new static;
         }
 
         /**
@@ -55,30 +64,13 @@
          * метод добавлет новую запись в БД, после чего возвращает  <b>$this</b> или <b>null</b>
          * @return $this|null|array объект или null (в случае неудачи)
          */
-        protected function insert() : null|Govno|Errors
+        protected function insert() : static
         {
             extract($this->makeSql(), EXTR_OVERWRITE);
 
-            //<editor-fold desc="Другой вариант">
-            //            проверка заполненности всех полей объекта
-            //        $wrapper = static function ($data) {
-            //            foreach ($data as $index => $datum) {
-            //                if (empty($datum)) {
-            //                    echo "Не указан " . $index;
-            //                    return true;
-            //                }
-            //            }
-            //        };
-            //
-            //            if ( $wrapper($data)) {
-            //                return null;
-            //            }
-            //</editor-fold>
-
-            $errors = $this->checkFields($data);
-
-            if ($errors()) {
-                return $errors;
+            $this->checkFields($data);
+            if ($this->errors->__invoke()) {
+                return $this;
             }
 
             // делаем строку подобную title, text, author, category
@@ -99,16 +91,16 @@
          * обновляет уже существующую запись, , которая ранее была получена из базы данных по id
          * @return $this|null
          */
-        protected function update() : null|Govno|Errors
+        protected function update() : static
         {
             //   TODO Как реализовать обновление только того поля, которое было изменено?
             // удаляем все пустые поля, после чего передаем массив фу makeSql
             extract($this->makeSql(), EXTR_OVERWRITE);
 
             // проверяем заполненность всех полей и возвращаем ошибку при необходимости
-            $errors = $this->checkFields($data);
-            if ($errors()) {
-                return $errors;
+            $this->checkFields($data);
+            if ($this->errors->__invoke()) {
+                return $this;
             }
 
             $set = [];
@@ -130,9 +122,9 @@
 
         /**
          * удаляет запись из БД
-         * @return bool|null
+         * @return bool
          */
-        public function delete() : ?bool
+        public function delete() : bool
         {
             /* TODO сделать его обычным или статическим? возможно, добавить деструктор? */
             //  if (isset($this->id) && (static::findById($this->id))) {
@@ -144,7 +136,7 @@
                 $db = new Db();
                 return $db->execute($sql, $data);
             }
-            return null;
+            return false;
         }
 
         /**
@@ -152,7 +144,7 @@
          * Если запись новая, то вызывает метод <b>insert</b>, в противном случае вызывает метод <b>update</b>.
          * @return $this|null|array
          */
-        public function save() : null|Govno|Errors
+        public function save() : static
         {
             //  необходима проверка на наличие такого id в БД
             //            if (isset($this->id) && (static::findById($this->id))) {
@@ -198,20 +190,19 @@
         }
 
         /**
-         * метод проверяет массив $data на наличие пустых элементов. По итогу работы возвращает массив,
+         * метод проверяет массив $data на наличие пустых элементов. По итогу работы создает массив,
          * с указанием всех пропущенных полей
          * @param array $data
-         * @return array
+         * @return void
          */
-        protected function checkFields (array $data) : Errors
+        protected function checkFields (array $data) : void
         {
-            $emptyes = new Errors();
+            $this->errors = new MyErrors();
             foreach ($data as $index => $datum) {
                 if (empty($datum)) {
-                    $emptyes->add("Отсутствует " . $index . "<br>");
+                    $this->errors->add($this->replacements[$index]);
                 }
             }
-            return $emptyes;
         }
 
         /**

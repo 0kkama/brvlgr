@@ -1,9 +1,10 @@
 <?php
 
-    namespace App\classes\publication;
+    namespace App\classes\models;
 
     use App\classes\Db;
-    use App\classes\Govno;
+    use App\classes\abstract\Govno;
+    use App\classes\MyErrors;
     use App\interfaces\HasAuthor;
     use App\interfaces\HasId;
     use App\interfaces\Readable;
@@ -15,9 +16,15 @@
     class Article extends Govno /*implements Readable, HasId, HasAuthor*/
     {
         // TODO поменять имя таблицы на articles в дальнейшем
-        protected const TABLE_NAME = 'news';
+        protected const TABLE_NAME = 'articles';
         protected $id = null,  $date = null;
         protected string $title, $text, $author, $category, $author_id;
+        protected array $replacements =
+            [
+                ':title' => 'Отсутствует заголовок',
+                ':text' => 'Отсутствует текст статьи',
+                ':category'=> 'Не указана категория',
+            ];
 
         use  SetControlTrait;
 
@@ -60,14 +67,14 @@
             $this->author_id = $author_id;
         }
 
-        public function getBriefContent() : ?string
+        public function getBriefContent() : string
         {
-            return mb_substr($this->text, 0, 150) . '...';
+            return (mb_substr($this->text, 0, 150) . '...') ?? '';
         }
 
         public function __toString() : string
         {
-            return "$this->title <br> $this->author <br> $this->date";
+            return "$this->title <br> $this->author <br> $this->date" ?? '';
         }
 
         public function __call($name, $arguments) : object
@@ -77,27 +84,12 @@
             }
         }
 
-        public function __invoke()
+        /**
+         * Return TRUE if object has NOT empty fields $id and $date
+         * @return bool
+         */
+        public function exist () : bool
         {
-            // TODO: Implement __invoke() method.
+            return (!empty($this->id) && !empty($this->date));
         }
-
-        public function modify(string $id) : ?Article
-        {
-            if (static::findById($id)) {
-                $this->id = $id;
-                return $this;
-            }
-            return null;
-        }
-
-        public function create(array $fields) : Article
-        {
-            $this->title = /*$title*/ $fields['title'];
-            $this->text = /*$text*/ $fields['text'];
-            $this->author = /*$author*/ $fields['author'];
-            $this->category = /*$category*/ $fields['category'];
-            return $this;
-        }
-
     }

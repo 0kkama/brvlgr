@@ -1,9 +1,9 @@
 <?php
 
-    namespace App\classes\publication;
+    namespace App\classes\models;
 
     use App\classes\Db;
-    use App\classes\Govno;
+    use App\classes\abstract\Govno;
     use App\interfaces\HasAuthor;
     use App\interfaces\HasId;
     use App\interfaces\HasTitle;

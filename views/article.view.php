@@ -1,5 +1,5 @@
-<?php    /** @var App\classes\publication\Article $article  */
-        /** @var App\classes\publication\User $author */
+<?php    /** @var App\classes\models\Article $article  */
+        /** @var App\classes\models\User $author */
 ?>
 <main>
     <div id="content">
@@ -9,10 +9,8 @@
             <br>
             <?= $article->text ?>
             <hr>
-
-            <a href="\edit.php?id=<?= $article->id ?>"> Редактировать </a>
-
-            <a href="\delete.php?id=<?= $article->id ?>"> Удалить </a>
+            <a href="\?cntrl=articleEdit&id=<?= $article->id ?>"> Редактировать </a>
+            <a href="\?cntrl=articleDelete&id=<?= $article->id ?>"> Удалить </a>
         </article>
     </div>
 </main>

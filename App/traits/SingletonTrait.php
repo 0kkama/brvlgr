@@ -2,7 +2,7 @@
 
     namespace App\traits;
 
-    use App\classes\publication\Article;
+    use App\classes\models\Article;
 
     trait SingletonTrait
     {

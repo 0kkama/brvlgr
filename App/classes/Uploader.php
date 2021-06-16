@@ -1,73 +1,72 @@
 <?php
     namespace App\classes;
 
+    use App\classes\MyErrors;
+    use App\classes\models\User;
+
+    /**
+     * Class Uploader
+     * @package App\classes
+     */
     class Uploader
     {
-        private $file;
-        private $errorStatus;
+        protected array $file;
+        protected User $user;
+        protected MyErrors $errors;
 
-        public function __construct($fieldName)
+        public function __construct(array $file, User $user)
         {
-            $this->file = $fieldName ?? [];
-            $this->errorStatus = $this->isUploaded($this->file);
+            $this->file = $file ?? [];
+            $this->user = $user;
+            $this->errors = new MyErrors();
         }
 
-        private function isUploaded($fileName) : string
+        /**
+         * check correctness file by size and name
+         * @return bool
+         */
+        protected function checkFile() : bool
         {
-            if ( empty($fileName) ) {
-                return '';
+            $this->errors->add('Допустим только jpg-формат!');
+
+            if ($this->file['size'] === 0) {
+                $this->errors->add('Файл не выбран');
             }
 
-            $errors = [];
-            $errMssg = '';
-
-            if ( $fileName['size'] === 0 ) {
-                $errors[] = 'Файл не выбран';
-                return $errors[0];
+            if ($this->file['size'] > 2000000) {
+                $this->errors->add('Превышен допустимый размер файла');
             }
 
-            if ( $fileName['size'] > 2000000 ) {
-                $errors[] = 'Превышен допустимый размер файла';
-                return $errors[0];
+            if (preg_match("`^[-0-9A-Z_\.]\.jpe?g$`i", $this->file['name'])) {
+                $this->errors->add('Некорректное расширение или имя файла. Допустим только jpg-формат!');
             }
 
-            if ( (preg_match("`^[-0-9A-Z_\.]\.jpe?g$`i", $fileName['name'])) ) {
-                $errors[] = 'Некорректное расширение или имя файла. Допустим только jpg-формат!';
+            if ((mb_strlen($this->file['name'], "UTF-8") > 225) ) {
+                $this->errors->add('Имя файла больше допустимой длины');
             }
-
-            if ( (mb_strlen($fileName['name'], "UTF-8") > 225) ) {
-                $errors[] = 'Имя файла больше допустимой длины';
-            }
-
-            if ( $errors !== [] ) {
-                foreach ($errors as $error) {
-                    $errMssg .= $error;
-                    $errMssg .= "<br>";
-                }
-            }
-
-            return $errMssg;
+            return $this->errors->__invoke();
         }
 
-        public function upload(string $userName) : void
+        /**
+         * Forming string for access logs and uploaded image if there is no errors in checkFile function
+         * @return \App\classes\MyErrors
+         */
+        public function upload() : MyErrors
         {
-            if ( empty($this->errorStatus) ) {
-                $directoryPath = Config::getInstance()->PATH_FOR_IMG;
+            if (!$this->checkFile()) {
+                $directoryPath = Config::getInstance()->IMG_PATH;
                 $fileName = $this->file['name'];
                 $currentTime =  date('H:i:s');
                 $currentDate = date('d-m-Y');
+                $userName = $this->user->login;
+                $userID = $this->user->id;
 
                 move_uploaded_file($this->file['tmp_name'], $directoryPath . $this->file['name']);
-                $msgStr =  "$currentTime - Пользователь $userName загрузил файл $fileName в $directoryPath\n";
-                file_put_contents(Config::getInstance()->AUTH_LOG_PATH . "$currentDate.log", $msgStr, FILE_APPEND);
+                $msgStr =  "$currentTime - Пользователь id $userID логин: $userName загрузил файл $fileName в $directoryPath\n";
+                file_put_contents(Config::getInstance()->AUTH_LOG . "$currentDate.log", $msgStr, FILE_APPEND);
             }
-        }
 
-        public function showErrorStatus() : ?string
-        {
-            if ( !empty($this->errorStatus) ) {
-                return $this->errorStatus;
-            }
-            return null;
+            return $this->errors;
         }
     }
+
