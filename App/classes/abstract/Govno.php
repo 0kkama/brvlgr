@@ -6,7 +6,8 @@
 //    use App\interfaces\Singleton;
     use App\classes\Db;
     use App\classes\MyErrors;
-    use App\interfaces\Shitty;
+use App\interfaces\HasId;
+use App\interfaces\Shitty;
 
 /**
  * Class Govno has following methods : <ul>
@@ -21,7 +22,7 @@
  * - <b>getTableName</b>
  * @package App\classes
  */
-    abstract class Govno implements Shitty
+    abstract class Govno implements Shitty, HasId
     {
 
     /**
@@ -124,8 +125,6 @@
          */
         public function delete() : bool
         {
-            /* TODO сделать его обычным или статическим? возможно, добавить деструктор? */
-            //  if (isset($this->id) && (static::findById($this->id))) {
             if (isset($this->id)) {
                 $table = static::TABLE_NAME;
                 $sql = "DELETE FROM $table WHERE id = :id";

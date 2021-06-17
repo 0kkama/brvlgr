@@ -24,7 +24,7 @@
                         <ul>
                             <li> <a href="/?cntrl=login"> Войти </a> </li>
                             <li> <a href="/"> Главная </a> </li>
-                            <li> <a href="/?cntrl=news.php"> Новости </a> </li>
+                            <li> <a href="/?cntrl=news"> Новости </a> </li>
                             <li> <a href="/?cntrl=gallery"> Котики </a> </li>
                             <li> <a href="/?cntrl=ArticleAdd"> Добавить </a> </li>
 

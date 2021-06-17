@@ -13,7 +13,7 @@
     use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
 
-    class Article extends Govno /*implements Readable, HasId, HasAuthor*/
+    class Article extends Govno implements HasId
     {
         // TODO поменять имя таблицы на articles в дальнейшем
         protected const TABLE_NAME = 'articles';
@@ -91,5 +91,18 @@
         public function exist () : bool
         {
             return (!empty($this->id) && !empty($this->date));
+        }
+
+        /**
+         * @return MyErrors
+         */
+        public function getErrors() : MyErrors
+        {
+            return $this->errors;
+        }
+
+        public function getID(): ?string
+        {
+            return $this->id;
         }
     }

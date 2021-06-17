@@ -24,6 +24,7 @@
 
             $this->title = 'Галерея';
             $this->list = glob(Config::getInstance()->IMG_PATH . "*.{jpg,jpeg}", GLOB_BRACE);
+//            var_dump($this->list);
             $this->content = $this->page->assign('list', $this->list)->assign('errMsg', $this->errors)->assign('user', $this->user)->render('gallery');
         }
     }

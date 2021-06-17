@@ -20,7 +20,9 @@
         public function __invoke()
         {
             $id = $_GET['id'];
-            if (!is_numeric($id) || empty($id)) { exit('Некорректный ID'); }
+            if (!is_numeric($id)) {
+                Relocator::deadend(400); exit();
+            }
 
             $this->list = glob(Config::getInstance()->IMG_PATH . "*.{jpg,jpeg}", GLOB_BRACE);
             $this->content = $this->page->assign('list', $this->list)->assign('id', $id)->render('image');

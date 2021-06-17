@@ -7,6 +7,7 @@
     use App\classes\View;
     use App\classes\models\User;
     use App\classes\Config;
+    use App\traits\ValidateArticleTrait;
 
     abstract class Controller
     {
@@ -17,7 +18,10 @@
         protected View $page;
         protected User $user;
         protected MyErrors $errors;
-        protected $title = 'PROBLEM!', $content = 'BIG PROBLEM!';
+        protected string $title = 'PROBLEM!';
+        protected string $content = 'BIG PROBLEM!';
+
+        use ValidateArticleTrait;
 
         /** Controller constructor */
         public function __construct()
