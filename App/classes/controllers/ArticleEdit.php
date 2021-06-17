@@ -26,7 +26,8 @@
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
                 $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category']);
-                $this->errors = $this->article->save()->errors;
+//                $this->errors = $this->article->save()->errors;
+                $this->errors = $this->article->save()->getErrors();
 
                 if (!$this->errors->__invoke()) {
                     header('Location: /?cntrl=articleRead&id=' . $this->article->id);

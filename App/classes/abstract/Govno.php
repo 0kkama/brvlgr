@@ -124,8 +124,6 @@
          */
         public function delete() : bool
         {
-            /* TODO сделать его обычным или статическим? возможно, добавить деструктор? */
-            //  if (isset($this->id) && (static::findById($this->id))) {
             if (isset($this->id)) {
                 $table = static::TABLE_NAME;
                 $sql = "DELETE FROM $table WHERE id = :id";

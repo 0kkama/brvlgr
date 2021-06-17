@@ -17,7 +17,8 @@
         protected View $page;
         protected User $user;
         protected MyErrors $errors;
-        protected $title = 'PROBLEM!', $content = 'BIG PROBLEM!';
+        protected string $title = 'PROBLEM!';
+        protected string $content = 'BIG PROBLEM!';
 
         /** Controller constructor */
         public function __construct()

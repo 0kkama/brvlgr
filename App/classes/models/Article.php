@@ -92,4 +92,12 @@
         {
             return (!empty($this->id) && !empty($this->date));
         }
+
+        /**
+         * @return MyErrors
+         */
+        public function getErrors() : MyErrors
+        {
+            return $this->errors;
+        }
     }

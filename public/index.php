@@ -1,10 +1,9 @@
 <?php
-        //    require_once(__DIR__ . '/../initialization.php');
-
     //<editor-fold desc="initialization">
     declare(strict_types=1);
 
     use App\classes\Config;
+    use App\classes\controllers\Relocator;
 
     setlocale(LC_ALL, "ru_RU.UTF-8");
     date_default_timezone_set('Europe/Moscow');
@@ -13,7 +12,11 @@
     // set autoload
     spl_autoload_register(static function($className) {
         $include = __DIR__ . '/../' . str_replace('\\', '/', $className) . '.php';
-        require_once $include;
+        if (file_exists($include)) {
+            require_once $include;
+        } else {
+            Relocator::deadend(400);
+        }
     });
 
     // set config instance
@@ -30,25 +33,17 @@
     //    /var/lib/php/sessions
     session_start();
 
-    //<editor-fold desc="USE">
-//    use App\classes\Config;
-//    use App\classes\models\News;
-//    use App\classes\models\User;
-//    use App\classes\models\Article;
-//    use App\classes\controllers;
-//    use App\classes\controllers\Index;
-//    use App\classes\View;
-    //</editor-fold>
-
     $cntrl = $_GET['cntrl'] ?? 'Index';
     $cntrl = ucfirst(val($cntrl));
     $id = $_GET['id'] ?? null;
 
     $class = "App\classes\controllers\\$cntrl";
+//    if (!class_exists($class)) {
+//        \App\classes\controllers\Relocator::deadEnd(400);
+//    }
     $cntrl = new $class;
     $cntrl();
     echo ($_SERVER['REQUEST_METHOD']);
-
 
     //<editor-fold desc="TODO">
 //    TODO решить проблему с повторной отправкой данных при F5 на Login и Gallery

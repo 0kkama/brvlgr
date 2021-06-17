@@ -27,10 +27,11 @@
         protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $hash = '', $email = '', $rights = '';
 
         use SetControlTrait;
+
         /**
          * Возвращает объект с данными пользователя по его $login в случае успеха, либо null
          * @param string $login
-         * @return object|null
+         * @return User
          */
         public static function findByLogin(string $login) : User
         {
@@ -46,7 +47,7 @@
          * @return object|null
          */
 //        TODO обращение к сессии и кики в модели - плохая практика. исправить?
-        public static function getCurrent(string $sessionFile/*, string $cookeToken, string $sessionToken*/) : User
+        public static function getCurrent(string $sessionFile) : User
         {
             $cookeToken = $_COOKIE['token'] ?? null; // TODO добавить валидацию токенов?
             $sessionToken = $_SESSION['token'] ?? null;

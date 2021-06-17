@@ -2,7 +2,8 @@ body {
   min-height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #002B36;
+  /*background-color: #002B36;*/
+  background-color: #E6E3D4;
   /*color: #77A8D9;*/
   color: #488A9E;
   font-size: 16px;
@@ -10,6 +11,10 @@ body {
   border-top: 2px solid #2A4F6F;
   /*margin-bottom: 15px;*/
 }
+
+/*pre.xdebug-var-dump{
+  color: #e49a3c;
+}*/
 
 * {
   box-sizing: border-box;
@@ -19,6 +24,7 @@ body {
 /*a {
   color: #e1cc5a;
 }*/
+
 
 .root {
   display: flex;
