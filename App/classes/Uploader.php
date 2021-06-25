@@ -1,7 +1,7 @@
 <?php
     namespace App\classes;
 
-    use App\classes\MyErrors;
+    use App\classes\UsersErrors;
     use App\classes\models\User;
 
     /**
@@ -12,13 +12,13 @@
     {
         protected array $file;
         protected User $user;
-        protected MyErrors $errors;
+        protected UsersErrors $errors;
 
         public function __construct(array $file, User $user)
         {
             $this->file = $file ?? [];
             $this->user = $user;
-            $this->errors = new MyErrors();
+            $this->errors = new UsersErrors();
         }
 
         /**
@@ -49,9 +49,9 @@
 
         /**
          * Forming string for access logs and uploaded image if there is no errors in checkFile function
-         * @return \App\classes\MyErrors
+         * @return \App\classes\UsersErrors
          */
-        public function upload() : MyErrors
+        public function upload() : UsersErrors
         {
             if (!$this->checkFile()) {
                 $directoryPath = Config::getInstance()->IMG_PATH;

@@ -9,8 +9,8 @@
             <br>
             <?= $article->text ?>
             <hr>
-            <a href="\?cntrl=articleEdit&id=<?= $article->id ?>"> Редактировать </a>
-            <a href="\?cntrl=articleDelete&id=<?= $article->id ?>"> Удалить </a>
+            <a href="/article/edit/<?= $article->id ?>"> Редактировать </a>
+            <a href="/article/delete/<?= $article->id ?>"> Удалить </a>
         </article>
     </div>
 </main>

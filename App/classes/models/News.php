@@ -9,7 +9,7 @@
     use App\interfaces\HasTitle;
 
 
-    class News extends Govno implements HasAuthor, HasId, HasTitle
+    class News extends Govno implements HasAuthor, HasTitle
     {
         protected string $title, $text, $author, $category;
         protected $id = null, $date = null;

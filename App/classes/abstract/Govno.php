@@ -5,7 +5,7 @@
 //    use classes\models\Article;
 //    use App\interfaces\Singleton;
     use App\classes\Db;
-    use App\classes\MyErrors;
+    use App\classes\UsersErrors;
 use App\interfaces\HasId;
 use App\interfaces\Shitty;
 
@@ -27,14 +27,14 @@ use App\interfaces\Shitty;
 
     /**
      *@const const TABLE_NAME dynamically changing in inheriting classes
-     * @var MyErrors $errors
+     * @var UsersErrors $errors
      * @var null $table
      * @var null $cols
      * @var null $data
      * @var null $separator
      */
     protected const TABLE_NAME = 'Govno';
-    protected MyErrors $errors;
+    protected UsersErrors $errors;
     protected array $replacements;
     protected array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
 
@@ -183,7 +183,7 @@ use App\interfaces\Shitty;
          */
         protected function checkFields (array $data) : void
         {
-            $this->errors = new MyErrors();
+            $this->errors = new UsersErrors();
             foreach ($data as $index => $datum) {
                 if (empty($datum)) {
                     $this->errors->add($this->replacements[$index]);

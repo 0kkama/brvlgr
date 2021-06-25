@@ -1,25 +1,25 @@
 <?php
 
 
-    namespace App\classes\controllers;
+    namespace App\classes\controllers\article;
 
 
     use App\classes\models\Article;
     use App\classes\Config;
     use App\traits\ValidateArticleTrait;
 
-    class ArticleEdit extends ArticleAdd
+    class Edit extends Add
     {
 
-        public function __construct()
+        public function __construct($params)
         {
-            parent::__construct();
+            parent::__construct($params);
             $this->title = 'Редактировать статью';
         }
 
         protected function execute() : void
         {
-            $this->validate();
+            $this->access();
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
@@ -28,7 +28,7 @@
                 $this->errors = $this->article->save()->getErrors();
 
                 if (!$this->errors->__invoke()) {
-                    header('Location: /?cntrl=articleRead&id=' . $this->article->id);
+                    header('Location: /article/read/' . $this->article->id);
                 }
             }
         }

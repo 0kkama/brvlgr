@@ -1,0 +1,110 @@
+<?php
+
+
+    namespace App\classes\controllers;
+
+
+    use App\classes\abstract\Controller;
+    use App\classes\Config;
+    use App\classes\controllers\Relocator;
+    use App\classes\models\Article as Publication;
+
+    class Article extends Controller
+    {
+
+        protected string $title = 'PROBLEM!';
+        protected string $content = 'BIG PROBLEM!';
+        protected Publication $article;
+
+
+        protected function action(string $action) : void
+        {
+            if (method_exists($this, $action)) {
+                $this->$action();
+            } else {
+                Relocator::deadend(400); exit();
+            }
+        }
+
+        protected function add() : void
+        {
+            $this->title = 'Добавить публикацию';
+            $this->article = new Publication();
+            $this->checkUser()->sendData();
+            $this->content = $this->page->assign('article', $this->article)->assign('errors', $this->errors)->render('add');
+        }
+
+        protected function read() : void
+        {
+            $this->checkArtID()->getArt()->checkArtExist();
+            $this->title = $this->article->title;
+            $this->content = $this->page->assign('title', $this->title)->assign('article', $this->article)->assign('author', $this->article->author())->render('article');
+        }
+
+        protected function edit() : void
+        {
+            $this->title = 'Редактировать статью';
+            $this->checkUser()->checkArtID()->getArt()->checkArtExist()->sendData();
+            $this->content = $this->page->assign('article', $this->article)->assign('errors', $this->errors)->render('add');
+        }
+
+        protected function delete() : void
+        {
+            $this->checkUser()->checkArtID()->getArt()->checkArtExist()->article->delete();
+            header('Location: ' . Config::getInstance()->BASE_URL);
+        }
+
+        protected function sendData() : void
+        {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $fields = extractFields(array_keys($_POST),$_POST);
+                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->id);
+                //                $this->errors = $this->article->save()->errors;
+                $this->errors = $this->article->save()->getErrors();
+
+                if (!$this->errors->__invoke()) {
+                    header('Location: /article/read/' . $this->article->id);
+                }
+            }
+        }
+
+        protected function checkUser() : self
+        {
+            if (!$this->user->exist()) {
+                Relocator::deadend(403); exit();
+            }
+            return $this;
+        }
+
+        protected function checkArtID () : self
+        {
+            if (!is_numeric($this->params['id']) || empty($this->params['id'])) {
+                Relocator::deadend(400); exit();
+            }
+            return $this;
+        }
+
+        protected function checkArtExist() : self
+        {
+            if (!$this->article->exist()) {
+                Relocator::deadend(404); exit();
+            }
+            return $this;
+        }
+
+        protected function getArt() : self
+        {
+            $this->article = Publication::findById($this->params['id']);
+            return $this;
+        }
+
+        public function __invoke()
+        {
+            $this->action($this->params['action']);
+            parent::__invoke();
+        }
+
+    }
+
+//    TODO допилить или переделать способ парсинга в Роутере и
+//    TODO разобраться с проблемой в релокейтере

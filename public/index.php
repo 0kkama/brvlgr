@@ -1,13 +1,18 @@
 <?php
-    //<editor-fold desc="initialization">
+    //<editor-fold desc="INITIALIZATION">
     declare(strict_types=1);
 
     use App\classes\Config;
     use App\classes\controllers\Relocator;
+    use App\classes\utility\Router;
 
+    // base settings
     setlocale(LC_ALL, "ru_RU.UTF-8");
     date_default_timezone_set('Europe/Moscow');
     error_reporting(E_ALL);
+    // include DEBUGGER
+    include_once (__DIR__ . '/../utility/debug.util.php');
+    set_error_handler('err_catcher');
 
     // set autoload
     spl_autoload_register(static function($className) {
@@ -15,40 +20,50 @@
         if (file_exists($include)) {
             require_once $include;
         } else {
-            Relocator::deadend(400);
+            trigger_error("Файл с классом $include не существует");
+            Relocator::deadend(400); exit();
         }
     });
 
     // set config instance
     Config::getInstance()->setInstance(include (__DIR__ . '/../config/config.php'));
 
-    // include DEBUGGER
-    include_once (__DIR__ . '/../utility/debug.util.php');
-    set_error_handler('err_catcher');
-
-    // include MODEL
+    // include library
     include_once (__DIR__ . '/../models/libra.php');
     //</editor-fold>
 
     //    /var/lib/php/sessions
     session_start();
 
-    $cntrl = $_GET['cntrl'] ?? 'Index';
-    $cntrl = ucfirst(val($cntrl));
-    $id = $_GET['id'] ?? null;
+    $uri = $_SERVER['REQUEST_URI'];
+    $router = new Router($uri);
+    $params = $router();
 
-    $class = "App\classes\controllers\\$cntrl";
-//    if (!class_exists($class)) {
-//        \App\classes\controllers\Relocator::deadEnd(400);
-//    }
-    $cntrl = new $class;
-    $cntrl();
+    var_dump($params);
+
+    $cntrl = ucfirst($params['controller']);
+    $className = "App\classes\controllers\\$cntrl";
+
+    if (!class_exists($className)) {
+        Relocator::deadEnd(400);
+    }
+
+    $controller = new $className($params);
+    $controller();
+
     echo ($_SERVER['REQUEST_METHOD']);
 
     //<editor-fold desc="TODO">
-//    TODO решить проблему с повторной отправкой данных при F5 на Login и Gallery
-//    TODO доделать ДЗ по контроллерам
-    //</editor-fold>
+/* TODO
+    - решить проблему с повторной отправкой данных при F5 на Login и Gallery
+    - доделать ДЗ по контроллерам
+    - доделать конфиг nginx для запрета доступа ко всем директориям, кроме public
+          а так же файлам типо /css/style.css
+    - https://stackoverflow.com/questions/40966017/nginx-deny-access-of-a-directory-and-files-inside-it
+    - сделать доступ по домену
+    -
+*/
+        //</editor-fold>
 
     //<editor-fold desc="OLD CODE">
     //    $cntrlName = $_SERVER['REQUEST_URI'] ?? 'Index';

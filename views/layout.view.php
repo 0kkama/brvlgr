@@ -22,17 +22,17 @@
                 <aside id='nav'>
                     <nav>
                         <ul>
-                            <li> <a href="/?cntrl=login"> Войти </a> </li>
+                            <li> <a href="/login"> Войти </a> </li>
                             <li> <a href="/"> Главная </a> </li>
-                            <li> <a href="/?cntrl=news"> Новости </a> </li>
-                            <li> <a href="/?cntrl=gallery"> Котики </a> </li>
-                            <li> <a href="/?cntrl=ArticleAdd"> Добавить </a> </li>
+                            <li> <a href="/news"> Новости </a> </li>
+                            <li> <a href="/gallery"> Котики </a> </li>
+                            <li> <a href="/article/add"> Добавить </a> </li>
 
                         <?php for($i = 0 ; $i < 4 ; $i++): ?>
                                 <li> Navigation </li>
                         <?php endfor; ?>
 
-                            <li> <a href="/?cntrl=logout"> Выйти </a> </li>
+                            <li> <a href="/logout"> Выйти </a> </li>
                             <li> <a href="/test.php"> Тест </a> </li>
                             <li> <a href="/info.php"> Инфо </a> </li>
                         </ul>

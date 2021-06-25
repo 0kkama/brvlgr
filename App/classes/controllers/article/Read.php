@@ -1,25 +1,26 @@
 <?php
 
-    namespace App\classes\controllers;
+    namespace App\classes\controllers\article;
 
-    use App\classes\abstract\Controller;
-    use App\classes\models\Article as Art;
+    use App\classes\controllers\Relocator;
+    use App\classes\models\Article;
+    use App\classes\controllers\article\Article as Essence;
 
-    class ArticleRead extends Controller
+    class Read extends Essence
     {
-        protected Art $article;
+        protected Article $article;
 
-        public function __construct()
+        public function __construct($params)
         {
-            parent::__construct();
+            parent::__construct($params);
 
-            $id = $_GET['id'] ?? null;
+            $id = $params['id'];
 
             if (!is_numeric($id) || empty($id)) {
                 Relocator::deadend(400); exit();
             }
 
-            $this->article = Art::findById($id);
+            $this->article = Article::findById($id);
 
             if (!$this->article->exist()) {
                 Relocator::deadend(404); exit();

@@ -6,17 +6,17 @@
 
     use App\classes\abstract\Controller;
     use App\classes\Config;
-    use App\classes\MyErrors;
+    use App\classes\UsersErrors;
     use JsonException;
 
     class Login extends Controller
     {
-        protected MyErrors $error;
+        protected UsersErrors $error;
         protected ?string $relocation;
 
-        public function __construct()
+        public function __construct($params)
         {
-            parent::__construct();
+            parent::__construct($params);
             $this->title = "Войти на сайт";
             $this->relocation = Config::getInstance()->BASE_URL;
         }
@@ -31,7 +31,7 @@
         protected function loginUser() : void
         {
             $this->checkUser();
-            $this->error = new MyErrors();
+            $this->error = new UsersErrors();
 
             if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
                 $this->user->setLogin(val($_POST['login']));
@@ -68,5 +68,6 @@
             $this->loginUser();
             $this->content = $this->page->assign('loginErr', $this->error)->render('login');
             parent::__invoke();
+//            $this->error->reset();
         }
 }

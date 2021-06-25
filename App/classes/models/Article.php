@@ -4,16 +4,16 @@
 
     use App\classes\Db;
     use App\classes\abstract\Govno;
-    use App\classes\MyErrors;
+    use App\classes\UsersErrors;
     use App\interfaces\HasAuthor;
-    use App\interfaces\HasId;
+    use App\interfaces\HasTitle;
     use App\interfaces\Readable;
     use App\interfaces\UserInterface;
     use App\traits\DebugTrait;
     use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
 
-    class Article extends Govno implements HasId
+    class Article extends Govno implements HasAuthor, HasTitle
     {
         // TODO поменять имя таблицы на articles в дальнейшем
         protected const TABLE_NAME = 'articles';
@@ -84,6 +84,8 @@
             }
         }
 
+
+
         /**
          * Return TRUE if object has NOT empty fields $id and $date
          * @return bool
@@ -94,9 +96,9 @@
         }
 
         /**
-         * @return MyErrors
+         * @return UsersErrors
          */
-        public function getErrors() : MyErrors
+        public function getErrors() : UsersErrors
         {
             return $this->errors;
         }
@@ -104,5 +106,15 @@
         public function getID(): ?string
         {
             return $this->id;
+        }
+
+        public function getAuthor()
+        {
+            return User::findById($this->author_id);
+        }
+
+        public function getTitle()
+        {
+            return $this->title;
         }
     }

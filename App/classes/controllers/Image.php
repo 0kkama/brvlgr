@@ -11,15 +11,15 @@
     {
         protected array $list;
 
-        public function __construct()
+        public function __construct($params)
         {
-            parent::__construct();
+            parent::__construct($params);
             $this->title = 'Изображение';
         }
 
         public function __invoke()
         {
-            $id = $_GET['id'];
+            $id = $this->params['id'];
             if (!is_numeric($id)) {
                 Relocator::deadend(400); exit();
             }

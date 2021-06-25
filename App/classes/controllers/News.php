@@ -11,9 +11,9 @@
     {
         protected array $articles;
 
-        public function __construct()
+        public function __construct($params)
         {
-            parent::__construct();
+            parent::__construct($params);
             $this->title = 'Статьи';
             $this->articles = Article::getAll();
             $this->content = $this->page->assign('news', $this->articles)->render('news');

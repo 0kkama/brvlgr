@@ -20,7 +20,7 @@
      * </ul>
      * @package App\classes\models
      */
-    class User extends Govno implements HasId, UserInterface
+    class User extends Govno implements UserInterface
     {
         protected const TABLE_NAME = 'users';
         protected ?string $id = null, $date = null;
@@ -94,6 +94,11 @@
         public function __invoke() : bool
         {
             return (!empty($this->id) && !empty($this->login));
+        }
+
+        public function exist() : bool
+        {
+            return $this();
         }
 
         //        public function checkPassword(string $login, string $password) : bool

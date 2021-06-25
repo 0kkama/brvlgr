@@ -1,7 +1,7 @@
 <?php
 
 
-    namespace App\classes\controllers;
+    namespace App\classes\controllers\test;
 
 
     use App\classes\abstract\Controller;

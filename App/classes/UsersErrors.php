@@ -6,7 +6,7 @@
 
     use JetBrains\PhpStorm\Pure;
 
-    class MyErrors implements \Countable
+    class UsersErrors implements \Countable
     {
         protected array $errors = [];
         protected string $string = '';
@@ -20,7 +20,8 @@
         {
             if ($this->count() !== 0) {
                 foreach ($this->errors as $error) {
-                    $this->string .= $error . ' <br> ';
+                    $this->string .= $error . ' <br>';
+//                    $this->string .= $error . PHP_EOL;
                 }
             }
             return $this->string;

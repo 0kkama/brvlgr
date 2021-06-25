@@ -4,17 +4,17 @@
 
     use App\classes\abstract\Controller;
     use App\classes\Config;
-    use App\classes\MyErrors;
+    use App\classes\UsersErrors;
     use App\classes\Uploader;
 
     class Gallery extends Controller
     {
         protected array $list;
 
-        public function __construct()
+        public function __construct($params)
         {
-            parent::__construct();
-            $this->errors = new MyErrors();
+            parent::__construct($params);
+            $this->errors = new UsersErrors();
 
             // TODO подумать, не перемудрил ли я здесь с условием
             if ( !empty($this->user->__invoke()) && ( $_SERVER['REQUEST_METHOD'] = 'POST' ) && (isset($_FILES['newimage'])) ) {
@@ -30,6 +30,8 @@
     }
 
     /*
+     *
+     * TODO ПЕРЕДЕЛАТЬ РАБОТУ КОНТРОЛЛЕРОВ Gallery и Image с учётом ЧПУ
         TODO 1. м.б. добавить рандомайзер имени для файла
         TODO 2. и/или добавить проверку совпадения нового имени и уже существущих
         TODO возможно, создать в будущем модель Gallery, которая будет работать с изображениями

@@ -1,8 +1,8 @@
 <?php
     use App\classes\Config;
-    use App\classes\MyErrors;
+    use App\classes\UsersErrors;
     /** @var App\classes\publication\Article $article  */
-    /** @var App\classes\MyErrors $errors  */
+    /** @var App\classes\UsersErrors $errors  */
 ?>
 <div id="content">
 

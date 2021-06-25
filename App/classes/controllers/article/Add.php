@@ -1,22 +1,23 @@
 <?php
 
 
-    namespace App\classes\controllers;
+    namespace App\classes\controllers\article;
 
-    use App\classes\abstract\Controller;
-    use App\classes\MyErrors;
+    use App\classes\controllers\Relocator;
+    use App\classes\UsersErrors;
+    use App\classes\controllers\article\Article as Essence;
     use App\classes\models\Article;
 
 
-    class ArticleAdd extends Controller
+    class Add extends Essence
     {
         protected Article $article;
 
-        public function __construct()
+        public function __construct($params)
         {
-            parent::__construct();
+            parent::__construct($params);
             $this->article = new Article();
-            $this->errors = new MyErrors();
+            $this->errors = new UsersErrors();
             $this->title = 'Добавить публикацию';
         }
 
@@ -33,7 +34,7 @@
                 $this->errors = $this->article->save()->getErrors();
 //                var_dump($this->article);
                 if (!$this->errors->__invoke()) {
-                    header('Location: /?cntrl=articleRead&id=' . $this->article->id);
+                    header('Location: /article/read/' . $this->article->id);
                 }
             }
         }

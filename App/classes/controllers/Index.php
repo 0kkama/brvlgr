@@ -12,9 +12,9 @@
     {
         protected News $news;
 
-        public function __construct()
+        public function __construct($params)
         {
-            parent::__construct();
+            parent::__construct($params);
             $this->title = 'Главная';
             $news = News::getLast(5);
             $this->content = $this->page->assign('news', $news)->render('news');

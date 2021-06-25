@@ -1,4 +1,4 @@
-<?php /** @var App\classes\MyErrors $loginErr */ ?>
+<?php /** @var App\classes\UsersErrors $loginErr */ ?>
 <form method="post">
     <div class="form-group">
         <label for="auth-login">Логин</label>

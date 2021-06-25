@@ -14,7 +14,7 @@
         {
 
             //            проверка наличия пользователя и корректности id
-            if (!$this->user->__invoke()) {
+            if (!$this->user->exist()) {
                 Relocator::deadend(403); exit();
             }
 
