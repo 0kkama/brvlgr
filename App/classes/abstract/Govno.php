@@ -49,8 +49,8 @@
         {
             try {
                 $db = new Db();
+
                 $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = :id';
-//                $sql = 'SELECT * FROM' . ' WHERE id = :id';
                 $result = $db->queryOne($sql, ['id' => $id], static::class);
             } catch (Exception $e) {
                 $ex = new DbException($e->getMessage(), 500);
