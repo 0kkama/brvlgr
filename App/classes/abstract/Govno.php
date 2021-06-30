@@ -49,8 +49,13 @@
         {
             try {
                 $db = new Db();
+<<<<<<< HEAD
                 $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = :id';
 //                $sql = 'SELECT * FROM' . ' WHERE id = :id';
+=======
+//                $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = :id';
+                $sql = 'SELECT * FROM' . ' WHERE id = :id';
+>>>>>>> f41099406dc4bb28324d900afbb3c7cbf1d4054a
                 $result = $db->queryOne($sql, ['id' => $id], static::class);
             } catch (Exception $e) {
                 $ex = new DbException($e->getMessage(), 500);
