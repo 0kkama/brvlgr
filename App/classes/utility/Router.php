@@ -3,7 +3,7 @@
     namespace App\classes\utility;
 
     use App\classes\Config;
-    use App\classes\controllers\Relocator;
+    use App\classes\controllers\Error;
 
     class Router
     {
@@ -21,15 +21,11 @@
             [
                 'controller' => '@\w+@',
                 'action' => '@[A-z]+@',
-                'id' => "@[1-9]+\d*@",
+                'id' => "@[0-9]+\d*@",
             ];
 
         public function __construct(string $uri)
         {
-//            $normID = '[1-9]+\d*';
-//            $normUrl = '[0-9a-zA-Z_-]+';
-//            $normDate = '\d{4}-\d{2}-\d{2}';
-//            $mdrQry = '\?q\=(\w{3})';
             $this->uri = $uri;
         }
 
@@ -68,14 +64,10 @@
             }
 
             $this->chunks = explode('/', $this->uri);
-            var_dump($this->chunks);
+//            var_dump($this->chunks);
 
             foreach ($this->regex as $index => $regex) {
                 $this->parseEach($index);
-            }
-
-            if ($this->result['controller'] === 'error') {
-                $this->result['controller'] = 'relocator';
             }
 
             return $this->result;

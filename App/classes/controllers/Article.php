@@ -6,7 +6,7 @@
 
     use App\classes\abstract\Controller;
     use App\classes\Config;
-    use App\classes\controllers\Relocator;
+    use App\classes\controllers\Error;
     use App\classes\models\Article as Publication;
 
     class Article extends Controller
@@ -22,7 +22,7 @@
             if (method_exists($this, $action)) {
                 $this->$action();
             } else {
-                Relocator::deadend(400); exit();
+                Error::deadend(400);
             }
         }
 
@@ -59,7 +59,6 @@
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
                 $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->id);
-                //                $this->errors = $this->article->save()->errors;
                 $this->errors = $this->article->save()->getErrors();
 
                 if (!$this->errors->__invoke()) {
@@ -71,7 +70,7 @@
         protected function checkUser() : self
         {
             if (!$this->user->exist()) {
-                Relocator::deadend(403); exit();
+                Error::deadend(403);
             }
             return $this;
         }
@@ -79,7 +78,7 @@
         protected function checkArtID () : self
         {
             if (!is_numeric($this->params['id']) || empty($this->params['id'])) {
-                Relocator::deadend(400); exit();
+                Error::deadend(400);
             }
             return $this;
         }
@@ -87,7 +86,7 @@
         protected function checkArtExist() : self
         {
             if (!$this->article->exist()) {
-                Relocator::deadend(404); exit();
+                Error::deadend(404, 'Статья не найдена');
             }
             return $this;
         }

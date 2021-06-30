@@ -1,7 +1,7 @@
 <?php
     namespace App\classes;
 
-    use App\classes\UsersErrors;
+    use App\classes\utility\UsersErrors;
     use App\classes\models\User;
 
     /**

@@ -16,7 +16,7 @@
         {
             parent::__construct($params);
             $this->title = 'Главная';
-            $news = News::getLast(5);
+            $news = News::getLast(4);
             $this->content = $this->page->assign('news', $news)->render('news');
         }
     }

@@ -2,7 +2,7 @@
 
     namespace App\classes\controllers\article;
 
-    use App\classes\controllers\Relocator;
+    use App\classes\controllers\Error;
     use App\classes\models\Article;
     use App\classes\controllers\article\Article as Essence;
 
@@ -17,13 +17,13 @@
             $id = $params['id'];
 
             if (!is_numeric($id) || empty($id)) {
-                Relocator::deadend(400); exit();
+                Error::deadend(400);
             }
 
             $this->article = Article::findById($id);
 
             if (!$this->article->exist()) {
-                Relocator::deadend(404); exit();
+                Error::deadend(404);
             }
 
             $this->title = $this->article->title;

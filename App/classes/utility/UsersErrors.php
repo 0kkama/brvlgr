@@ -1,12 +1,13 @@
 <?php
 
 
-    namespace App\classes;
+    namespace App\classes\utility;
 
 
+    use Countable;
     use JetBrains\PhpStorm\Pure;
 
-    class UsersErrors implements \Countable
+    class UsersErrors implements Countable
     {
         protected array $errors = [];
         protected string $string = '';
@@ -21,7 +22,6 @@
             if ($this->count() !== 0) {
                 foreach ($this->errors as $error) {
                     $this->string .= $error . ' <br>';
-//                    $this->string .= $error . PHP_EOL;
                 }
             }
             return $this->string;
@@ -43,19 +43,11 @@
             }
         }
 
-
         /**
          * Replace respective words in array with string $errors if those strings have keywords
          * @param array $search - array with searched keywords
          * @param array $substitutions - array with words for replacement
          */
-//        public function replace(array $search, array $substitutions) {
-//            if ($this()) {
-//                foreach ($this->errors as $index => $item) {
-//
-//                }
-//            }
-//        }
 
         /**
          * Return true if array $errors content some messages
@@ -68,4 +60,3 @@
 
     }
 
-//    TODO перенести часть фукционала из Govno и Uploader в Errors

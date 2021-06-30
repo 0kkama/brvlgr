@@ -4,7 +4,8 @@
 
     use App\classes\Db;
     use App\classes\abstract\Govno;
-    use App\classes\UsersErrors;
+    use App\classes\exceptions\FileException;
+    use App\classes\utility\UsersErrors;
     use App\interfaces\HasAuthor;
     use App\interfaces\HasTitle;
     use App\interfaces\Readable;
@@ -12,6 +13,8 @@
     use App\traits\DebugTrait;
     use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
+    use App\classes\exceptions\DbException;
+    use Exception;
 
     class Article extends Govno implements HasAuthor, HasTitle
     {
@@ -28,8 +31,16 @@
 
         use  SetControlTrait;
 
+        /**
+         * @throws Exception
+         */
         public static function getLast(int $limit) : ?array
         {
+//            if ( $limit < 5 ) {
+//                $ex = new DbException('Недостаточное количество айтемов', 404);
+//                $ex->setAlert('фыр-фыр-фыр')->setParam("limit = $limit")->throwIt();
+//            }
+
             $db = new Db;
             $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `date` DESC LIMIT ' . $limit;
             return $db->queryAll($sql, [], self::class);
@@ -83,8 +94,6 @@
                 return User::findById($this->author_id);
             }
         }
-
-
 
         /**
          * Return TRUE if object has NOT empty fields $id and $date

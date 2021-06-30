@@ -3,8 +3,8 @@
 
     namespace App\classes\controllers\article;
 
-    use App\classes\controllers\Relocator;
-    use App\classes\UsersErrors;
+    use App\classes\controllers\Error;
+    use App\classes\utility\UsersErrors;
     use App\classes\controllers\article\Article as Essence;
     use App\classes\models\Article;
 
@@ -24,7 +24,7 @@
         protected function execute() : void
         {
             if (!$this->user->__invoke()) {
-                Relocator::deadend(403); exit();
+                Error::deadend(403);
             }
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {

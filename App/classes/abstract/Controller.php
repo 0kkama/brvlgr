@@ -3,9 +3,9 @@
 
     namespace App\classes\abstract;
 
-    use App\classes\controllers\Relocator;
+    use App\classes\controllers\Error;
     use App\classes\models\Article;
-    use App\classes\UsersErrors;
+    use App\classes\utility\UsersErrors;
     use App\classes\View;
     use App\classes\models\User;
     use App\classes\Config;
@@ -21,8 +21,7 @@
         protected User $user;
         protected UsersErrors $errors;
         protected array $params;
-
-//        use ValidateArticleTrait;
+        protected string $title, $content;
 
         public function __construct($params)
         {
@@ -32,24 +31,9 @@
             $this->params = $params;
         }
 
-
-
-//        protected function access() : bool {
-//            return (($this->user->exist()) &&  $this->user->getRights() >= 5);
-//        }
-//
-//        protected function action($action) : void {
-//            if ($this->access()) {
-////                do something...
-//            } else {
-//                Relocator::deadend(403);
-//            }
-//        }
-
         public function __invoke()
         {
             $this->page->assign('title', $this->title)->assign('content', $this->content)->assign('user', $this->user)->display('layout');
-//            var_dump($this->user);
         }
     }
 

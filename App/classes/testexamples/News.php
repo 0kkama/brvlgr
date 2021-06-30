@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\models;
+    namespace App\classes\testexamples;
 
     use App\classes\Db;
     use App\classes\abstract\Govno;
