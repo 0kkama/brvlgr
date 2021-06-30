@@ -3,7 +3,8 @@
     declare(strict_types=1);
 
     use App\classes\Config;
-    use App\classes\controllers\Relocator;
+    use App\classes\controllers\Error;
+    use App\classes\exceptions\DbException;
     use App\classes\utility\Router;
 
     // base settings
@@ -19,7 +20,7 @@
             require_once $include;
         } else {
             var_dump($include);
-            //            Relocator::deadend(400); exit();
+            //            Relocator::deadend(400);
         }
     });
 
@@ -38,53 +39,32 @@
     //    /var/lib/php/sessions
     session_start();
 
+//$ex = new Exception();
 
-//    $id = '';
 //
-//    $us = new \App\classes\models\User();
+    try {
+
+//    $ex = new \App\classes\exceptions\FullException();
+        $exe = new Exception('Строка сообщения для логов', 500);
+        throw $exe;
+        //        $exe->setLog('Строка логов')->setParam('Строка парамтров')->throwIt();
+//    DbException::create('Ошибка в базе данных', 500)->setLog('Message')->throwIt();
+
+    } catch (Exception $ex) {
+\App\classes\utility\Logger::create($ex)->write();
+
+    var_dump($ex);
+    }
+//\App\classes\utility\Logger::create($ex)->write();
+
+
+
+
+
+    //    $ex = new \App\classes\exceptions\DbException('Какая-то хуйня', 404);
+//    $ex->setLog('Полетел запрос в пизду')->setParam('SELECT + START');
 //
-//    var_dump($us->getLogin());
-
-
-
-//    $cntrl = $_GET['cntrl'] ?? 'Index';
-//    $cntrl = ucfirst(val($cntrl));
-//    $id = $_GET['id'] ?? null;
-//
-//    $class = "App\classes\controllers\\$cntrl";
-//    $cntrl = new $class;
-//    $cntrl();
-
-//$uri = '/relocator/400';
-//$uri = '/article/read/32/?dfdfdf=dsfs';
-//
-//    $pattern = '@(\?.*)?@';
-//    $uri = preg_replace($pattern, '', $uri);
-//
-//$uri = trim($uri, '/');
-//$value = explode('/', $uri);
-//var_dump($value);
-//var_dump($uri);
-
-//$router = new \App\classes\utility\Router($uri);
-//
-//$result = $router();
-//
-//var_dump($result);
-
-
-//    $id = $_GET['id'];
-//
-//    $value = Article::findById($id);
-//
-//    var_dump($value);
-//
-//    if($value->exist()) {
-//        echo '!!!!!!!!!';
-//    }
-
-
-
+//    var_dump($ex);
 
 
 

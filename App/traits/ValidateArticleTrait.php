@@ -5,7 +5,7 @@
 
 
     use App\classes\Config;
-    use App\classes\controllers\Relocator;
+    use App\classes\controllers\Error;
     use App\classes\models\Article;
 
     trait ValidateArticleTrait
@@ -15,18 +15,18 @@
 
             //            проверка наличия пользователя и корректности id
             if (!$this->user->exist()) {
-                Relocator::deadend(403); exit();
+                Error::deadend(403);
             }
 
             $id = $_GET['id'];
             if (!is_numeric($id) || empty($id)) {
-                Relocator::deadend(400); exit();
+                Error::deadend(400);
             }
 
             //    получение данных уже существующей статьи
             $this->article = Article::findById($id);
             if (!$this->article->exist()) {
-                Relocator::deadend(404); exit();
+                Error::deadend(404);
             }
         }
     }

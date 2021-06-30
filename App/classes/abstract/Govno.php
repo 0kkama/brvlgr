@@ -5,9 +5,11 @@
 //    use classes\models\Article;
 //    use App\interfaces\Singleton;
     use App\classes\Db;
-    use App\classes\UsersErrors;
-use App\interfaces\HasId;
-use App\interfaces\Shitty;
+    use App\classes\exceptions\DbException;
+    use App\classes\utility\UsersErrors;
+    use App\interfaces\HasId;
+    use App\interfaces\Shitty;
+    use Exception;
 
 /**
  * Class Govno has following methods : <ul>
@@ -45,10 +47,16 @@ use App\interfaces\Shitty;
          */
         public static function findById(string $id) : static
         {
-            $db = new Db();
-            $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = :id';
-            $result = $db->queryOne($sql, ['id' => $id], static::class);
-            return $result ?? new static;
+            try {
+                $db = new Db();
+                $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = :id';
+//                $sql = 'SELECT * FROM' . ' WHERE id = :id';
+                $result = $db->queryOne($sql, ['id' => $id], static::class);
+            } catch (Exception $e) {
+                $ex = new DbException($e->getMessage(), 500);
+                $ex->setAlert('Ошибка при запросе к базе данных')->setParam("Запрос `$sql`")->throwIt();
+            }
+                return $result ?? new static;
         }
 
         /**
@@ -58,6 +66,7 @@ use App\interfaces\Shitty;
         {
             $db = new Db();
             $sql = 'SELECT * FROM ' . static::TABLE_NAME;
+//            $sql = 'SELECT * FROM ' . 'zorba';
             return $db->queryAll($sql, [], static::class);
         }
 

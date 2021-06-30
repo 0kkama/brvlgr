@@ -1,8 +1,7 @@
 <?php
 
 
-    namespace App\classes\controllers\test;
-
+    namespace App\classes\testexamples;
 
     use App\classes\abstract\Controller;
     use App\classes\Config;
@@ -18,7 +17,7 @@
 
         protected function checkUser() {
             if (!$this->user->exist()) {
-                Relocator::deadend(403); exit();
+                Relocator::deadend(403);
             }
         }
 
@@ -26,14 +25,14 @@
         {
             // проверка наличия и корректности переданного id
             if (!is_numeric($this->params['id']) || empty($this->params['id'])) {
-                Relocator::deadend(400); exit();
+                Relocator::deadend(400);
             }
 
             // получение данных уже существующей статьи и проверка ее существования
             $this->article = Publication::findById($this->params['id']);
 
             if (!$this->article->exist()) {
-                Relocator::deadend(404); exit();
+                Relocator::deadend(404);
             }
         }
 
@@ -42,7 +41,7 @@
             if (method_exists($this, $action)) {
                 $this->$action();
             } else {
-                Relocator::deadend(400); exit();
+                Relocator::deadend(400);
             }
         }
 

@@ -3,7 +3,9 @@
     declare(strict_types=1);
 
     use App\classes\Config;
-    use App\classes\controllers\Relocator;
+    use App\classes\controllers\Error;
+    use App\classes\exceptions\FullException;
+    use App\classes\utility\Logger;
     use App\classes\utility\Router;
 
     // base settings
@@ -12,16 +14,16 @@
     error_reporting(E_ALL);
     // include DEBUGGER
     include_once (__DIR__ . '/../utility/debug.util.php');
-    set_error_handler('err_catcher');
+    set_error_handler('err_catcher', E_ALL);
 
     // set autoload
     spl_autoload_register(static function($className) {
         $include = __DIR__ . '/../' . str_replace('\\', '/', $className) . '.php';
-        if (file_exists($include)) {
+        if (is_readable($include)) {
             require_once $include;
         } else {
-            trigger_error("Файл с классом $include не существует");
-            Relocator::deadend(400); exit();
+            trigger_error("Ошибка при попытке подключения класса $className. Файл $include не существует или повреждён");
+            Error::deadend(400, 'Ошибка при подключении класса');
         }
     });
 
@@ -34,53 +36,53 @@
 
     //    /var/lib/php/sessions
     session_start();
-
     $uri = $_SERVER['REQUEST_URI'];
     $router = new Router($uri);
     $params = $router();
-
-    var_dump($params);
 
     $cntrl = ucfirst($params['controller']);
     $className = "App\classes\controllers\\$cntrl";
 
     if (!class_exists($className)) {
-        Relocator::deadEnd(400);
+        trigger_error("Контроллер несуществующего класса $className в " . __FILE__ . __LINE__ );
+        Error::deadEnd(400);
     }
 
-    $controller = new $className($params);
-    $controller();
+    try {
+        $controller = new $className($params);
+        $controller();
+    }
+    catch (FullException $ex) {
+        Logger::create($ex)->write();
+        Error::deadend($ex->getCode(), $ex->getAlert());
+    }
+    catch (Exception $ex) {
+        Logger::create($ex)->write();
+        Error::deadend($ex->getCode());
+    }
 
-    echo ($_SERVER['REQUEST_METHOD']);
+
+//    echo ($_SERVER['REQUEST_METHOD']);
 
     //<editor-fold desc="TODO">
 /* TODO
     - решить проблему с повторной отправкой данных при F5 на Login и Gallery
-    - доделать ДЗ по контроллерам
+    - решить проблему с костылями и путями на Login и Gallery
     - доделать конфиг nginx для запрета доступа ко всем директориям, кроме public
           а так же файлам типо /css/style.css
     - https://stackoverflow.com/questions/40966017/nginx-deny-access-of-a-directory-and-files-inside-it
-    - сделать доступ по домену
-    -
+    - сделать доступ по домену (http)
+    1. + Добавьте в свой проект класс исключений, возникающих при работе с базой данных.
+            Придумайте - где их можно бросать? Как вариант - нет соединения с БД, ошибка в запросе.
+    2. Ловите исключения из пункта 1 во фронт-контроллере, поймав же,
+       выдавайте пользователю красивую страницу с сообщением об ошибке.
+    3. Добавьте класс исключений, означающих "Ошибка 404 - не найдено". Бросайте такое исключение в ситуациях,
+       когда вы не можете найти в базе запрашиваемую запись. Добавьте обработку исключений этого типа во фронт-контроллер.
+    4. Добавьте в модель новостей (а лучше - в базовую модель) метод fill(array $data),
+       который заполняет свойства модели данными из массива. Примените в этом методе паттерн "Мультиисключение".
+        + 5*. Добавьте в свой проект класс-логгер. Его задача - записывать в текстовый лог информацию об
+       ошибках - когда и где возникла ошибка, какая. Логируйте исключения из пунктов 1 и 3.
 */
         //</editor-fold>
 
-    //<editor-fold desc="OLD CODE">
-    //    $cntrlName = $_SERVER['REQUEST_URI'] ?? 'Index';
-//    $class = 'App\classes\controllers\Index';
-//
-//    $class = Index::class;
-//    $controller = new $class();
-//
-////    заглушка: если пользователь не найден, то создаём новый пустой объект User для избежания ошибки при вызове getLogin из null
-//    $user = User::getCurrent(Config::getInstance()->SESSIONS) ?? new User();
-//    $news =  Article::getLast(5);
-//    $currentPage = new View();
-//
-//    $content = $currentPage->assign('news', $news)->render('news');
-//    $currentPage->assign('title', $title)->assign('content', $content)->assign('name', $user->getLogin())->display('layout');
-//
-//    var_dump($_SERVER['REQUEST_URI']);
-//    var_dump($cntrlName);
-    //</editor-fold>
 

@@ -1,6 +1,6 @@
 <?php
     use App\classes\models\User;
-    use App\classes\UsersErrors;
+    use App\classes\utility\UsersErrors;
     /** @var UsersErrors $errMsg */
     /** @var User $user */
 ?>
@@ -11,7 +11,7 @@
         </div>
     <?php endif;?>
     <h1>Галерея</h1>
-    <?php foreach($list as $number => $cat): ?><a href=<?="/image/$number"?>><img src="<?=$cat?>" alt="<?="Котик номер $number"?>" height="200" width="200" hspace="20" vspace="20" border="0"></a><?php endforeach; ?>
+    <?php foreach($list as $number => $cat): ?><a href=<?="image/$number"?>><img src="<?=$cat?>" alt="<?="Котик номер $number"?>" height="200" width="200" hspace="20" vspace="20" border="0"></a><?php endforeach; ?>
 </div>
 <?php if ($user()):?>
 <form  method="post" enctype="multipart/form-data">

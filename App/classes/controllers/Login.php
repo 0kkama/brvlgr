@@ -6,7 +6,7 @@
 
     use App\classes\abstract\Controller;
     use App\classes\Config;
-    use App\classes\UsersErrors;
+    use App\classes\utility\UsersErrors;
     use JsonException;
 
     class Login extends Controller
@@ -28,6 +28,9 @@
             }
         }
 
+        /**
+         * @throws JsonException
+         */
         protected function loginUser() : void
         {
             $this->checkUser();
@@ -44,7 +47,8 @@
                     try {
                         $data = json_encode(['user' => $this->user->login, 'token' => $token, 'date' => time()], JSON_THROW_ON_ERROR);
                     }
-                    catch (JsonException $e) {
+                    catch (JsonException $ex) {
+                        throw $ex;
                     }
                     // помещаем данные в файл сессий, в куки и в массив сессий
                     setcookie('token', $token, time() + 86400, $this->relocation);

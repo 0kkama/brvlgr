@@ -4,13 +4,17 @@
 
     use App\classes\abstract\Controller;
     use App\classes\Config;
-    use App\classes\UsersErrors;
+    use App\classes\exceptions\FileException;
+    use App\classes\utility\UsersErrors;
     use App\classes\Uploader;
 
     class Gallery extends Controller
     {
         protected array $list;
 
+        /**
+         * @throws FileException
+         */
         public function __construct($params)
         {
             parent::__construct($params);
@@ -24,7 +28,12 @@
 
             $this->title = 'Галерея';
             $this->list = glob(Config::getInstance()->IMG_PATH . "*.{jpg,jpeg}", GLOB_BRACE);
-//            var_dump($this->list);
+//                var_dump(Config::getInstance()->IMG_PATH);
+            var_dump($this->list);
+            if (empty($this->list)) {
+//                throw new FileException('Ошибка при получении списка изображений',500);
+            }
+
             $this->content = $this->page->assign('list', $this->list)->assign('errMsg', $this->errors)->assign('user', $this->user)->render('gallery');
         }
     }
