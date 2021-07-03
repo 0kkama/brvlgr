@@ -5,6 +5,7 @@
 
     use Exception;
     use App\interfaces\ArrayAccessInterface;
+    use JsonException;
     use Traversable;
 
     class MultiException extends FullException implements ArrayAccessInterface
@@ -16,53 +17,75 @@
             $this->errors[] = $err;
         }
 
-        public function all() : array
+        public function getAll() : array
         {
             return $this->errors;
         }
 
-        public function empty() : bool
+        public function isEmpty() : bool
         {
             return empty($this->errors);
         }
 
-        public function getIterator()
-        {
-            // TODO: Implement getIterator() method.
-        }
+//        public function getIterator()
+//        {
+//            // TODO: Implement getIterator() method.
+//        }
 
-        public function offsetExists($offset)
+        public function offsetExists($offset) : bool
         {
-            // TODO: Implement offsetExists() method.
+            return isset($this->errors[$offset]);
         }
 
         public function offsetGet($offset)
         {
-            // TODO: Implement offsetGet() method.
+            return $this->errors[$offset] ?: null;
         }
 
-        public function offsetSet($offset, $value)
+        public function offsetSet($offset, $value) : void
         {
-            // TODO: Implement offsetSet() method.
+            is_null($offset) ? $this->errors[] = $value : $this->errors[$offset] = $value;
         }
 
-        public function offsetUnset($offset)
+        public function offsetUnset($offset) : void
         {
-            // TODO: Implement offsetUnset() method.
+
+            if (is_null($offset)) {
+                unset($this->errors[$offset]);
+            }
         }
 
-        public function serialize()
+        public function serialize() : string
         {
-            // TODO: Implement serialize() method.
+            if(!$this->isEmpty()) {
+                $res = serialize($this->errors);
+            }
+            return (empty($res)) ? '' : $res;
+
+//            if(!$this->isEmpty()) {
+//                $res = json_encode($this->errors, JSON_THROW_ON_ERROR);
+//            }
+//            return (empty($res)) ? '' : $res;
         }
 
-        public function unserialize($data)
+        public function unserialize($data) : void
         {
-            // TODO: Implement unserialize() method.
+            $this->errors = unserialize($data, ['allowed_classes' => true]);
+            //            $this->errors = json_decode($data, true, 16, JSON_THROW_ON_ERROR);
         }
 
-        public function count()
+        public function count() : int
         {
-            // TODO: Implement count() method.
+            return count($this->errors);
+        }
+
+        public function __invoke()
+        {
+            var_dump($this->errors);
+        }
+
+        public function jsonSerialize()
+        {
+            return $this->errors;
         }
     }

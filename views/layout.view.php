@@ -2,7 +2,7 @@
 /** @var  App\classes\models\User $user */
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <title><?= $title ?? '' ?></title>
     <meta charset="utf-8" />

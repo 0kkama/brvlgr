@@ -64,16 +64,19 @@
      * Возвращает массив с данными, декодированными из json-файла в случае успеха, либо пустой массив.
      * @param string $fileName
      * @return array
+     * @throws JsonException
      */
     function getFileContent (string $fileName) : array
     {
+//        TODO проверка на empty оказалась недостаточной в слачае наличия пробела или переноса.
+//          ДОРАБОТАТЬ!!!
         $content = file($fileName);
         if ( empty($content) ) {
             return [];
         }
 
         $wrapper = static function (string $line) : array {
-            return json_decode($line,true);
+            return json_decode($line,true, 8, JSON_THROW_ON_ERROR);
         };
         return array_map($wrapper, $content);
     }

@@ -1,6 +1,13 @@
 <?php
     //<editor-fold desc="INITIALIZATION">
+    // base settings
     declare(strict_types=1);
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+    date_default_timezone_set('Europe/Moscow');
+    error_reporting(E_ALL);
+    // include DEBUGGER
+    include_once (__DIR__ . '/../utility/debug.util.php');
+    set_error_handler('err_catcher', E_ALL);
 
     use App\classes\Config;
     use App\classes\controllers\Error;
@@ -8,13 +15,8 @@
     use App\classes\utility\Logger;
     use App\classes\utility\Router;
 
-    // base settings
-    setlocale(LC_ALL, "ru_RU.UTF-8");
-    date_default_timezone_set('Europe/Moscow');
-    error_reporting(E_ALL);
-    // include DEBUGGER
-    include_once (__DIR__ . '/../utility/debug.util.php');
-    set_error_handler('err_catcher', E_ALL);
+    // set composer autoload
+    require __DIR__ . '/../vendor/autoload.php';
 
     // set autoload
     spl_autoload_register(static function($className) {
@@ -66,6 +68,7 @@
 
     //<editor-fold desc="TODO">
 /* TODO
+    - допилить MultiException
     - решить проблему с повторной отправкой данных при F5 на Login и Gallery
     - решить проблему с костылями и путями на Login и Gallery
     - доделать конфиг nginx для запрета доступа ко всем директориям, кроме public

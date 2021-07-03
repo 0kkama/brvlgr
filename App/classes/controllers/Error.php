@@ -7,6 +7,7 @@
     use App\classes\abstract\Controller;
     use App\classes\Config;
     use App\classes\models\User;
+    use App\classes\utility\UsersErrors;
     use App\classes\View;
     use JetBrains\PhpStorm\Pure;
 
@@ -33,7 +34,13 @@
 
         public function __construct($params)
         {
-            parent::__construct($params);
+            $this->page = new View();
+            $this->errors = new UsersErrors();
+            $this->params = $params;
+            $this->user = new User();
+//            $this->user = User::getCurrent(Config::getInstance()->SESSIONS);
+//            parent::__construct($params);
+
 
             if (empty($params['id']) || !is_numeric($params['id']) || !array_key_exists($params['id'], self::$signals)) {
                 $number = 418;
@@ -71,6 +78,7 @@
                     'title' => $this->title,
                     'message' => $this->message,
                 ])->render('error');
+//            $this->page->assign('title', $this->title)->assign('content', $this->content)->assign('user', $this->user)->display('layout');
             parent::__invoke();
         }
     }

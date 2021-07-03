@@ -42,22 +42,29 @@
 //$ex = new Exception();
 
 //
-    try {
-
-//    $ex = new \App\classes\exceptions\FullException();
-        $exe = new Exception('Строка сообщения для логов', 500);
-        throw $exe;
-        //        $exe->setLog('Строка логов')->setParam('Строка парамтров')->throwIt();
-//    DbException::create('Ошибка в базе данных', 500)->setLog('Message')->throwIt();
-
-    } catch (Exception $ex) {
-\App\classes\utility\Logger::create($ex)->write();
-
-    var_dump($ex);
-    }
+//    try {
+//
+////    $ex = new \App\classes\exceptions\FullException();
+//        $exe = new Exception('Строка сообщения для логов', 500);
+//        throw $exe;
+//        //        $exe->setLog('Строка логов')->setParam('Строка парамтров')->throwIt();
+////    DbException::create('Ошибка в базе данных', 500)->setLog('Message')->throwIt();
+//
+//    } catch (Exception $ex) {
+//\App\classes\utility\Logger::create($ex)->write();
+//
+//    var_dump($ex);
+//    }
 //\App\classes\utility\Logger::create($ex)->write();
 
+    $fileName = Config::getInstance()->SESSIONS;
 
+    $content = file($fileName);
+    var_dump($content);
+
+    //    if ( empty($content) ) {
+//        echo 'Empty';
+//    }
 
 
 

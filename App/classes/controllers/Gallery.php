@@ -28,10 +28,9 @@
 
             $this->title = 'Галерея';
             $this->list = glob(Config::getInstance()->IMG_PATH . "*.{jpg,jpeg}", GLOB_BRACE);
-//                var_dump(Config::getInstance()->IMG_PATH);
-            var_dump($this->list);
+
             if (empty($this->list)) {
-//                throw new FileException('Ошибка при получении списка изображений',500);
+                throw new FileException('Ошибка при получении списка изображений',500);
             }
 
             $this->content = $this->page->assign('list', $this->list)->assign('errMsg', $this->errors)->assign('user', $this->user)->render('gallery');

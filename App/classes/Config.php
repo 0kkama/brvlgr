@@ -15,8 +15,8 @@
 
     final class Config implements Singleton
     {
-        private $configurations = null;
-        private $constants;
+        private array $configurations;
+        private array $constants;
 
         use SingletonTrait;
 

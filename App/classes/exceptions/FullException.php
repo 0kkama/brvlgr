@@ -28,6 +28,7 @@
         }
 
         /**
+         * Optional message for user
          * @param string $alert
          * @return FullException
          */
@@ -43,6 +44,7 @@
 //        }
 
         /**
+         * Optional parameters for logs
          * @param string $param
          * @return FullException
          */

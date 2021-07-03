@@ -4,12 +4,15 @@
 
     use App\classes\abstract\Govno;
     use App\classes\Db;
+    use App\classes\exceptions\FileException;
+    use App\classes\exceptions\FullException;
     use App\interfaces\HasId;
     use App\interfaces\Shitty;
     use App\interfaces\UserInterface;
     use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
     use JetBrains\PhpStorm\Pure;
+    use JsonException;
 
     /**
      * Class User
@@ -44,9 +47,10 @@
         /**
          * Возвращает данные текущего пользователя по кукам и сесси, либо null
          * @param string $sessionFile
-         * @return object|null
+         * @return User
+         * @throws FullException
          */
-//        TODO обращение к сессии и кики в модели - плохая практика. исправить?
+//        TODO обращение к сессии и куки в модели - плохая практика. исправить?
         public static function getCurrent(string $sessionFile) : User
         {
             $cookeToken = $_COOKIE['token'] ?? null; // TODO добавить валидацию токенов?
@@ -65,7 +69,16 @@
             // если есть только куки-токен, или только сессионный токен, то сравниваем его с токеном из файла сессий (БД)
             // если совпадают, то берём имя пользователя из файла сессий (БД) и даём соответствующие права.
             $tokenOne =  $sessionToken ?? $cookeToken;
-            $dbSession = getFileContent( $sessionFile );
+
+//            TODO исправить работу исключения или иным способом решить проблему получения пользователя для заглушки-error
+//              ошибка при парсинге sessions.json способна остановить работу всего сайта из-за того, что попытка получения
+//              данных о текущем пользователе происходит на каждом из контроллеров
+            try {
+                $dbSession = getFileContent($sessionFile);
+            } catch (JsonException $e) {
+                $ex = new FileException($e->getMessage(), 456);
+                $ex->setParam('Ошибка при декодировании данных из файла sessions.json')->throwIt();
+            }
             $haystack = array_column($dbSession, 'user', 'token');
             $userName = $haystack[$tokenOne] ?? null;
             // если нет ни куки-токена ни сессионного-токена, то возвращаем null

@@ -45,7 +45,7 @@
                     $token = makeToken();
                     $fileName = Config::getInstance()->SESSIONS;
                     try {
-                        $data = json_encode(['user' => $this->user->login, 'token' => $token, 'date' => time()], JSON_THROW_ON_ERROR);
+                        $data = json_encode(['user' => $this->user->login, 'token' => $token, 'date' => time()], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
                     }
                     catch (JsonException $ex) {
                         throw $ex;

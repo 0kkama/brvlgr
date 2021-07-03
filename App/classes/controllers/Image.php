@@ -24,7 +24,6 @@
         public function __invoke()
         {
             $id = $this->params['id'];
-            var_dump($this->params);
 
             if (!is_numeric($id)) {
                 Error::deadend(400);
