@@ -38,9 +38,8 @@
         #[Pure] public function getFirst() : string {
             if ($this->count() !== 0) {
                 return $this->errors[0];
-            } else {
-                return '418';
             }
+            return '418';
         }
 
         /**
@@ -54,6 +53,11 @@
          * @return bool
          */
         #[Pure] public function __invoke() : bool
+        {
+            return $this->count() !== 0;
+        }
+
+        #[Pure] public function notEmpty() : bool
         {
             return $this->count() !== 0;
         }
