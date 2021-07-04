@@ -100,7 +100,6 @@
                 return null;
         }
 
-
         /**
          * Return TRUE only if User has NOT empty fields $id and $login
          * @return bool */
@@ -109,7 +108,7 @@
             return (!empty($this->id) && !empty($this->login));
         }
 
-        public function exist() : bool
+        #[Pure] public function exist() : bool
         {
             return $this();
         }

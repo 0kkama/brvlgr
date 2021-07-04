@@ -63,9 +63,9 @@
 //            запрет на магическую установу параметров
         }
 
-        public function __get($param) : ?string
+        public function __get($param) : string
         {
-            return $this->constants[$param] ?? null;
+            return $this->constants[$param] ?? '';
         }
     }
 

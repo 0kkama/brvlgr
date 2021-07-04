@@ -6,7 +6,8 @@
     use App\classes\Config;
     use App\classes\exceptions\FileException;
     use App\classes\utility\UsersErrors;
-    use App\classes\Uploader;
+    use App\classes\utility\Uploader;
+    use Exception;
 
     class Gallery extends Controller
     {
@@ -14,6 +15,7 @@
 
         /**
          * @throws FileException
+         * @throws Exception
          */
         public function __construct($params)
         {
@@ -21,13 +23,23 @@
             $this->errors = new UsersErrors();
 
             // TODO подумать, не перемудрил ли я здесь с условием
-            if ( !empty($this->user->__invoke()) && ( $_SERVER['REQUEST_METHOD'] = 'POST' ) && (isset($_FILES['newimage'])) ) {
+            if ( ( $_SERVER['REQUEST_METHOD'] === 'POST' ) && (isset($_FILES['newimage'])) && $this->user->exist()) {
                 $newImage = new Uploader($_FILES['newimage'], $this->user);
                 $this->errors = $newImage->upload();
             }
 
             $this->title = 'Галерея';
-            $this->list = glob(Config::getInstance()->IMG_PATH . "*.{jpg,jpeg}", GLOB_BRACE);
+            $origPath = Config::getInstance()->IMG_PATH;
+            $prePath = Config::getInstance()->IMG_PRE;
+
+            $this->list = scandir($origPath, SCANDIR_SORT_DESCENDING);
+            array_pop($this->list);
+            array_pop($this->list);
+
+            $callback = static function (&$value, $key, $path) {
+                $value = $path . $value;
+            };
+            array_walk($this->list, $callback, $prePath);
 
             if (empty($this->list)) {
                 throw new FileException('Ошибка при получении списка изображений',500);
@@ -38,7 +50,6 @@
     }
 
     /*
-     *
      * TODO ПЕРЕДЕЛАТЬ РАБОТУ КОНТРОЛЛЕРОВ Gallery и Image с учётом ЧПУ
         TODO 1. м.б. добавить рандомайзер имени для файла
         TODO 2. и/или добавить проверку совпадения нового имени и уже существущих

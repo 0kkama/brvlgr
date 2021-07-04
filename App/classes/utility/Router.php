@@ -69,7 +69,6 @@
             foreach ($this->regex as $index => $regex) {
                 $this->parseEach($index);
             }
-
             return $this->result;
         }
 

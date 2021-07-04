@@ -21,7 +21,7 @@
         protected User $user;
         protected UsersErrors $errors;
         protected array $params;
-        protected string $title, $content;
+        protected string $title, $content, $id;
 
         public function __construct($params)
         {
@@ -31,9 +31,26 @@
             $this->params = $params;
         }
 
+        protected function action(string $action) : void
+        {
+            if (method_exists($this, $action)) {
+                $this->$action();
+            } else {
+                Error::deadend(400);
+            }
+        }
+
         public function __invoke()
         {
             $this->page->assign('title', $this->title)->assign('content', $this->content)->assign('user', $this->user)->display('layout');
+        }
+
+        /**
+         * @return string
+         */
+        public function getId() : string
+        {
+            return $this->id;
         }
     }
 

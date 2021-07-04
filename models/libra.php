@@ -49,7 +49,9 @@
      * generate random string (token)
      * @param int $length (by default equal 32)
      * @return string $token (random string in hexadecimal representation. Max length of token is 128 bytes)
-     **/
+     *
+     * @throws Exception
+     */
     function makeToken ( int $length = 32 ) : string
     {
         if ( $length > 64 ) {
@@ -59,6 +61,7 @@
         }
         return $token;
     }
+//    TODO implement custom exception... maybe
 
     /**
      * Возвращает массив с данными, декодированными из json-файла в случае успеха, либо пустой массив.

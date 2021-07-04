@@ -6,6 +6,7 @@
 <head>
     <title><?= $title ?? '' ?></title>
     <meta charset="utf-8" />
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/styles.css"/>
 </head>
@@ -25,7 +26,7 @@
                             <li> <a href="/login"> Войти </a> </li>
                             <li> <a href="/"> Главная </a> </li>
                             <li> <a href="/news"> Новости </a> </li>
-                            <li> <a href="/gallery"> Котики </a> </li>
+                            <li> <a href="/gallery"> Галерея </a> </li>
                             <li> <a href="/article/add"> Добавить </a> </li>
 
                         <?php for($i = 0 ; $i < 4 ; $i++): ?>

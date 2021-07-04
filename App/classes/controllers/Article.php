@@ -16,16 +16,6 @@
         protected string $content = 'BIG PROBLEM!';
         protected Publication $article;
 
-
-        protected function action(string $action) : void
-        {
-            if (method_exists($this, $action)) {
-                $this->$action();
-            } else {
-                Error::deadend(400);
-            }
-        }
-
         protected function add() : void
         {
             $this->title = 'Добавить публикацию';
