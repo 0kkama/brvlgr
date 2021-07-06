@@ -86,8 +86,6 @@
 
             $this->action($this->params['action']);
 
-
-//            $this->content = $this->page->assign('list', $this->list)->assign('id', $this->id)->render('image');
             $this->content = $this->page->assign('image', $this)->render('image');
             parent::__invoke();
         }
