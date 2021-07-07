@@ -2,6 +2,7 @@
   "name": "0kkama/profit",
   "description": "training project. When a hope becomes a loss",
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "license": "proprietary",
   "authors": [
     {
@@ -15,7 +16,9 @@
     "intervention/image": "^2.5",
     "twig/twig": "v3.3.2",
     "nikic/fast-route": "v1.3.0",
-    "phpunit/phpunit": "9.5.6"
+    "phpunit/phpunit": "9.5.x-dev",
+    "swiftmailer/swiftmailer": "6.2.x-dev",
+    "phpunit/php-timer": "^5.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"

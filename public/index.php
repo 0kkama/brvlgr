@@ -14,6 +14,7 @@
     use App\classes\exceptions\FullException;
     use App\classes\utility\Logger;
     use App\classes\utility\Router;
+    use SebastianBergmann\Timer\ResourceUsageFormatter;
 
     // set composer autoload
     require __DIR__ . '/../vendor/autoload.php';
@@ -38,6 +39,7 @@
 
     //    /var/lib/php/sessions
     session_start();
+
     $uri = $_SERVER['REQUEST_URI'];
     $router = new Router($uri);
     $params = $router();
@@ -62,6 +64,8 @@
         Logger::create($ex)->write();
         Error::deadend($ex->getCode());
     }
+
+    echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
 
 //    var_dump($_SERVER['REQUEST_URI']);
 
