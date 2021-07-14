@@ -66,7 +66,7 @@
             exit;
         }
 
-        public function action(string $action): void
+        public function action(string $action) : void
         {
             if( $action === '') {
                 $action = 'show';
@@ -93,7 +93,7 @@
         /**
          * @return string
          */
-        public function getImage(): string
+        public function getImage() : string
         {
             return $this->image;
         }

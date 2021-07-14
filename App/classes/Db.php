@@ -15,7 +15,6 @@
      */
     class Db
     {
-
         /**
          * @var PDO
          */
@@ -48,8 +47,7 @@
                     );
             }
             catch (PDOException $ex) {
-                $dbEx = new DbException($ex->getMessage(), 500);
-                $dbEx->setAlert('Ошибка в базе данных')->throwIt();
+                (new DbException($ex->getMessage(), 500))->setAlert('Ошибка в базе данных')->throwIt();
             }
             return $dbConnection;
         }
@@ -63,9 +61,7 @@
         {
             $errInfo = $query->errorInfo();
             if($errInfo[0] !== PDO::ERR_NONE) {
-                $ex = new DbException($errInfo[2], 500);
-                $ex->setAlert('Ошибка при запросе к базе данных')->setParam($query->queryString)->throwIt();
-//                trigger_error($errInfo[2], E_USER_ERROR);
+                (new DbException($errInfo[2], 500))->setAlert('Ошибка при запросе к базе данных')->setParam($query->queryString)->throwIt();
             }
             return true;
         }

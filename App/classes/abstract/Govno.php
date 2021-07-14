@@ -53,8 +53,7 @@
                 $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = :id';
                 $result = $db->queryOne($sql, ['id' => $id], static::class);
             } catch (Exception $e) {
-                $ex = new DbException($e->getMessage(), 500);
-                $ex->setAlert('Ошибка при запросе к базе данных')->setParam("Запрос `$sql`")->throwIt();
+                (new DbException($e->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->setParam("Запрос `$sql`")->throwIt();
             }
                 return $result ?? new static;
         }

@@ -18,7 +18,9 @@
     "nikic/fast-route": "v1.3.0",
     "phpunit/phpunit": "9.5.x-dev",
     "swiftmailer/swiftmailer": "6.2.x-dev",
-    "phpunit/php-timer": "^5.0"
+    "phpunit/php-timer": "^5.0",
+    "ext-imagick": "*",
+    "ext-pdo": "*"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"

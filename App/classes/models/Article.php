@@ -37,8 +37,7 @@
         public static function getLast(int $limit) : ?array
         {
 //            if ( $limit < 5 ) {
-//                $ex = new DbException('Недостаточное количество айтемов', 404);
-//                $ex->setAlert('фыр-фыр-фыр')->setParam("limit = $limit")->throwIt();
+//                (new DbException('Недостаточное количество айтемов', 404))->setAlert('фыр-фыр-фыр')->setParam("limit = $limit")->throwIt();
 //            }
 
             $db = new Db;

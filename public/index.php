@@ -68,7 +68,6 @@
     echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
 
 //    var_dump($_SERVER['REQUEST_URI']);
-
 //    echo ($_SERVER['REQUEST_METHOD']);
 
     //<editor-fold desc="TODO">
