@@ -4,7 +4,7 @@
     namespace App\classes\exceptions;
 
 
-    use App\classes\utility\Logger;
+    use App\classes\utility\LittleLogger;
     use Exception;
     use JetBrains\PhpStorm\Pure;
     use mysql_xdevapi\SqlStatementResult;

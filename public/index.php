@@ -5,14 +5,14 @@
     setlocale(LC_ALL, "ru_RU.UTF-8");
     date_default_timezone_set('Europe/Moscow');
     error_reporting(E_ALL);
-    // include DEBUGGER
-    include_once (__DIR__ . '/../utility/debug.util.php');
-    set_error_handler('err_catcher', E_ALL);
+
+//    include_once (__DIR__ . '/../utility/debug.util.php');
+//    set_error_handler('err_catcher', E_ALL);
 
     use App\classes\Config;
+    use App\classes\utility\LittleLogger;
     use App\classes\controllers\Error;
     use App\classes\exceptions\FullException;
-    use App\classes\utility\Logger;
     use App\classes\utility\Router;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
 
@@ -30,6 +30,7 @@
         }
     });
 
+    set_error_handler('App\classes\utility\LittleLogger::errorCatcher', E_ALL);
     // set config instance
     Config::getInstance()->setInstance(include (__DIR__ . '/../config/config.php'));
 
@@ -57,18 +58,18 @@
         $controller();
     }
     catch (FullException $ex) {
-        Logger::create($ex)->write();
+        LittleLogger::create($ex)->write();
         Error::deadend($ex->getCode(), $ex->getAlert());
     }
     catch (Exception $ex) {
-        Logger::create($ex)->write();
+        LittleLogger::create($ex)->write();
         Error::deadend($ex->getCode());
     }
 
-    echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
+    echo $df;
 
-//    var_dump($_SERVER['REQUEST_URI']);
-//    echo ($_SERVER['REQUEST_METHOD']);
+//    вывод данных о ресурсах
+    echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
 
     //<editor-fold desc="TODO">
 /* TODO
