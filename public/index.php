@@ -5,16 +5,17 @@
     setlocale(LC_ALL, "ru_RU.UTF-8");
     date_default_timezone_set('Europe/Moscow');
     error_reporting(E_ALL);
-    // include DEBUGGER
-    include_once (__DIR__ . '/../utility/debug.util.php');
-    set_error_handler('err_catcher', E_ALL);
+
+//    include_once (__DIR__ . '/../utility/debug.util.php');
+//    set_error_handler('err_catcher', E_ALL);
 
     use App\classes\Config;
+    use App\classes\utility\LittleLogger;
     use App\classes\controllers\Error;
     use App\classes\exceptions\FullException;
-    use App\classes\utility\Logger;
     use App\classes\utility\Router;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
+    use Psr\Log\LoggerInterface as PsrLog;
 
     // set composer autoload
     require __DIR__ . '/../vendor/autoload.php';
@@ -30,6 +31,7 @@
         }
     });
 
+    set_error_handler('App\classes\utility\LittleLogger::errorCatcher', E_ALL);
     // set config instance
     Config::getInstance()->setInstance(include (__DIR__ . '/../config/config.php'));
 
@@ -57,18 +59,30 @@
         $controller();
     }
     catch (FullException $ex) {
-        Logger::create($ex)->write();
+        LittleLogger::create($ex)->write();
         Error::deadend($ex->getCode(), $ex->getAlert());
     }
     catch (Exception $ex) {
-        Logger::create($ex)->write();
+        LittleLogger::create($ex)->write();
         Error::deadend($ex->getCode());
     }
 
-    echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
+    use Monolog\Logger as Monologger;
+    use Monolog\Handler\ErrorLogHandler;
+    use App\classes\testexamples\LoggerTest;
 
-//    var_dump($_SERVER['REQUEST_URI']);
-//    echo ($_SERVER['REQUEST_METHOD']);
+    $logger = new Monologger('test_logger');
+    $logger->pushHandler(new ErrorLogHandler());
+
+    //    $logger->info('test message and {user}');
+    $logger->info('This is a log! ^_^ ');
+    $logger->warning('This is a log warning! ^_^ ');
+    $logger->error('This is a log error! ^_^ ');
+
+
+    echo $_SERVER['SERVER_PROTOCOL'];
+//    вывод данных о ресурсах
+    echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
 
     //<editor-fold desc="TODO">
 /* TODO

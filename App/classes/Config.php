@@ -24,33 +24,19 @@
         {
             if (!isset($this->configurations)) {
                 $this->configurations['db'] = $params['db'];
+                $this->configurations['swift'] = $params['swift'];
                 $this->constants = $params['CONSTANTS'];
             }
         }
 
-        public function getDbHost() : string
+        public function getDb(string $name) : string
         {
-            return $this->configurations['db']['host'];
+            return $this->configurations['db'][$name] ?? '';
         }
 
-        public function getDbName() : string
+        public function getSwift(string $name) : string
         {
-            return $this->configurations['db']['name'];
-        }
-
-        public function getDbUser() : string
-        {
-            return $this->configurations['db']['user'];
-        }
-
-        public function getDbPass() : string
-        {
-            return $this->configurations['db']['pass'];
-        }
-
-        public function getDbChar() : string
-        {
-            return $this->configurations['db']['char'];
+            return $this->configurations['swift'][$name] ?? '';
         }
 
         public function __isset($param)

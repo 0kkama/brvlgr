@@ -37,8 +37,8 @@
             try {
                 $config = Config::getInstance();
                     $dbConnection = new PDO
-                    ('mysql:host=' . $config->getDbHost() . ';dbname=' . $config->getDbName() . ';charset=' . $config->getDbChar(),
-                        $config->getDbUser(), $config->getDbPass(),
+                    ('mysql:host=' . $config->getDb('host') . ';dbname=' . $config->getDb('name') . ';charset=' . $config->getDb('char'),
+                        $config->getDb('user'), $config->getDb('pass'),
                         [
                             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS,

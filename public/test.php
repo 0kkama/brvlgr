@@ -12,7 +12,7 @@
     use App\classes\Config;
     use App\classes\controllers\Error;
     use App\classes\exceptions\FullException;
-    use App\classes\utility\Logger;
+    use App\classes\utility\LittleLogger;
     use App\classes\utility\Router;
     use FastRoute\RouteCollector;
     use Intervention\Image\ImageManagerStatic as Image;
@@ -67,4 +67,4 @@
 //    array_walk($list, $callback, $path);
 
 
-  
+

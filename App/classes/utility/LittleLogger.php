@@ -7,7 +7,7 @@
     use JetBrains\PhpStorm\Pure;
 
 
-    class Logger
+    class LittleLogger
     {
         protected int|string $number;
         protected string $file, $line, $date, $time, $message, $log = '', $type = '', $alert = '', $param = '';
@@ -30,18 +30,28 @@
             }
         }
 
-        #[Pure] public static function create(Exception $ex) : Logger
+        #[Pure] public static function create(Exception $ex) : LittleLogger
         {
             return new self($ex);
         }
 
-        public function write() : Logger
+        public function write() : LittleLogger
         {
             $logFile = static::$path . '/err_' . $this->date . '.log';
-
             $this->log = "$this->time - $this->number - $this->type $this->message $this->param in $this->file line:$this->line";
             error_log("$this->log\n", 3, $logFile);
             return $this;
+        }
+
+        public static function errorCatcher(int $errNo, string $errMsg, string $errFile, string $errLine) : void
+        {
+            $currentDate = date('Y-m-d');
+            $currentTime = date('H:i:s');
+            $errPath = __DIR__ . '/../../../logs/errors';
+
+            $msgStr = "$currentTime - $errNo - $errMsg in $errFile line:$errLine";
+            error_log("$msgStr\n", 3, "$errPath/err_$currentDate.log");
+            echo 'ERROR!';
         }
 
         //        protected function getClassName(FullException $ex) : string
