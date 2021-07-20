@@ -80,7 +80,6 @@
     $logger->error('This is a log error! ^_^ ');
 
 
-    echo $_SERVER['SERVER_PROTOCOL'];
 //    вывод данных о ресурсах
     echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
 
