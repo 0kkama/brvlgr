@@ -15,7 +15,6 @@
     use App\classes\exceptions\FullException;
     use App\classes\utility\Router;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
-    use Psr\Log\LoggerInterface as PsrLog;
 
     // set composer autoload
     require __DIR__ . '/../vendor/autoload.php';
@@ -67,18 +66,7 @@
         Error::deadend($ex->getCode());
     }
 
-    use Monolog\Logger as Monologger;
-    use Monolog\Handler\ErrorLogHandler;
-    use App\classes\testexamples\LoggerTest;
-
-    $logger = new Monologger('test_logger');
-    $logger->pushHandler(new ErrorLogHandler());
-
-    //    $logger->info('test message and {user}');
-    $logger->info('This is a log! ^_^ ');
-    $logger->warning('This is a log warning! ^_^ ');
-    $logger->error('This is a log error! ^_^ ');
-
+    echo $df;
 
 //    вывод данных о ресурсах
     echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();

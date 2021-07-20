@@ -67,6 +67,7 @@
         Error::deadend($ex->getCode());
     }
 
+<<<<<<< HEAD
     use Monolog\Logger as Monologger;
     use Monolog\Handler\ErrorLogHandler;
     use App\classes\testexamples\LoggerTest;
@@ -80,6 +81,11 @@
     $logger->error('This is a log error! ^_^ ');
 
 
+    echo $_SERVER['SERVER_PROTOCOL'];
+=======
+    echo $df;
+
+>>>>>>> f1a9fe4d2c009c5a18d4cea14c172c51e5872621
 //    вывод данных о ресурсах
     echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
 
