@@ -3,6 +3,7 @@
     namespace App\classes;
 
     use App\classes\exceptions\DbException;
+    use App\classes\exceptions\ExceptionWrapper;
     use App\classes\exceptions\FullException;
     use PDO;
     use PDOException;
@@ -31,13 +32,14 @@
         /**
          * @return PDO
          * @throws DbException|exceptions\FullException
+         * @throws ExceptionWrapper
          */
         protected function newConnection() : PDO
         {
             try {
                 $config = Config::getInstance();
                     $dbConnection = new PDO
-                    ('mysql:host=' . $config->getDb('host') . ';dbname=' . $config->getDb('name') . ';charset=' . $config->getDb('char'),
+                    ('mysql:host=' . $config->getDb('hos') . ';dbname=' . $config->getDb('name') . ';charset=' . $config->getDb('char'),
                         $config->getDb('user'), $config->getDb('pass'),
                         [
                             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -47,7 +49,8 @@
                     );
             }
             catch (PDOException $ex) {
-                (new DbException($ex->getMessage(), 500))->setAlert('Ошибка в базе данных')->throwIt();
+                (new ExceptionWrapper('Ошибка при запросе к базе данных', 500, $ex, true))->throwIt();
+//                (new DbException($ex->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->throwIt();
             }
             return $dbConnection;
         }

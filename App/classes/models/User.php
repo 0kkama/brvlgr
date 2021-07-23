@@ -76,6 +76,7 @@
             try {
                 $dbSession = getFileContent($sessionFile);
             } catch (JsonException $e) {
+//                throw $e;
                 (new FileException($e->getMessage(), 456))->setParam('Ошибка при декодировании данных из файла sessions.json')->throwIt();
             }
             $haystack = array_column($dbSession, 'user', 'token');

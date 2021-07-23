@@ -14,8 +14,11 @@
     use App\classes\controllers\Error;
     use App\classes\exceptions\FullException;
     use App\classes\utility\Router;
+//    use PHPUnit\Framework\ExceptionWrapper;
+    use App\classes\exceptions\ExceptionWrapper as MyExWrapper;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
     use Psr\Log\LoggerInterface as PsrLog;
+    use App\classes\utility\LoggerForExceptions;
 
     // set composer autoload
     require __DIR__ . '/../vendor/autoload.php';
@@ -36,7 +39,7 @@
     Config::getInstance()->setInstance(include (__DIR__ . '/../config/config.php'));
 
     // include library
-    include_once (__DIR__ . '/../models/libra.php');
+    include_once (__DIR__ . '/../helpers/libra.php');
     //</editor-fold>
 
     //    /var/lib/php/sessions
@@ -62,23 +65,18 @@
         LittleLogger::create($ex)->write();
         Error::deadend($ex->getCode(), $ex->getAlert());
     }
-    catch (Exception $ex) {
-        LittleLogger::create($ex)->write();
-        Error::deadend($ex->getCode());
+    catch (MyExWrapper $ex) {
+        (new LoggerForExceptions($ex))->write();
+        Error::deadend($ex->getNumber(), $ex->getAlert());
+//        var_dump($ex);
     }
-
-    use Monolog\Logger as Monologger;
-    use Monolog\Handler\ErrorLogHandler;
-    use App\classes\testexamples\LoggerTest;
-
-    $logger = new Monologger('test_logger');
-    $logger->pushHandler(new ErrorLogHandler());
-
-    //    $logger->info('test message and {user}');
-    $logger->info('This is a log! ^_^ ');
-    $logger->warning('This is a log warning! ^_^ ');
-    $logger->error('This is a log error! ^_^ ');
-
+    catch (Exception $ex) {
+        (new LoggerForExceptions($ex))->write();
+//        var_dump($ex);
+        Error::deadend($ex->getNumber(), $ex->getAlert());
+//        LittleLogger::create($ex)->write();
+//        Error::deadend($ex->getCode());
+    }
 
 //    вывод данных о ресурсах
     echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();

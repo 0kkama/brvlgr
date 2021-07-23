@@ -11,7 +11,7 @@
     {
         protected int|string $number;
         protected string $file, $line, $date, $time, $message, $log = '', $type = '', $alert = '', $param = '';
-        protected static string $path = __DIR__ . '/../../../logs/errors';
+        protected static string $path = __DIR__ . '/../../../logs/errors/';
 
         #[Pure] protected function __construct(Exception $ex)
         {
@@ -37,7 +37,7 @@
 
         public function write() : LittleLogger
         {
-            $logFile = static::$path . '/err_' . $this->date . '.log';
+            $logFile = static::$path . $this->date . '.log';
             $this->log = "$this->time - $this->number - $this->type $this->message $this->param in $this->file line:$this->line";
             error_log("$this->log\n", 3, $logFile);
             return $this;
@@ -50,7 +50,7 @@
             $errPath = __DIR__ . '/../../../logs/errors';
 
             $msgStr = "$currentTime - $errNo - $errMsg in $errFile line:$errLine";
-            error_log("$msgStr\n", 3, "$errPath/err_$currentDate.log");
+            error_log("$msgStr\n", 3, "$errPath/$currentDate.log");
             echo 'ERROR!';
         }
 
