@@ -16,12 +16,6 @@
         protected array $list;
         protected string $image;
 
-        public function __construct(array $params,View $templateEngine)
-        {
-            parent::__construct($params, $templateEngine);
-            $this->title = 'Изображение';
-        }
-
         /**
          * @throws FileException
          */
@@ -33,16 +27,13 @@
             array_pop($this->list);
             array_pop($this->list);
 
-            $callback = static function (&$value, $key, $path) {
-                $value = $path . $value;
-            };
+            $callback = static function (&$value, $key, $path) { $value = $path . $value; };
             array_walk($this->list, $callback, $origPath);
 
             if (empty($this->list)) {
                 throw new FileException('Ошибка при получении изображения',500);
             }
 
-//            $id = $this->params['id'];
             $this->image = $this->list[$this->id];
 
             if (!is_readable($this->image)) {
@@ -79,6 +70,7 @@
          */
         public function __invoke()
         {
+            $this->title = 'Изображение';
             $this->id = $this->params['id'];
 
             if (!is_numeric($this->id)) {

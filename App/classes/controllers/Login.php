@@ -9,6 +9,7 @@
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\utility\UsersErrors;
     use App\classes\View;
+    use Exception;
     use JsonException;
 
     class Login extends Controller
@@ -31,7 +32,7 @@
         }
 
         /**
-         * @throws ExceptionWrapper
+         * @throws ExceptionWrapper|Exception
          */
         protected function loginUser() : void
         {
