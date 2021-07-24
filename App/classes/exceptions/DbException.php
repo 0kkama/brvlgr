@@ -5,7 +5,7 @@
 
     use Throwable;
 
-    class DbException extends FullException
+    class DbException extends CustomException
     {
 
     }

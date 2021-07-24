@@ -7,7 +7,8 @@
     use App\classes\abstract\Controller;
     use App\classes\Config;
     use App\classes\exceptions\FileException;
-    use App\classes\exceptions\FullException;
+    use App\classes\exceptions\CustomException;
+    use App\classes\View;
     use JetBrains\PhpStorm\NoReturn;
 
     class Image extends Controller
@@ -15,9 +16,9 @@
         protected array $list;
         protected string $image;
 
-        public function __construct($params)
+        public function __construct(array $params,View $templateEngine)
         {
-            parent::__construct($params);
+            parent::__construct($params, $templateEngine);
             $this->title = 'Изображение';
         }
 

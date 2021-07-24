@@ -2,7 +2,7 @@
 
 
     namespace App\classes\utility;
-    use App\classes\exceptions\FullException;
+    use App\classes\exceptions\CustomException;
     use Exception;
     use JetBrains\PhpStorm\Pure;
 
@@ -23,7 +23,7 @@
             $this->date = date('Y-m-d');
             $this->time = date('H:i:s');
 
-            if ($ex instanceof FullException) {
+            if ($ex instanceof CustomException) {
                 $this->alert = $ex->getAlert();
                 $this->param = $ex->getParam();
                 $this->type = $ex->getType();

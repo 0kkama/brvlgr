@@ -4,7 +4,7 @@
     namespace App\interfaces;
 
 
-    interface Shitty
+    interface HasText
     {
 
     }

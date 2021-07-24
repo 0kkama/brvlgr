@@ -4,14 +4,20 @@
     namespace App\classes\utility;
 
 
+    use App\interfaces\CanSendMessage;
     use Swift_Mailer;
     use Swift_Message;
     use Swift_SmtpTransport;
     use App\classes\Config;
 
-    class SendMail
+    /**
+     * Class SendMail
+     * Primitive class for send alerts to admin e-mail
+     * @package App\classes\utility
+     */
+    class SendMail implements CanSendMessage
     {
-        public static function send(string $subject, string $body) : int
+        public static function sendMessage(string $subject, string $body) : int
         {
             $conf = Config::getInstance();
             $transport = (new Swift_SmtpTransport(

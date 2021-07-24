@@ -6,7 +6,9 @@
 
     use App\classes\abstract\Controller;
     use App\classes\Config;
+    use App\classes\exceptions\ExceptionWrapper;
     use App\classes\utility\UsersErrors;
+    use App\classes\View;
     use JsonException;
 
     class Login extends Controller
@@ -14,9 +16,9 @@
         protected UsersErrors $error;
         protected ?string $relocation;
 
-        public function __construct($params)
+        public function __construct(array $params, View $templateEngine)
         {
-            parent::__construct($params);
+            parent::__construct($params, $templateEngine);
             $this->title = "Войти на сайт";
             $this->relocation = Config::getInstance()->BASE_URL;
         }
@@ -29,7 +31,7 @@
         }
 
         /**
-         * @throws JsonException
+         * @throws ExceptionWrapper
          */
         protected function loginUser() : void
         {
@@ -48,7 +50,7 @@
                         $data = json_encode(['user' => $this->user->login, 'token' => $token, 'date' => time()], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
                     }
                     catch (JsonException $ex) {
-                        throw $ex;
+                        (new ExceptionWrapper('Ошибка при запросе к базе данных', 500, $ex))->throwIt();
                     }
                     // помещаем данные в файл сессий, в куки и в массив сессий
                     setcookie('token', $token, time() + 86400, $this->relocation);

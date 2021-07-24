@@ -3,20 +3,15 @@
     namespace App\classes\models;
 
     use App\classes\Db;
-    use App\classes\abstract\Govno;
-    use App\classes\exceptions\FileException;
+    use App\classes\abstract\AbstractModel;
     use App\classes\utility\UsersErrors;
     use App\interfaces\HasAuthor;
     use App\interfaces\HasTitle;
-    use App\interfaces\Readable;
-    use App\interfaces\UserInterface;
-    use App\traits\DebugTrait;
-    use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
     use App\classes\exceptions\DbException;
     use Exception;
 
-    class Article extends Govno implements HasAuthor, HasTitle
+    class Article extends AbstractModel implements HasAuthor, HasTitle
     {
         // TODO поменять имя таблицы на articles в дальнейшем
         protected const TABLE_NAME = 'articles';
@@ -28,7 +23,7 @@
                 ':text' => 'Отсутствует текст статьи',
                 ':category'=> 'Не указана категория',
             ];
-
+        //                              TRAIT!!!!!!!!!
         use  SetControlTrait;
 
         /**
@@ -36,8 +31,8 @@
          */
         public static function getLast(int $limit) : ?array
         {
-//            if ( $limit < 5 ) {
-//                (new DbException('Недостаточное количество айтемов', 404))->setAlert('фыр-фыр-фыр')->setParam("limit = $limit")->throwIt();
+//            if ( $limit < 7 ) {
+//                (new DbException('Недостаточное количество айтемов', 404))->setAlert('')->setParam("")->throwIt();
 //            }
 
             $db = new Db;
@@ -111,12 +106,12 @@
             return $this->errors;
         }
 
-        public function getID(): ?string
+        public function getID() : ?string
         {
             return $this->id;
         }
 
-        public function getAuthor()
+        public function getAuthor() : User
         {
             return User::findById($this->author_id);
         }

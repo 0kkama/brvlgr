@@ -6,14 +6,12 @@
 
     use App\classes\abstract\Controller;
     use App\classes\Config;
-    use App\classes\controllers\Error;
     use App\classes\models\Article as Publication;
 
     class Article extends Controller
     {
 
-        protected string $title = 'PROBLEM!';
-        protected string $content = 'BIG PROBLEM!';
+        protected string $title = 'PROBLEM!', $content = 'BIG PROBLEM!';
         protected Publication $article;
 
         protected function add() : void
@@ -27,7 +25,7 @@
         protected function read() : void
         {
             $this->checkArtID()->getArt()->checkArtExist();
-            $this->title = $this->article->title;
+            $this->title = $this->article->getTitle();
             $this->content = $this->page->assign('title', $this->title)->assign('article', $this->article)->assign('author', $this->article->author())->render('article');
         }
 
@@ -44,7 +42,7 @@
             header('Location: ' . Config::getInstance()->BASE_URL);
         }
 
-        protected function sendData() : void
+        private function sendData() : void
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
@@ -52,7 +50,7 @@
                 $this->errors = $this->article->save()->getErrors();
 
                 if (!$this->errors->__invoke()) {
-                    header('Location: /article/read/' . $this->article->id);
+                    header('Location: /article/read/' . $this->article->getID());
                 }
             }
         }
@@ -92,8 +90,5 @@
             $this->action($this->params['action']);
             parent::__invoke();
         }
-
     }
 
-//    TODO допилить или переделать способ парсинга в Роутере и
-//    TODO разобраться с проблемой в релокейтере

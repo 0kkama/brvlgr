@@ -4,33 +4,32 @@
     namespace App\classes\exceptions;
 
 
-    use App\classes\utility\LittleLogger;
     use Exception;
     use JetBrains\PhpStorm\Pure;
-    use mysql_xdevapi\SqlStatementResult;
     use Throwable;
 
-    abstract class FullException extends Exception
+    abstract class CustomException extends Exception
     {
         /**
          * @var string $alert is outer message for users
          * @var string $param is additional parameter for log message
          * @var string $type is type of Exception for log message
          */
-        protected string $alert = '';
-        protected string $param = '';
-        protected string $type;
 
-        #[Pure] public function __construct($message = "", $code = 0, Throwable $previous = null)
+        protected string $alert = '', $param = '', $type;
+        protected bool $critical;
+
+        #[Pure] public function __construct($message = "", $code = 0, $critical = false, Throwable $previous = null)
         {
             $this->type = static::class;
+            $this->critical = $critical;
             parent::__construct($message, $code, $previous);
         }
 
         /**
          * Optional message for user
          * @param string $alert
-         * @return FullException
+         * @return CustomException
          */
         public function setAlert(string $alert) : static
         {
@@ -38,15 +37,10 @@
             return $this;
         }
 
-//       public static function create($message = "", $code = 0, Throwable $previous = null) : self
-//        {
-//            return new static($message, $code, $previous);
-//        }
-
         /**
          * Optional parameters for logs
          * @param string $param
-         * @return FullException
+         * @return CustomException
          */
         public function setParam(string $param) : static
         {
@@ -73,22 +67,19 @@
         /**
          * @return string
          */
-        public function getFullType() : string
-        {
-            return $this->type;
-        }
-
-        /**
-         * @return string
-         */
         public function getType() : string
         {
             $pos = strrpos($this->type, '\\');
                 return substr($this->type, $pos + 1);
         }
 
+        public function isCritical() : bool
+        {
+            return $this->critical;
+        }
+
         /**
-         * @throws FullException
+         * @throws CustomException
          */
         public function throwIt() : void
         {

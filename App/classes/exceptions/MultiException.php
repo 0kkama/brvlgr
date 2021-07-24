@@ -8,7 +8,7 @@
     use JsonException;
     use Traversable;
 
-    class MultiException extends FullException implements ArrayAccessInterface
+    class MultiException extends CustomException implements ArrayAccessInterface
     {
         protected array $errors = [];
 

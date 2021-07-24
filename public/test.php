@@ -11,7 +11,7 @@
 
     use App\classes\Config;
     use App\classes\controllers\Error;
-    use App\classes\exceptions\FullException;
+    use App\classes\exceptions\CustomException;
     use App\classes\utility\LittleLogger;
     use App\classes\utility\Router;
     use FastRoute\RouteCollector;
@@ -42,16 +42,10 @@
     //    /var/lib/php/sessions
     session_start();
 
-//    $ex1 = new JsonException('Test JSON exception');
-//    $ex2 = new \App\classes\exceptions\FileException('Test exception #2');
-//
-//    $ll1 = LittleLogger::create($ex1)->write();
-//    $ll2 = LittleLogger::create($ex2)->write();
-//
-//    echo get_class($ex1);
-//    echo get_class($ex2);
-//
-//    var_dump($ll1, $ll2);
+    try {
+        var_dump(method_exists(new Error([]), 'action'));
+    } catch (CustomException $e) {
+    }
 
 
 

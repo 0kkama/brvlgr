@@ -2,10 +2,11 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\Govno;
+    use App\classes\abstract\AbstractModel;
     use App\classes\Db;
+    use App\classes\exceptions\ExceptionWrapper;
     use App\classes\exceptions\FileException;
-    use App\classes\exceptions\FullException;
+    use App\classes\exceptions\CustomException;
     use App\interfaces\HasId;
     use App\interfaces\Shitty;
     use App\interfaces\UserInterface;
@@ -23,7 +24,7 @@
      * </ul>
      * @package App\classes\models
      */
-    class User extends Govno implements UserInterface
+    class User extends AbstractModel implements UserInterface
     {
         protected const TABLE_NAME = 'users';
         protected ?string $id = null, $date = null;
@@ -48,7 +49,7 @@
          * Возвращает данные текущего пользователя по кукам и сесси, либо null
          * @param string $sessionFile
          * @return User
-         * @throws FullException
+         * @throws ExceptionWrapper
          */
 //        TODO обращение к сессии и куки в модели - плохая практика. исправить?
         public static function getCurrent(string $sessionFile) : User
@@ -76,8 +77,8 @@
             try {
                 $dbSession = getFileContent($sessionFile);
             } catch (JsonException $e) {
-//                throw $e;
-                (new FileException($e->getMessage(), 456))->setParam('Ошибка при декодировании данных из файла sessions.json')->throwIt();
+               (new ExceptionWrapper('', 500, $e, true))->throwIt();
+//                (new FileException($e->getMessage(), 456))->setParam('Ошибка при декодировании данных из файла sessions.json')->throwIt();
             }
             $haystack = array_column($dbSession, 'user', 'token');
             $userName = $haystack[$tokenOne] ?? null;

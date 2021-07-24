@@ -4,16 +4,25 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\AbstractController;
     use App\classes\Config;
+    use App\classes\exceptions\CustomException;
     use App\classes\models\User;
-    use App\classes\utility\UsersErrors;
     use App\classes\View;
-    use JetBrains\PhpStorm\Pure;
+    use JetBrains\PhpStorm\NoReturn;
 
-    class Error extends Controller
+    /**
+     * Relocate user to respective blind plug by HTTP error code with short message about situation
+    */
+    class Error extends AbstractController
     {
-        protected string $message, $header;
+        /**
+         * @var string|mixed
+         */
+        protected string $header;
+        /**
+         * @var array|string[][]
+         */
         protected static array $signals =
             [
                 400 => ['400 Bad request', 'Некорректный запрос'],
@@ -32,53 +41,60 @@
                 504 => ['Gateway Time-Out', 'Шлюз или прокси-сервер временно заблокирован. Попробуйте повторить запрос позже'],
             ];
 
-        public function __construct($params)
+        /**
+         * Error constructor.
+         * @param $params
+         * @param View $templateEngine
+         */
+        public function __construct($params, View $templateEngine)
         {
-            $this->page = new View();
-            $this->errors = new UsersErrors();
-            $this->params = $params;
+            parent::__construct($params, $templateEngine);
             $this->user = new User();
-//            $this->user = User::getCurrent(Config::getInstance()->SESSIONS);
-//            parent::__construct($params);
 
-
+//          если ключ отсутствует или неверен, то присваивается дефолтное значение для сигнала
             if (empty($params['id']) || !is_numeric($params['id']) || !array_key_exists($params['id'], self::$signals)) {
-                $number = 418;
-            }
-            else {
-                $number = (int) ($params['id']);
+                $this->id = 418;
+            } else {
+                $this->id = (int) ($params['id']);
             }
 
-            $this->title = self::$signals[$number][0];
-            $this->message = $_SESSION['errorMessage'] ?? self::$signals[$number][1] ;
+            $this->title = self::$signals[$this->id][0];
+            $this->content = $_SESSION['errorMessage'] ?? self::$signals[$this->id][1] ;
             unset($_SESSION['errorMessage']);
             $this->header = 'ERROR: ' . $this->title . '!';
         }
 
-        public static function deadend(int|string $number = 418, $message = '') : void
+        /**
+         * This method take two parameters and then call itself by 'header Location' with these parameters
+         * @param int|string $code is HTTP-code for error blind plug
+         * @param string $message optional message for user
+         */
+        #[NoReturn] public static function deadend(int|string $code = 418, string $message = '') : void
         {
             if ($message !== '') {
                 $_SESSION['errorMessage'] = $message;
             }
 
-            if (!is_numeric($number)) {
-                $number = 418;
+            if (!is_numeric($code)) {
+                $code = 418;
             }
 
-            header(Config::getInstance()->PROTOCOL . ' ' . self::$signals[$number][0]);
-            header('Location: ' . '/error/' . $number);
+            header(Config::getInstance()->PROTOCOL . ' ' . self::$signals[$code][0]);
+            header('Location: ' . '/error/' . $code);
             die();
         }
 
+        /**
+         *
+         */
         public function __invoke()
         {
             $this->content = $this->page->assignArray(
                 [
                     'header' => $this->header,
                     'title' => $this->title,
-                    'message' => $this->message,
+                    'message' => $this->content,
                 ])->render('error');
-//            $this->page->assign('title', $this->title)->assign('content', $this->content)->assign('user', $this->user)->display('layout');
             parent::__invoke();
         }
     }

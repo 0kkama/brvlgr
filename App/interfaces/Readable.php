@@ -4,8 +4,7 @@
     namespace App\interfaces;
 
 
-    interface Readable extends Shitty
+    interface Readable extends HasId, HasTitle, HasText
     {
-        public function getTitle();
-        public function getText();
+
     }

@@ -17,9 +17,9 @@
          * @throws FileException
          * @throws Exception
          */
-        public function __construct($params)
+        public function __construct($params, $templateEngine)
         {
-            parent::__construct($params);
+            parent::__construct($params,$templateEngine);
             $this->errors = new UsersErrors();
 
             // TODO подумать, не перемудрил ли я здесь с условием

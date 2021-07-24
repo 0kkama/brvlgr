@@ -6,5 +6,7 @@
 
     interface HasTitle
     {
+        public const TITLE = 'title';
+
         public function getTitle();
     }

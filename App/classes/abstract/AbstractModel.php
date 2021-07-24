@@ -8,7 +8,6 @@
     use App\classes\exceptions\DbException;
     use App\classes\utility\UsersErrors;
     use App\interfaces\HasId;
-    use App\interfaces\Shitty;
     use Exception;
 
 /**
@@ -24,7 +23,7 @@
  * - <b>getTableName</b>
  * @package App\classes
  */
-    abstract class Govno implements Shitty, HasId
+    abstract class AbstractModel implements HasId
     {
 
     /**
@@ -35,7 +34,7 @@
      * @var null $data
      * @var null $separator
      */
-    protected const TABLE_NAME = 'Govno';
+    protected const TABLE_NAME = 'abstract';
     protected UsersErrors $errors;
     protected array $replacements;
     protected array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
@@ -43,7 +42,7 @@
         /**
          * Finds needed line in table by given <b>$id</b> and return it like object of respective class
          * @param string $id
-         * @return Govno
+         * @return AbstractModel
          */
         public static function findById(string $id) : static
         {
@@ -71,7 +70,7 @@
 
         /**
          * метод добавлет новую запись в БД, после чего возвращает  <b>$this</b> или <b>null</b>
-         * @return Govno
+         * @return AbstractModel
          */
         protected function insert() : static
         {
@@ -99,7 +98,7 @@
 
         /**
          * обновляет уже существующую запись, , которая ранее была получена из базы данных по id
-         * @return Govno
+         * @return AbstractModel
          */
         protected function update() : static
         {
@@ -147,7 +146,7 @@
         /**
          * Определяет, является ли запись новой или уже существующей.
          * Если запись новая, то вызывает метод <b>insert</b>, в противном случае вызывает метод <b>update</b>.
-         * @return Govno
+         * @return AbstractModel
          */
         public function save() : static
         {

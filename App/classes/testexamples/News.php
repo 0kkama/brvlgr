@@ -3,13 +3,13 @@
     namespace App\classes\testexamples;
 
     use App\classes\Db;
-    use App\classes\abstract\Govno;
+    use App\classes\abstract\AbstractModel;
     use App\interfaces\HasAuthor;
     use App\interfaces\HasId;
     use App\interfaces\HasTitle;
 
 
-    class News extends Govno implements HasAuthor, HasTitle
+    class News extends AbstractModel implements HasAuthor, HasTitle
     {
         protected string $title, $text, $author, $category;
         protected $id = null, $date = null;

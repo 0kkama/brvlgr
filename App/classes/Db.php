@@ -4,7 +4,7 @@
 
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
-    use App\classes\exceptions\FullException;
+    use App\classes\exceptions\CustomException;
     use PDO;
     use PDOException;
     use PDOStatement;
@@ -31,7 +31,6 @@
 
         /**
          * @return PDO
-         * @throws DbException|exceptions\FullException
          * @throws ExceptionWrapper
          */
         protected function newConnection() : PDO
@@ -39,7 +38,7 @@
             try {
                 $config = Config::getInstance();
                     $dbConnection = new PDO
-                    ('mysql:host=' . $config->getDb('hos') . ';dbname=' . $config->getDb('name') . ';charset=' . $config->getDb('char'),
+                    ('mysql:host=' . $config->getDb('host') . ';dbname=' . $config->getDb('name') . ';charset=' . $config->getDb('char'),
                         $config->getDb('user'), $config->getDb('pass'),
                         [
                             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -49,7 +48,7 @@
                     );
             }
             catch (PDOException $ex) {
-                (new ExceptionWrapper('Ошибка при запросе к базе данных', 500, $ex, true))->throwIt();
+                (new ExceptionWrapper('Ошибка при запросе к базе данных', 500, $ex, false))->throwIt();
 //                (new DbException($ex->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->throwIt();
             }
             return $dbConnection;
@@ -58,7 +57,7 @@
         /**
          * @param PDOStatement $query
          * @return bool
-         * @throws exceptions\DbException|exceptions\FullException
+         * @throws exceptions\DbException|exceptions\CustomException
          */
         protected function checkQueryErr(PDOStatement $query) : bool
         {
@@ -91,6 +90,7 @@
          * @param array $data
          * @param $class
          * @return array|null
+         * @throws ExceptionWrapper
          */
         public function queryAll(string $sql, array $data, $class) : ?array
         {
@@ -99,14 +99,10 @@
                 $query->execute($data);
                 $this->checkQueryErr($query);
                 $result = $query->fetchAll(PDO::FETCH_CLASS, $class);
+            } catch (\Exception $e) {
+                (new ExceptionWrapper('Ошибка при осуществелнии запроса к базе данных', 500, $e))->throwIt();
+            }
                 return $result ?: null;
-            } catch (FullException $fex) {
-                throw $fex;
-            }
-            catch (\Exception $e) {
-                $ex = new DbException($e->getMessage(), 500);
-                $ex->setAlert('Ошибка при запросе к базе данных')->setParam("{$e->getFile()} {$e->getLine()}")->throwIt();
-            }
         }
 
         /**

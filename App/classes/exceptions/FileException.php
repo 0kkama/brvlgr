@@ -4,7 +4,7 @@
     namespace App\classes\exceptions;
 
 
-    class FileException extends FullException
+    class FileException extends CustomException
     {
 
     }
