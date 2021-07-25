@@ -77,6 +77,19 @@
             return (mb_substr($this->text, 0, 150) . '...') ?? '';
         }
 
+        public function getFormattedContent() : string
+        {
+            $string = $this->text;
+            $paragraphs = [];
+            $arr = explode(PHP_EOL, $string);
+
+            foreach ($arr as $row) {
+                $paragraphs[] = '<p>' . $row . '</p>';
+            }
+
+            return implode(PHP_EOL,$paragraphs);
+        }
+
         public function __toString() : string
         {
             return "$this->title <br> $this->author <br> $this->date" ?? '';

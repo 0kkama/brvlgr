@@ -41,9 +41,23 @@
 
         /**
          * Finds needed line in table by given <b>$id</b> and return it like object of respective class
-         * @param string $id
+         * @param string $type type of search subject (id, login, mail etc.)
+         * @param string $subject
          * @return AbstractModel
          */
+        public static function findBy(string $type, string $subject) : static
+        {
+            try {
+                $db = new Db();
+
+                $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE ' . $type.' = :'.$type;
+                $result = $db->queryOne($sql, [$type => $subject], static::class);
+            } catch (Exception $e) {
+                (new DbException($e->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->setParam("Ошибка при запросе: `$sql`")->throwIt();
+            }
+            return $result ?? new static;
+        }
+
         public static function findById(string $id) : static
         {
             try {
