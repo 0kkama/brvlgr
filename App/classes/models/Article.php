@@ -87,7 +87,7 @@
                 $paragraphs[] = '<p>' . $row . '</p>';
             }
 
-            return implode(PHP_EOL,$paragraphs);
+            return implode(PHP_EOL, $paragraphs);
         }
 
         public function __toString() : string
@@ -98,7 +98,7 @@
         public function __call($name, $arguments) : object
         {
             if ($name === 'author') {
-                return User::findById($this->author_id);
+                return User::findBy(type: 'id', subject: $this->author_id);
             }
         }
 
@@ -126,7 +126,7 @@
 
         public function getAuthor() : User
         {
-            return User::findById($this->author_id);
+            return User::findBy(type: 'id', subject: $this->author_id);
         }
 
         public function getTitle()

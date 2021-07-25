@@ -81,7 +81,7 @@
 
         protected function getArt() : self
         {
-            $this->article = Publication::findById($this->params['id']);
+            $this->article = Publication::findBy('id', $this->params['id']);
             return $this;
         }
 

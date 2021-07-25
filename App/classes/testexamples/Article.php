@@ -29,7 +29,7 @@
             }
 
             // получение данных уже существующей статьи и проверка ее существования
-            $this->article = Publication::findById($this->params['id']);
+            $this->article = Publication::findBy(type: $this->params['id'], subject: 'id');
 
             if (!$this->article->exist()) {
                 Relocator::deadend(404);

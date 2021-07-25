@@ -8,12 +8,12 @@
     use App\classes\Config;
     use App\classes\controllers\Error;
     use App\classes\exceptions\CustomException;
-    use App\classes\utility\Router;
     use App\classes\exceptions\ExceptionWrapper as MyExWrapper;
+    use App\classes\utility\LoggerForExceptions;
+    use App\classes\utility\Router;
     use App\classes\utility\SendMail;
     use App\classes\View;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
-    use App\classes\utility\LoggerForExceptions;
 
     // set composer autoload
     require __DIR__ . '/../vendor/autoload.php';

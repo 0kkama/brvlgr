@@ -33,19 +33,6 @@
         use SetControlTrait;
 
         /**
-         * Возвращает объект с данными пользователя по его $login в случае успеха, либо null
-         * @param string $login
-         * @return User
-         */
-        public static function findByLogin(string $login) : User
-        {
-            $db = new Db();
-            $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE login = :login';
-            $result = $db->queryOne($sql, ['login' => $login], static::class);
-            return $result ?? new self;
-        }
-
-        /**
          * Возвращает данные текущего пользователя по кукам и сесси, либо null
          * @param string $sessionFile
          * @return User
@@ -59,10 +46,10 @@
             // если токен установлен и в сессии и в куки, то проверяем их совпадение
             // если совпадают, то возвращаем имя пользователя из сессии
             if ( ( $cookeToken && $sessionToken ) && ( $cookeToken === $sessionToken) ) {
-                return self::findByLogin($_SESSION['user']) ?? new self;
+                return self::findBy(type: 'login', subject: $_SESSION['user']) ?? new self;
             }
             // если токен в сессии и куке есть, но они не совпадают, то удаляем оба.
-            if ( ( $cookeToken && $sessionToken ) && ( $cookeToken !== $sessionToken ) ) {
+            if ( ( $cookeToken && $sessionToken ) &&  ($cookeToken !== $sessionToken ) ) {
                 unset($_SESSION['user'], $_SESSION['token']);
                 setcookie('token', '', time() - 86400, '/');
                 return new self;
@@ -87,15 +74,15 @@
             if (null !== $userName) {
                 $_SESSION['user'] = $userName;
                 $_SESSION['token'] = $tokenOne;
-                return self::findByLogin($userName) ?? new self;
+                return self::findBy(type: 'login', subject: $userName) ?? new self;
             }
             return new self;
         }
 
         public function checkPassword(string $password) : ?User
         {
-            $user = self::findByLogin($this->login);
-            if (isset($user) && password_verify($password, $user->getHash())) {
+            $user = self::findBy('login', $this->login);
+            if (isset($user) && password_verify(password: $password, hash: $user->getHash())) {
                 return $user;
             }
                 return null;

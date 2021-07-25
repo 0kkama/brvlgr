@@ -40,7 +40,7 @@
     protected array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
 
         /**
-         * Finds needed line in table by given <b>$id</b> and return it like object of respective class
+         * Finds needed line in table by given <b>$subject</b> and return it like object of respective class
          * @param string $type type of search subject (id, login, mail etc.)
          * @param string $subject
          * @return AbstractModel
@@ -56,19 +56,6 @@
                 (new DbException($e->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->setParam("Ошибка при запросе: `$sql`")->throwIt();
             }
             return $result ?? new static;
-        }
-
-        public static function findById(string $id) : static
-        {
-            try {
-                $db = new Db();
-
-                $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE id = :id';
-                $result = $db->queryOne($sql, ['id' => $id], static::class);
-            } catch (Exception $e) {
-                (new DbException($e->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->setParam("Запрос `$sql`")->throwIt();
-            }
-                return $result ?? new static;
         }
 
         /**
@@ -111,7 +98,7 @@
         }
 
         /**
-         * обновляет уже существующую запись, , которая ранее была получена из базы данных по id
+         * обновляет уже существующую запись, которая ранее была получена из базы данных по id
          * @return AbstractModel
          */
         protected function update() : static

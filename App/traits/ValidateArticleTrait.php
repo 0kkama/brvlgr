@@ -24,7 +24,7 @@
             }
 
             //    получение данных уже существующей статьи
-            $this->article = Article::findById($id);
+            $this->article = Article::findBy(type: 'id', subject: $id);
             if (!$this->article->exist()) {
                 Error::deadend(404);
             }
