@@ -11,7 +11,7 @@
     use App\classes\exceptions\ExceptionWrapper as MyExWrapper;
     use App\classes\utility\LoggerForExceptions;
     use App\classes\utility\Router;
-    use App\classes\utility\SendMail;
+    use App\classes\utility\SendMailInterface;
     use App\classes\View;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
 
@@ -34,13 +34,13 @@
     Config::getInstance()->setInstance(include (__DIR__ . '/../config/config.php'));
 
     // include library
-    include_once (__DIR__ . '/../helpers/libra.php');
+    include_once (__DIR__ . '/../App/helpers/libra.php');
     //</editor-fold>
 
     //    /var/lib/php/sessions
     session_start();
 
-    $uri = $_SERVER['REQUEST_URI'];
+    $uri = val($_SERVER['REQUEST_URI']);
     $params = (new Router($uri))();
 
     $cntrl = ucfirst($params['controller']);
@@ -56,11 +56,11 @@
         (new $className($params, new View))();
     }
     catch (CustomException|MyExWrapper $ex ) {
-        (new LoggerForExceptions($ex, new SendMail))();
-        Error::deadend($ex->getCode(), $ex->getAlert());
-        //        var_dump($ex);
+        (new LoggerForExceptions($ex, new SendMailInterface))();
+        Error::deadend($ex->getHttpCode(), $ex->getAlert());
+        //                var_dump($ex);
     } catch (Exception $ex) {
-        (new LoggerForExceptions($ex, new SendMail))();
+        (new LoggerForExceptions($ex, new SendMailInterface))();
         Error::deadend();
         //        var_dump($ex);
     }

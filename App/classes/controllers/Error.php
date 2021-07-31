@@ -7,7 +7,10 @@
     use App\classes\abstract\AbstractController;
     use App\classes\Config;
     use App\classes\exceptions\CustomException;
+    use App\classes\exceptions\ExceptionWrapper;
     use App\classes\models\User;
+    use App\classes\utility\LoggerForExceptions;
+    use App\classes\utility\SendMailInterface;
     use App\classes\View;
     use JetBrains\PhpStorm\NoReturn;
 
@@ -23,7 +26,7 @@
         /**
          * @var array|string[][]
          */
-        protected static array $signals =
+        protected static array $httpSignals =
             [
                 400 => ['400 Bad request', 'Некорректный запрос'],
                 403 => ['403 Forbidden', 'Данное действие требует авторизации'],
@@ -49,17 +52,21 @@
         public function __construct($params, View $templateEngine)
         {
             parent::__construct($params, $templateEngine);
-            $this->user = new User();
-
+            try {
+                $this->user = User::getCurrent(Config::getInstance()->SESSIONS);
+            } catch (ExceptionWrapper $ex) {
+                (new LoggerForExceptions($ex, new SendMailInterface))();
+                $this->user = new User();
+            }
 //          если ключ отсутствует или неверен, то присваивается дефолтное значение для сигнала
-            if (empty($params['id']) || !is_numeric($params['id']) || !array_key_exists($params['id'], self::$signals)) {
+            if (empty($params['id']) || !is_numeric($params['id']) || !array_key_exists($params['id'], self::$httpSignals)) {
                 $this->id = 418;
             } else {
                 $this->id = (int) ($params['id']);
             }
 
-            $this->title = self::$signals[$this->id][0];
-            $this->content = $_SESSION['errorMessage'] ?? self::$signals[$this->id][1] ;
+            $this->title = self::$httpSignals[$this->id][0];
+            $this->content = $_SESSION['errorMessage'] ?? self::$httpSignals[$this->id][1] ;
             unset($_SESSION['errorMessage']);
             $this->header = 'ERROR: ' . $this->title . '!';
         }
@@ -71,6 +78,8 @@
          */
         #[NoReturn] public static function deadend(int|string $code = 418, string $message = '') : void
         {
+            echo $code;
+
             if ($message !== '') {
                 $_SESSION['errorMessage'] = $message;
             }
@@ -79,7 +88,7 @@
                 $code = 418;
             }
 
-            header(Config::getInstance()->PROTOCOL . ' ' . self::$signals[$code][0]);
+            header(Config::getInstance()->PROTOCOL . ' ' . self::$httpSignals[$code][0]);
             header('Location: ' . '/error/' . $code);
             die();
         }

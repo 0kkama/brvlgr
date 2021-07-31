@@ -4,12 +4,12 @@
 
     use App\classes\Db;
     use App\classes\abstract\AbstractModel;
-    use App\interfaces\HasAuthor;
-    use App\interfaces\HasId;
-    use App\interfaces\HasTitle;
+    use App\interfaces\HasAuthorInterface;
+    use App\interfaces\HasIdInterface;
+    use App\interfaces\HasTitleInterface;
 
 
-    class News extends AbstractModel implements HasAuthor, HasTitle
+    class News extends AbstractModel implements HasAuthorInterface, HasTitleInterface
     {
         protected string $title, $text, $author, $category;
         protected $id = null, $date = null;

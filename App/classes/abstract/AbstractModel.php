@@ -1,31 +1,31 @@
 <?php
 
     namespace App\classes\abstract;
-//
-//    use classes\models\Article;
-//    use App\interfaces\Singleton;
+
     use App\classes\Db;
+    use App\classes\exceptions\CustomException;
     use App\classes\exceptions\DbException;
+    use App\classes\exceptions\ExceptionWrapper;
     use App\classes\utility\UsersErrors;
-    use App\interfaces\HasId;
+    use App\interfaces\HasIdInterface;
     use Exception;
+    use PDO;
 
-/**
- * Class Govno has following methods : <ul>
- * - <b>findById</b> - return null|object</li>
- * - <b>getAll</b> - return array contain objects of respective class</li>
- * - <b>insert</b>
- * - <b>update</b>
- * - <b>delete</b>
- * - <b>save</b>
- * - <b>makeSQL</b>
- * - <b>checkFields</b>
- * - <b>getTableName</b>
- * @package App\classes
- */
-    abstract class AbstractModel implements HasId
+    /**
+     * Class AbstractModel has following methods : <ul>
+     * - <b>findById</b> - return null|object</li>
+     * - <b>getAll</b> - return array contain objects of respective class</li>
+     * - <b>insert</b>
+     * - <b>update</b>
+     * - <b>delete</b>
+     * - <b>save</b>
+     * - <b>makeSQL</b>
+     * - <b>checkFields</b>
+     * - <b>getTableName</b>
+     * @package App\classes
+     */
+    abstract class AbstractModel implements HasIdInterface
     {
-
     /**
      *@const const TABLE_NAME dynamically changing in inheriting classes
      * @var UsersErrors $errors
@@ -35,6 +35,7 @@
      * @var null $separator
      */
     protected const TABLE_NAME = 'abstract';
+    protected ?string $id = null;
     protected UsersErrors $errors;
     protected array $replacements;
     protected array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
@@ -45,7 +46,7 @@
          * @param string $subject
          * @return AbstractModel
          */
-        public static function findBy(string $type, string $subject) : static
+        public static function findOneBy(string $type, string $subject) : static
         {
             try {
                 $db = new Db();
@@ -60,6 +61,7 @@
 
         /**
          * @return array
+         * @throws ExceptionWrapper
          */
         public static function getAll() : array
         {
@@ -67,6 +69,16 @@
             $sql = 'SELECT * FROM ' . static::TABLE_NAME;
 //            $sql = 'SELECT * FROM ' . 'zorba';
             return $db->queryAll($sql, [], static::class);
+        }
+
+        /**
+         * @throws DbException|CustomException
+         */
+        public static function getTotalQuantity()
+        {
+            $db = new Db();
+            $sql = 'SELECT COUNT(*) AS ' . static::TABLE_NAME . ' FROM ' . static::TABLE_NAME;
+            return $db->fetchAssoc($sql);
         }
 
         /**
@@ -163,8 +175,8 @@
          * Возвращает ассоциативный массив с данными: <ul>
          * <li><b>table</b> - имя таблицы;</li>
          * <li><b>cols</b> - массив вида 'index' => ':index' для подготовленных запросов;</li>
-         * <li><b>data</b> - массив данных для подстановки  (':user' => 'Ahmed');</li>
-         * <li><b>separator</b> - символ-разделитель, использюущийся в запросе;</li></ul>
+         * <li><b>data</b> - массив данных для подстановки (':user' => 'Ahmed');</li>
+         * <li><b>separator</b> - символ-разделитель, использующийся в запросе;</li></ul>
          *
          * @return void
          */
@@ -206,5 +218,10 @@
         public static function getTableName() : string
         {
             return static::TABLE_NAME;
+        }
+
+        public function getID() : null|string
+        {
+            return $this->id;
         }
     }

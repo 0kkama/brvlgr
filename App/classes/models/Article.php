@@ -3,19 +3,22 @@
     namespace App\classes\models;
 
     use App\classes\Db;
-    use App\classes\abstract\AbstractModel;
+    use App\classes\abstract\Model;
+    use App\classes\exceptions\CustomException;
+    use App\classes\exceptions\MagickException;
     use App\classes\utility\UsersErrors;
-    use App\interfaces\HasAuthor;
-    use App\interfaces\HasTitle;
+    use App\interfaces\HasAuthorInterface;
+    use App\interfaces\HasTableInterface;
+    use App\interfaces\HasTitleInterface;
+    use App\interfaces\PaginatedInterface;
     use App\traits\SetControlTrait;
     use App\classes\exceptions\DbException;
     use Exception;
 
-    class Article extends AbstractModel implements HasAuthor, HasTitle
+    class Article extends Model implements HasAuthorInterface, HasTitleInterface, PaginatedInterface, HasTableInterface
     {
         // TODO поменять имя таблицы на articles в дальнейшем
         protected const TABLE_NAME = 'articles';
-        protected ?string $id = null,  $date = null;
         protected string $title, $text, $author, $category, $author_id;
         protected array $replacements =
             [
@@ -39,6 +42,8 @@
             $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `date` DESC LIMIT ' . $limit;
             return $db->queryAll($sql, [], self::class);
         }
+
+//        public function
 
         public function setTitle(string $title) : Article
         {
@@ -95,11 +100,15 @@
             return "$this->title <br> $this->author <br> $this->date" ?? '';
         }
 
+        /**
+         * @throws MagickException|CustomException
+         */
         public function __call($name, $arguments) : object
         {
             if ($name === 'author') {
-                return User::findBy(type: 'id', subject: $this->author_id);
+                return User::findOneBy(type: 'id', subject: $this->author_id);
             }
+            throw (new MagickException('Вызов несуществующего метода','456',''))->setParam("Метод: $name Арг: $arguments");
         }
 
         /**
@@ -126,7 +135,7 @@
 
         public function getAuthor() : User
         {
-            return User::findBy(type: 'id', subject: $this->author_id);
+            return User::findOneBy(type: 'id', subject: $this->author_id);
         }
 
         public function getTitle()

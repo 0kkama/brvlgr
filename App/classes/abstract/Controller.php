@@ -19,11 +19,7 @@
         * @var string $title title of page
         * @var string $content content of page for substitution in layout template
          */
-        protected View $page;
-        protected User $user;
         protected UsersErrors $errors;
-        protected array $params;
-        protected string $title, $content, $id;
 
         /**
          * @throws ExceptionWrapper

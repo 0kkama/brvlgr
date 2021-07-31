@@ -2,13 +2,12 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\AbstractModel;
+    use App\classes\abstract\Model;
     use App\classes\Db;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\exceptions\FileException;
     use App\classes\exceptions\CustomException;
-    use App\interfaces\HasId;
-    use App\interfaces\Shitty;
+    use App\interfaces\HasIdInterface;
     use App\interfaces\UserInterface;
     use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
@@ -24,10 +23,9 @@
      * </ul>
      * @package App\classes\models
      */
-    class User extends AbstractModel implements UserInterface
+    class User extends Model implements UserInterface
     {
         protected const TABLE_NAME = 'users';
-        protected ?string $id = null, $date = null;
         protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $hash = '', $email = '', $rights = '';
 
         use SetControlTrait;
@@ -46,7 +44,7 @@
             // если токен установлен и в сессии и в куки, то проверяем их совпадение
             // если совпадают, то возвращаем имя пользователя из сессии
             if ( ( $cookeToken && $sessionToken ) && ( $cookeToken === $sessionToken) ) {
-                return self::findBy(type: 'login', subject: $_SESSION['user']) ?? new self;
+                return self::findOneBy(type: 'login', subject: $_SESSION['user']) ?? new self;
             }
             // если токен в сессии и куке есть, но они не совпадают, то удаляем оба.
             if ( ( $cookeToken && $sessionToken ) &&  ($cookeToken !== $sessionToken ) ) {
@@ -64,9 +62,9 @@
             try {
                 $dbSession = getFileContent($sessionFile);
             } catch (JsonException $e) {
-               (new ExceptionWrapper('', 500, $e, true))->throwIt();
-//                (new FileException($e->getMessage(), 456))->setParam('Ошибка при декодировании данных из файла sessions.json')->throwIt();
+               (new ExceptionWrapper('Критическая ошибка на сервере. Сообщите администратору!', 500, $e, false))->throwIt();
             }
+
             $haystack = array_column($dbSession, 'user', 'token');
             $userName = $haystack[$tokenOne] ?? null;
             // если нет ни куки-токена ни сессионного-токена, то возвращаем null
@@ -74,14 +72,14 @@
             if (null !== $userName) {
                 $_SESSION['user'] = $userName;
                 $_SESSION['token'] = $tokenOne;
-                return self::findBy(type: 'login', subject: $userName) ?? new self;
+                return self::findOneBy(type: 'login', subject: $userName) ?? new self;
             }
             return new self;
         }
 
         public function checkPassword(string $password) : ?User
         {
-            $user = self::findBy('login', $this->login);
+            $user = self::findOneBy('login', $this->login);
             if (isset($user) && password_verify(password: $password, hash: $user->getHash())) {
                 return $user;
             }

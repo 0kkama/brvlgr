@@ -2,7 +2,7 @@
 
     namespace App\classes;
 
-    use App\interfaces\Singleton;
+    use App\interfaces\SingletonInterface;
     use App\traits\SingletonTrait;
 
     /*
@@ -13,7 +13,7 @@
     *   Изучите что такое синглтон (слайды + консультация в чате поддержки) и сделайте класс App\Config синглтоном
     */
 
-    final class Config implements Singleton
+    final class Config implements SingletonInterface
     {
         private array $configurations;
         private array $constants;

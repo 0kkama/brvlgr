@@ -70,7 +70,7 @@
      */
     function getFileContent (string $fileName) : array
     {
-//        TODO проверка на empty оказалась недостаточной в слачае наличия пробела или переноса.
+//        TODO проверка на empty оказалась недостаточной в случае наличия пробела или переноса.
 //          ДОРАБОТАТЬ!!!
         $content = file($fileName);
         if ( empty($content) ) {

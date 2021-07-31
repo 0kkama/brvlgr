@@ -46,7 +46,7 @@
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
-                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->id);
+                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->getId());
                 $this->errors = $this->article->save()->getErrors();
 
                 if (!$this->errors->__invoke()) {
@@ -81,7 +81,7 @@
 
         protected function getArt() : self
         {
-            $this->article = Publication::findBy('id', $this->params['id']);
+            $this->article = Publication::findOneBy('id', $this->params['id']);
             return $this;
         }
 

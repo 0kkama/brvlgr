@@ -23,6 +23,7 @@
 
         /**
          * Db constructor.
+         * @throws ExceptionWrapper
          */
         public function __construct()
         {
@@ -57,7 +58,7 @@
         /**
          * @param PDOStatement $query
          * @return bool
-         * @throws exceptions\DbException|exceptions\CustomException
+         * @throws DbException|CustomException
          */
         protected function checkQueryErr(PDOStatement $query) : bool
         {
@@ -74,6 +75,7 @@
          * @param string $sql
          * @param array $data
          * @return bool
+         * @throws DbException|CustomException
          */
         public function execute(string $sql, array $data) : bool
         {
@@ -100,7 +102,7 @@
                 $this->checkQueryErr($query);
                 $result = $query->fetchAll(PDO::FETCH_CLASS, $class);
             } catch (\Exception $e) {
-                (new ExceptionWrapper('Ошибка при осуществелнии запроса к базе данных', 500, $e))->throwIt();
+                (new ExceptionWrapper('Ошибка при осуществлении запроса к базе данных', 500, $e))->throwIt();
             }
                 return $result ?: null;
         }
@@ -110,6 +112,7 @@
          * @param array $data
          * @param $class
          * @return object|null
+         * @throws DbException|CustomException
          */
         public function queryOne(string $sql, array $data, $class) : ?object
         {
@@ -127,6 +130,19 @@
         public function getLastId() : string
         {
             return $this->dbh->lastInsertId();
+        }
+
+        /**
+         * @throws DbException|CustomException
+         */
+        public function fetchAssoc(string $sql)
+        {
+            $query = $this->dbh->prepare($sql);
+            $query->setFetchMode(PDO::FETCH_ASSOC);
+            $query->execute();
+            $this->checkQueryErr($query);
+            $result = $query->fetch();
+            return  $result ?: null;
         }
 
     }

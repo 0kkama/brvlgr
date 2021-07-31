@@ -29,13 +29,12 @@
             }
 
             // получение данных уже существующей статьи и проверка ее существования
-            $this->article = Publication::findBy(type: $this->params['id'], subject: 'id');
+            $this->article = Publication::findOneBy(type: $this->params['id'], subject: 'id');
 
             if (!$this->article->exist()) {
                 Relocator::deadend(404);
             }
         }
-
         protected function action(string $action) : void
         {
             if (method_exists($this, $action)) {

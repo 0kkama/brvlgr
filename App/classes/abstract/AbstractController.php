@@ -9,7 +9,7 @@
     use App\classes\View;
     use JetBrains\PhpStorm\Pure;
 
-    class AbstractController
+    abstract class AbstractController
     {
         /** @var View template object for rendering content section and then whole current page
          * @var User|object object of current user or empty object of respective class

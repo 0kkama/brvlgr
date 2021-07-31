@@ -17,13 +17,14 @@
          */
 
         protected string $alert = '', $param = '', $type;
-        protected int $httpCode;
+        public int $httpCode;
         protected bool $critical;
 
         #[Pure] public function __construct($message = "", $code = 0, $critical = false, Throwable $previous = null)
         {
             $this->type = static::class;
             $this->critical = $critical;
+            $this->httpCode = $code;
             parent::__construct($message, $code, $previous);
         }
 
@@ -36,6 +37,11 @@
         {
             $this->alert = $alert;
             return $this;
+        }
+
+        public function getHttpCode() : int
+        {
+            return $this->httpCode ?? 418;
         }
 
         /**
