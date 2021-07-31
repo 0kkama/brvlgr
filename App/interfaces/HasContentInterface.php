@@ -4,7 +4,7 @@
     namespace App\interfaces;
 
 
-    interface HasContent
+    interface HasContentInterface
     {
         public function getContent();
     }

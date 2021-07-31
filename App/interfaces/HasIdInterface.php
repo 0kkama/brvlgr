@@ -4,7 +4,7 @@
     namespace App\interfaces;
 
 
-    interface HasId
+    interface HasIdInterface
     {
         public function getID();
     }

@@ -4,7 +4,7 @@
     namespace App\interfaces;
 
 
-    interface HasTitle
+    interface HasTitleInterface
     {
         public const TITLE = 'title';
 

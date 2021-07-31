@@ -12,11 +12,10 @@
     {
 
         protected string $myMessage, $type;
-        protected int $myCode;
+        protected int $httpCode;
         protected bool $critical;
         protected array $trace;
         protected Exception $ex;
-
 
         /**
          * ExceptionWrapper constructor.
@@ -28,7 +27,7 @@
         #[Pure] public function __construct($message, $code, Exception $previous, bool $critical = false)
         {
             $this->myMessage = $message ?? '';
-            $this->myCode = $code ?? 418;
+            $this->httpCode = $code ?? 418;
             $this->critical = $critical;
             $this->type = get_class($previous);
 
@@ -63,9 +62,9 @@
             return $this->myMessage;
         }
 
-        public function getNumber() : int
+        public function getHttpCode() : int
         {
-            return $this->myCode;
+            return $this->httpCode;
         }
 
         public function getType() : string

@@ -4,7 +4,7 @@
     namespace App\interfaces;
 
 
-    interface HasAuthor
+    interface HasAuthorInterface
     {
         public function getAuthor();
     }

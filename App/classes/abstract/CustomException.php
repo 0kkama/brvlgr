@@ -17,6 +17,7 @@
          */
 
         protected string $alert = '', $param = '', $type;
+        protected int $httpCode;
         protected bool $critical;
 
         #[Pure] public function __construct($message = "", $code = 0, $critical = false, Throwable $previous = null)

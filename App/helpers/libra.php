@@ -38,11 +38,10 @@
 
     // короткоименная фуя для простой обработки данных, вводимых пользователем.
     function val(string $inputStr, int $key = 1) : string {
-        switch ($key) {
-            case 1: $inputStr = trim(strip_tags($inputStr)); break;
-            case 2: $inputStr = trim(htmlspecialchars($inputStr)); break;
-        }
-        return $inputStr;
+        return match ($key) {
+            1 => trim(strip_tags($inputStr)),
+            2 => trim(htmlspecialchars($inputStr)),
+        };
     }
 
     /**
@@ -103,4 +102,11 @@
         $str = mb_strtolower($str);
         $str = my_mb_ucfirst($str);
         return $str;
+    }
+
+    // фуя получает число и возвращает количество секунд, равное кол-ву дней от текущей даты
+    function getDaysQuant (int $days) : int {
+        $seconds = 3600;
+        $hours = 24;
+        return time() + $seconds * $hours * $days;
     }

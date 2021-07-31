@@ -4,7 +4,7 @@
     namespace App\interfaces;
 
 
-    interface Singleton
+    interface SingletonInterface
     {
 
         public static function getInstance();
