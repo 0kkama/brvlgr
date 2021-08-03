@@ -1,12 +1,12 @@
 <?php
     use App\classes\Config;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
     use App\classes\models\Article;
     /** @var Article $article  */
-    /** @var UsersErrors $errors  */
+    /** @var ErrorsContainer $errors  */
 ?>
 <div id="content">
-    <?php if($errors()): ?>
+    <?php if($errors->notEmpty()): ?>
         <div class="alert alert-warning">
             <p> <?= $errors ?></p>
         </div>

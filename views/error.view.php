@@ -1,3 +1,7 @@
+<?php
+    /** @var string $header */
+    /** @var string $message */
+?>
 <main>
     <h1><?= $header ?></h1>
 <div class="alert alert-warning">

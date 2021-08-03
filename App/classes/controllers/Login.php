@@ -7,20 +7,20 @@
     use App\classes\abstract\Controller;
     use App\classes\Config;
     use App\classes\exceptions\ExceptionWrapper;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
     use App\classes\View;
     use Exception;
     use JsonException;
 
     class Login extends Controller
     {
-        protected UsersErrors $error;
+        protected ErrorsContainer $error;
+        protected string $title = "Войти на сайт";
         protected ?string $relocation;
 
         public function __construct(array $params, View $templateEngine)
         {
             parent::__construct($params, $templateEngine);
-            $this->title = "Войти на сайт";
             $this->relocation = Config::getInstance()->BASE_URL;
         }
 
@@ -37,7 +37,7 @@
         protected function loginUser() : void
         {
             $this->checkUser();
-            $this->error = new UsersErrors();
+            $this->error = new ErrorsContainer();
 
             if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
                 $this->user->setLogin(val($_POST['login']));

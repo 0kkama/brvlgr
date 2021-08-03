@@ -6,8 +6,8 @@
 
     use App\classes\exceptions\ExceptionWrapper as Wrapper;
     use App\classes\exceptions\CustomException;
-    use App\classes\utility\SendMail;
-    use App\interfaces\CanSendMessage;
+    use App\classes\utility\EmailSender;
+    use App\interfaces\CanSendMessageInterface;
     use Exception;
 
     /**
@@ -19,10 +19,10 @@
     {
         protected string $date, $time, $logFile, $logMessage;
         protected Exception $ex;
-        protected CanSendMessage $sender;
+        protected CanSendMessageInterface $sender;
         protected static string $path = __DIR__ . '/../../../logs/errors/';
 
-        public function __construct(Exception $ex, CanSendMessage $sender)
+        public function __construct(Exception $ex, CanSendMessageInterface $sender)
         {
             $this->ex = $ex;
             $this->date = date('Y-m-d');
@@ -41,11 +41,12 @@
                 $this->logMessage = "$this->time - {$this->ex->getCode()} - {$this->ex->getMessage()} in {$this->ex->getFile()} line:{$this->ex->getLine()}";
             }
                 error_log("$this->logMessage\n", 3, $this->logFile);
-// TODO переделать блок критикал!!!
+
+            // TODO переделать блок критикал
         // if this error has critical status then email message will be send
             if ($this->ex->isCritical()) {
-                $subject = $this->date."(Сообщение: {$this->ex->getAlert()} код: {$this->ex->getNumber()})";
-                SendMail::sendMessage($subject, $this->logMessage);
+                $subject = $this->date."(Сообщение: {$this->ex->getAlert()} код: {$this->ex->getНttpCode()})";
+                EmailSender::sendMessage($subject, $this->logMessage);
             }
         }
     }

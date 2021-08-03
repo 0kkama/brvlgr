@@ -4,7 +4,7 @@
     namespace App\classes\utility;
 
 
-    use App\interfaces\CanSendMessage;
+    use App\interfaces\CanSendMessageInterface;
     use Swift_Mailer;
     use Swift_Message;
     use Swift_SmtpTransport;
@@ -12,10 +12,10 @@
 
     /**
      * Class SendMail
-     * Primitive class for send alerts to admin e-mail
+     * Simple class for send emails using Swift_Mailer
      * @package App\classes\utility
      */
-    class SendMail implements CanSendMessage
+    class EmailSender implements CanSendMessageInterface
     {
         public static function sendMessage(string $subject, string $body) : int
         {

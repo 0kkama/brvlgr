@@ -7,7 +7,7 @@
     use App\classes\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\models\Article;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
     use App\classes\View;
     use App\classes\models\User;
     use App\classes\Config;
@@ -19,7 +19,7 @@
         * @var string $title title of page
         * @var string $content content of page for substitution in layout template
          */
-        protected UsersErrors $errors;
+        protected ErrorsContainer $errors;
 
         /**
          * @throws ExceptionWrapper
@@ -28,7 +28,7 @@
         {
             parent::__construct($params, $templateEngine);
             $this->user = User::getCurrent(Config::getInstance()->SESSIONS);
-            $this->errors = new UsersErrors();
+            $this->errors = new ErrorsContainer();
         }
 
         protected function action(string $action) : void
@@ -36,7 +36,6 @@
             if (method_exists($this, $action)) {
                 $this->$action();
             } else {
-
                 Error::deadend(400);
             }
         }

@@ -7,6 +7,7 @@
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\exceptions\FileException;
     use App\classes\exceptions\CustomException;
+    use App\classes\utility\ErrorsContainer;
     use App\interfaces\HasIdInterface;
     use App\interfaces\UserInterface;
     use App\traits\GetSetTrait;
@@ -27,6 +28,18 @@
     {
         protected const TABLE_NAME = 'users';
         protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $hash = '', $email = '', $rights = '';
+        protected ?string $pass = null;
+        protected static array $checkList = ['checkEmail', 'checkLogin', 'checkHash'];
+        protected static array $errorsList =
+            [
+                ':login' => 'Логин отсутствует или некорректен',
+                ':firstName' => 'Отсутствует имя',
+                ':middleName' => 'Отсутствует отчество',
+                ':lastName' => 'Отсутствует фамилия',
+                ':email' => 'Не указан почтовый ящик',
+                ':hash' => 'Пароль отсутствует или некорректен',
+//                TODO не забыть заменить hash
+            ];
 
         use SetControlTrait;
 
@@ -89,26 +102,15 @@
         /**
          * Return TRUE only if User has NOT empty fields $id and $login
          * @return bool */
-        public function __invoke() : bool
+        #[Pure] public function __invoke() : bool
         {
-            return (!empty($this->id) && !empty($this->login));
+            return $this->exist();
         }
 
         #[Pure] public function exist() : bool
         {
-            return $this();
+            return (!empty($this->id) && !empty($this->login));
         }
-
-        //        public function checkPassword(string $login, string $password) : bool
-//        {
-//            if (!(empty($login) || empty($password))) {
-//                $user = User::findByLogin($login);
-//                if (isset($user)) {
-//                    return password_verify($password, $user->getHash());
-//                }
-//            }
-//            return false;
-//        }
 
         public function __toString() : string
         {
@@ -116,10 +118,15 @@
         }
 
         //<editor-fold desc="======================= getters">
+        public function getErrors() : ErrorsContainer
+        {
+             return $this->errors;
+        }
+
         /**
-         * @return string
+         * @return string|null
          */
-        public function getLogin(): ?string
+        public function getLogin() : ?string
         {
             return $this->login;
         }
@@ -127,13 +134,13 @@
         /**
          * @return string
          */
-        public function getHash(): ?string
+        public function getHash() : ?string
         {
             return $this->hash;
         }
 
         /**
-         * @return null
+         * @return string|null
          */
         public function getId() : ?string
         {
@@ -141,19 +148,27 @@
         }
 
         /**
-         * @return string
+         * @return string|null
          */
-        public function getRights(): ?string
+        public function getRights() : ?string
         {
             return $this->rights;
         }
 
         /**
-         * @return string
+         * @return string|null
          */
-        public function getEmail(): ?string
+        public function getEmail() : ?string
         {
             return $this->email;
+        }
+
+        /**
+         * @return string|null
+         */
+        public function getPass() : ?string
+        {
+            return $this->pass;
         }
         //</editor-fold>
 
@@ -161,70 +176,76 @@
         /**
          * @param string $email
          */
-        public function setEmail(string $email): void
+        public function setEmail(string $email) : User
         {
             $this->email = $email;
+            return $this;
         }
 
         /**
          * @param string $rights
          */
-        public function setRights(string $rights): void
+        public function setRights(string $rights) : User
         {
             $this->rights = $rights;
+            return $this;
         }
 
         /**
          * @param string $firstName
          */
-        public function setFirstName(string $firstName): void
+        public function setFirstName(string $firstName) : User
         {
             $this->firstName = $firstName;
+            return $this;
         }
 
         /**
          * @param string $middleName
          */
-        public function setMiddleName(string $middleName): void
+        public function setMiddleName(string $middleName) : User
         {
             $this->middleName = $middleName;
+            return $this;
         }
 
         /**
          * @param string $lastName
          */
-        public function setLastName(string $lastName): void
+        public function setLastName(string $lastName) : User
         {
             $this->lastName = $lastName;
+            return $this;
         }
 
         /**
          * @param string $login
          */
-        public function setLogin(string $login): void
+        public function setLogin(string $login) : User
         {
             $this->login = $login;
+            return $this;
         }
 
         /**
-         * @param null $id
+         * Temporary password fields for the moment when user make registration
+         * @param string|null $pass
          */
-        private function setId($id): void
+        public function setPassword(?string $pass) : User
         {
+            $this->pass = $pass;
+            return $this;
         }
 
         /**
-         * @param null $date
+         * @param string $password
+         * @return User
          */
-        private function setDate($date): void
+        public function setHash(string $password) : User
         {
-        }
-
-        /**
-         * @param string $hash
-         */
-        private function setHash(string $hash): void
-        {
+            $this->hash = password_hash($password, PASSWORD_BCRYPT);
+            $this->pass = null;
+            return $this;
         }
         //</editor-fold>
     }

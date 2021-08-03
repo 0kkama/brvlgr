@@ -5,7 +5,7 @@
     use App\classes\abstract\Controller;
     use App\classes\Config;
     use App\classes\exceptions\FileException;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
     use App\classes\utility\Uploader;
     use Exception;
 
@@ -20,7 +20,7 @@
         public function __construct($params, $templateEngine)
         {
             parent::__construct($params,$templateEngine);
-            $this->errors = new UsersErrors();
+            $this->errors = new ErrorsContainer();
 
             // TODO подумать, не перемудрил ли я здесь с условием
             if ( ( $_SERVER['REQUEST_METHOD'] === 'POST' ) && (isset($_FILES['newimage'])) && $this->user->exist()) {

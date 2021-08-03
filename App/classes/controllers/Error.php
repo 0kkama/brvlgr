@@ -10,7 +10,7 @@
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\models\User;
     use App\classes\utility\LoggerForExceptions;
-    use App\classes\utility\SendMailInterface;
+    use App\classes\utility\EmailSender;
     use App\classes\View;
     use JetBrains\PhpStorm\NoReturn;
 
@@ -55,7 +55,7 @@
             try {
                 $this->user = User::getCurrent(Config::getInstance()->SESSIONS);
             } catch (ExceptionWrapper $ex) {
-                (new LoggerForExceptions($ex, new SendMailInterface))();
+                (new LoggerForExceptions($ex, new EmailSender))();
                 $this->user = new User();
             }
 //          если ключ отсутствует или неверен, то присваивается дефолтное значение для сигнала

@@ -17,7 +17,7 @@
             if (property_exists($this, $property)) {
                 return $this->$property;
             }
-            (new MagickException('Запрос несуществующего метода через SetControlTrait'))->setAlert('Некорректный запрос')->throwIt();
+//            (new MagickException('Запрос несуществующего метода через SetControlTrait'))->setAlert('Некорректный запрос')->throwIt();
         }
 
         public function __set($name, $value)

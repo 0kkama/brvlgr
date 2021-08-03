@@ -10,7 +10,8 @@
     use PDOStatement;
     use App\classes\Config;
 
-
+//TODO разобраться с периодически возникающей ошибкой
+// 2 - Packets out of order. Expected 1 received 0. Packet size=145 in App/classes/Db.php line:45
     /**
 
      */
@@ -91,20 +92,20 @@
          * @param string $sql
          * @param array $data
          * @param $class
+         * @param int $fetchMode
          * @return array|null
          * @throws ExceptionWrapper
          */
-        public function queryAll(string $sql, array $data, $class) : ?array
+        public function queryAll(string $sql, array $data, $class, int $fetchMode = PDO::FETCH_CLASS) : ?array
         {
             try {
                 $query = $this->dbh->prepare($sql);
                 $query->execute($data);
                 $this->checkQueryErr($query);
-                $result = $query->fetchAll(PDO::FETCH_CLASS, $class);
             } catch (\Exception $e) {
                 (new ExceptionWrapper('Ошибка при осуществлении запроса к базе данных', 500, $e))->throwIt();
             }
-                return $result ?: null;
+                return ($fetchMode === 8) ? $query->fetchAll($fetchMode, $class) : $query->fetchAll($fetchMode);
         }
 
         /**
@@ -130,19 +131,6 @@
         public function getLastId() : string
         {
             return $this->dbh->lastInsertId();
-        }
-
-        /**
-         * @throws DbException|CustomException
-         */
-        public function fetchAssoc(string $sql)
-        {
-            $query = $this->dbh->prepare($sql);
-            $query->setFetchMode(PDO::FETCH_ASSOC);
-            $query->execute();
-            $this->checkQueryErr($query);
-            $result = $query->fetch();
-            return  $result ?: null;
         }
 
     }

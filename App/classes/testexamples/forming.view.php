@@ -1,6 +1,6 @@
 <?php
     use App\classes\Config;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
     /** @var App\classes\publication\Article $article  */
     /** @var App\classes\UsersErrors $errors  */
 ?>

@@ -4,7 +4,7 @@
     namespace App\classes\controllers\article;
 
     use App\classes\controllers\Error;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
     use App\classes\controllers\article\Article as Essence;
     use App\classes\models\Article;
 
@@ -17,7 +17,7 @@
         {
             parent::__construct($params);
             $this->article = new Article();
-            $this->errors = new UsersErrors();
+            $this->errors = new ErrorsContainer();
             $this->title = 'Добавить публикацию';
         }
 

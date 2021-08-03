@@ -6,7 +6,7 @@
     use App\classes\abstract\Model;
     use App\classes\exceptions\CustomException;
     use App\classes\exceptions\MagickException;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
     use App\interfaces\HasAuthorInterface;
     use App\interfaces\HasTableInterface;
     use App\interfaces\HasTitleInterface;
@@ -17,14 +17,14 @@
 
     class Article extends Model implements HasAuthorInterface, HasTitleInterface, PaginatedInterface, HasTableInterface
     {
-        // TODO поменять имя таблицы на articles в дальнейшем
         protected const TABLE_NAME = 'articles';
         protected string $title, $text, $author, $category, $author_id;
-        protected array $replacements =
+        protected static array $checkList = [];
+        protected static array $errorsList =
             [
                 ':title' => 'Отсутствует заголовок',
                 ':text' => 'Отсутствует текст статьи',
-                ':category'=> 'Не указана категория',
+                ':category' => 'Не указана категория',
             ];
         //                              TRAIT!!!!!!!!!
         use  SetControlTrait;
@@ -37,14 +37,12 @@
 //            if ( $limit < 7 ) {
 //                (new DbException('Недостаточное количество айтемов', 404))->setAlert('')->setParam("")->throwIt();
 //            }
-
             $db = new Db;
-            $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `date` DESC LIMIT ' . $limit;
+            $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `id` DESC LIMIT ' . $limit;
             return $db->queryAll($sql, [], self::class);
         }
 
 //        public function
-
         public function setTitle(string $title) : Article
         {
             $this->title = $title;
@@ -115,22 +113,17 @@
          * Return TRUE if object has NOT empty fields $id and $date
          * @return bool
          */
-        public function exist () : bool
+        public function exist() : bool
         {
             return (!empty($this->id) && !empty($this->date));
         }
 
         /**
-         * @return UsersErrors
+         * @return ErrorsContainer
          */
-        public function getErrors() : UsersErrors
+        public function getErrors() : ErrorsContainer
         {
             return $this->errors;
-        }
-
-        public function getID() : ?string
-        {
-            return $this->id;
         }
 
         public function getAuthor() : User
@@ -138,8 +131,9 @@
             return User::findOneBy(type: 'id', subject: $this->author_id);
         }
 
-        public function getTitle()
+        public function getTitle() : string
         {
             return $this->title;
         }
+
     }

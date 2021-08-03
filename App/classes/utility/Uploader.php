@@ -14,14 +14,14 @@
     {
         protected array $file, $list;
         protected User $user;
-        protected UsersErrors $errors;
+        protected ErrorsContainer $errors;
         protected string $origPath, $prePath, $newFileName;
 
         public function __construct(array $file, User $user)
         {
             $this->file = $file ?? [];
             $this->user = $user;
-            $this->errors = new UsersErrors();
+            $this->errors = new ErrorsContainer();
             $this->origPath = Config::getInstance()->IMG_PATH;
             $this->prePath = Config::getInstance()->IMG_PRE;
         }
@@ -68,10 +68,10 @@
 
         /**
          * Forming string for access logs and uploaded image if there is no errors in checkFile function
-         * @return UsersErrors
+         * @return ErrorsContainer
          * @throws Exception
          */
-        public function upload() : UsersErrors
+        public function upload() : ErrorsContainer
         {
             if (!$this->checkFile()) {
                 Image::configure(['driver' => 'imagick']);

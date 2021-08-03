@@ -11,7 +11,7 @@
     use App\classes\exceptions\ExceptionWrapper as MyExWrapper;
     use App\classes\utility\LoggerForExceptions;
     use App\classes\utility\Router;
-    use App\classes\utility\SendMailInterface;
+    use App\classes\utility\EmailSender;
     use App\classes\View;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
 
@@ -56,11 +56,11 @@
         (new $className($params, new View))();
     }
     catch (CustomException|MyExWrapper $ex ) {
-        (new LoggerForExceptions($ex, new SendMailInterface))();
+        (new LoggerForExceptions($ex, new EmailSender))();
         Error::deadend($ex->getHttpCode(), $ex->getAlert());
         //                var_dump($ex);
     } catch (Exception $ex) {
-        (new LoggerForExceptions($ex, new SendMailInterface))();
+        (new LoggerForExceptions($ex, new EmailSender))();
         Error::deadend();
         //        var_dump($ex);
     }

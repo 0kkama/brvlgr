@@ -6,9 +6,11 @@
     use App\classes\exceptions\CustomException;
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
+    use App\classes\utility\ErrorsInspector;
     use App\interfaces\HasIdInterface;
     use Exception;
+    use JetBrains\PhpStorm\Pure;
     use PDO;
 
     /**
@@ -28,17 +30,27 @@
     {
     /**
      *@const const TABLE_NAME dynamically changing in inheriting classes
-     * @var UsersErrors $errors
-     * @var null $table
-     * @var null $cols
-     * @var null $data
-     * @var null $separator
+     * @var ErrorsContainer $errors
+     * @var array $mata collection of data for forming sql queries
      */
     protected const TABLE_NAME = 'abstract';
     protected ?string $id = null;
-    protected UsersErrors $errors;
-    protected array $replacements;
+    protected ErrorsContainer $errors;
+    protected ErrorsInspector $inspector;
+    protected static array $errorsList;
+    protected static array $checkList;
     protected array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
+
+//    TODO перенести метода exist в абстракцию
+//    TODO вынести проверку заполненности полей в отдельный класс?
+        public function __construct(ErrorsInspector $inspector = null)
+        {
+            $this->errors = new ErrorsContainer();
+//            $this->inspector = new ErrorsInspector();
+            $this->inspector = $inspector ?: new ErrorsInspector();
+            $this->inspector->setObject($this);
+            $this->inspector->setContainer($this->errors);
+        }
 
         /**
          * Finds needed line in table by given <b>$subject</b> and return it like object of respective class
@@ -50,7 +62,6 @@
         {
             try {
                 $db = new Db();
-
                 $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE ' . $type.' = :'.$type;
                 $result = $db->queryOne($sql, [$type => $subject], static::class);
             } catch (Exception $e) {
@@ -73,32 +84,25 @@
 
         /**
          * @throws DbException|CustomException
+         * @throws ExceptionWrapper
          */
         public static function getTotalQuantity()
         {
             $db = new Db();
             $sql = 'SELECT COUNT(*) AS ' . static::TABLE_NAME . ' FROM ' . static::TABLE_NAME;
-            return $db->fetchAssoc($sql);
+            return $db->queryAll($sql, [], static::class, PDO::FETCH_ASSOC);
         }
 
         /**
-         * метод добавлет новую запись в БД, после чего возвращает  <b>$this</b> или <b>null</b>
+         * метод добавлет новую запись в БД, после чего возвращает <b>$this</b> или <b>null</b>
          * @return AbstractModel
          */
         protected function insert() : static
         {
-//            extract($this->makeSql(), EXTR_OVERWRITE);
-            $this->makeSql();
-            $this->checkFields($this->meta['data']);
-
-            if ($this->errors->__invoke()) {
-                return $this;
-            }
-
+            // делаем строку подобную :title, :text, :author, :category
+            $values = implode($this->meta['separator'], $this->meta['cols']);
             // делаем строку подобную title, text, author, category
             $insertions = implode($this->meta['separator'], array_flip($this->meta['cols']));
-            // делаем строку подобную :title, :text, :author, :category
-            $values = implode($this->meta['separator'], array_keys($this->meta['data']));
             // создаем шаблон запроса вида INSERT INTO news (title,text,author,category) VALUES (:title,:text,:author,:category)
             $sql = "INSERT INTO {$this->meta['table']} ($insertions) VALUES ($values)";
 
@@ -110,19 +114,12 @@
         }
 
         /**
-         * обновляет уже существующую запись, которая ранее была получена из базы данных по id
+         * Обновляет уже существующую запись, которая ранее была получена из базы данных по id
          * @return AbstractModel
          */
         protected function update() : static
         {
             //   TODO Как реализовать обновление только того поля, которое было изменено?
-            $this->makeSql();
-            $this->checkFields($this->meta['data']);
-
-            if ($this->errors->__invoke()) {
-                return $this;
-            }
-
             $set = [];
             foreach ($this->meta['cols'] as $index => $value) {
                 $set[] = "$index = $value";
@@ -140,7 +137,7 @@
         }
 
         /**
-         * удаляет запись из БД
+         * Удаляет запись из БД
          * @return bool
          */
         public function delete() : bool
@@ -157,8 +154,8 @@
         }
 
         /**
-         * Определяет, является ли запись новой или уже существующей.
-         * Если запись новая, то вызывает метод <b>insert</b>, в противном случае вызывает метод <b>update</b>.
+         * Defines whether a record is old or new. If the record is new,
+         * then the <b>insert</b> method will be called, otherwise the <b>update</b> method.
          * @return AbstractModel
          */
         public function save() : static
@@ -172,12 +169,12 @@
         /**
          * Внутренний метод, формирующий данные для последующей подстановки в SQL запрос.
          * Предварительно удаляет данные полей, не являющихся типом string и генерируемых БД автоматически.
+         * В конце работы проверяет заполненность всех полей
          * Возвращает ассоциативный массив с данными: <ul>
          * <li><b>table</b> - имя таблицы;</li>
          * <li><b>cols</b> - массив вида 'index' => ':index' для подготовленных запросов;</li>
          * <li><b>data</b> - массив данных для подстановки (':user' => 'Ahmed');</li>
          * <li><b>separator</b> - символ-разделитель, использующийся в запросе;</li></ul>
-         *
          * @return void
          */
         protected function makeSql() : void
@@ -188,31 +185,28 @@
 
             foreach ($fields as $index => $value) {
                 $this->meta['cols'][$index] = ":$index"; // массив вида 'index' => ':index'
-                $this->meta['data'][":$index"] = $value; // данные для внедрения ':user' => 'Ahmed'
+                $this->meta['data'][":$index"] = $value; // данные для внедрения вида ':user' => 'Ahmed'
             }
 
-            $this->meta['separator'] = ', '; // разделитель, используемый в запросе
+            $this->meta['separator'] = ', '; // разделитель, используемый в текущем запросе
             $this->meta['table'] = static::TABLE_NAME; // имя таблицы в БД
         }
 
-        /**
-         * метод проверяет массив $data на наличие пустых элементов. По итогу работы создает массив,
-         * с указанием всех пропущенных полей
-         * @param array $data
-         * @return void
-         */
-        protected function checkFields (array $data) : void
+        public function checkData() : static
         {
-            $this->errors = new UsersErrors();
-            foreach ($data as $index => $datum) {
-                if (empty($datum)) {
-                    $this->errors->add($this->replacements[$index]);
-                }
+            $this->makeSql();
+            $this->inspector->checkFormFields();
+            if ($this->errors->notEmpty()) {
+                return $this;
             }
+            if (!empty(static::$checkList)) {
+                $this->inspector->validateData(static::$checkList);
+            }
+                return $this;
         }
 
         /**
-         * возвращает <b>string</b> с именем текущей таблицы
+         * Возвращает <b>string</b> с именем текущей таблицы
          * @return string
          */
         public static function getTableName() : string
@@ -224,4 +218,16 @@
         {
             return $this->id;
         }
+
+        public function getErrorsList() : array
+        {
+            return static::$errorsList;
+        }
+
+        public function getMetaData() : array
+        {
+            return $this->meta['data'];
+        }
+
+        abstract public function exist() : bool;
     }

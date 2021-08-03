@@ -5,7 +5,7 @@
 
 
     use App\classes\models\User;
-    use App\classes\utility\UsersErrors;
+    use App\classes\utility\ErrorsContainer;
     use App\classes\View;
     use JetBrains\PhpStorm\Pure;
 
@@ -31,5 +31,4 @@
         {
             $this->page->assign('title', $this->title)->assign('content', $this->content)->assign('user', $this->user)->display('layout');
         }
-
     }

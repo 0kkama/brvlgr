@@ -1,4 +1,4 @@
-<?php /** @var App\classes\UsersErrors $loginErr */ ?>
+<?php /** @var App\classes\utility\ErrorsContainer $loginErr */ ?>
 <form method="post">
     <div class="form-group">
         <label for="auth-login">Логин</label>
@@ -11,7 +11,7 @@
 
     <hr>
     <button class="btn btn-primary">Войти</button>
-    <?php if($loginErr()) : ?>
+    <?php if($loginErr->notEmpty()) : ?>
         <hr>
         <div class="alert alert-danger">
             <?= $loginErr ?>

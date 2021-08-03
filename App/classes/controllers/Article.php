@@ -7,11 +7,12 @@
     use App\classes\abstract\Controller;
     use App\classes\Config;
     use App\classes\models\Article as Publication;
+    use App\classes\utility\ErrorsInspector;
 
     class Article extends Controller
     {
 
-        protected string $title = 'PROBLEM!', $content = 'BIG PROBLEM!';
+        protected string $title = 'PAGE NOT FOUND!', $content = 'PAGE NOT FOUND!';
         protected Publication $article;
 
         protected function add() : void
@@ -47,9 +48,10 @@
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
                 $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->getId());
-                $this->errors = $this->article->save()->getErrors();
+                $this->errors = $this->article->checkData()->getErrors();
 
-                if (!$this->errors->__invoke()) {
+                if (!$this->errors->notEmpty()) {
+                    $this->article->save();
                     header('Location: /article/read/' . $this->article->getID());
                 }
             }

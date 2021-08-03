@@ -55,25 +55,6 @@
             }
         }
 
-        public function serialize() : string
-        {
-            if(!$this->isEmpty()) {
-                $res = serialize($this->errors);
-            }
-            return (empty($res)) ? '' : $res;
-
-//            if(!$this->isEmpty()) {
-//                $res = json_encode($this->errors, JSON_THROW_ON_ERROR);
-//            }
-//            return (empty($res)) ? '' : $res;
-        }
-
-        public function unserialize($data) : void
-        {
-            $this->errors = unserialize($data, ['allowed_classes' => true]);
-            //            $this->errors = json_decode($data, true, 16, JSON_THROW_ON_ERROR);
-        }
-
         public function count() : int
         {
             return count($this->errors);
@@ -84,8 +65,21 @@
             var_dump($this->errors);
         }
 
-        public function jsonSerialize()
+        /**
+         * @throws JsonException
+         */
+        public function jsonSerialize() : string
         {
-            return $this->errors;
+            return (!empty($this->errors)) ? (json_encode($this->errors, JSON_THROW_ON_ERROR)) : '';
         }
+
+        /**
+         * @throws JsonException
+         */
+        public function jsonUnserialize(string $json) : void
+        {
+            $this->errors = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        }
+
+
     }

@@ -21,7 +21,7 @@
         {
             $this->title = 'Главная';
             $news = News::getLast(5);
-            $this->content = $this->page->assign('news', $news)->render('news');
+            $this->content = $this->page->assign('news', $news)->render('index');
             parent::__invoke();
         }
     }

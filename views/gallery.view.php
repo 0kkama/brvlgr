@@ -1,7 +1,7 @@
 <?php
     use App\classes\models\User;
-    use App\classes\utility\UsersErrors;
-    /** @var UsersErrors $errMsg */
+    use App\classes\utility\ErrorsContainer;
+    /** @var ErrorsContainer $errMsg */
     /** @var User $user */
 ?>
 <div id="content">

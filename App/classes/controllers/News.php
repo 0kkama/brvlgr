@@ -17,6 +17,6 @@
             parent::__construct($params, $templateEngine);
             $this->title = 'Статьи';
             $this->articles = Article::getAll();
-            $this->content = $this->page->assign('news', $this->articles)->render('news');
+            $this->content = $this->page->assign('news', $this->articles)->render('index');
         }
     }
