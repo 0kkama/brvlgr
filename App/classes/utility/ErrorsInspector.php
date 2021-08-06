@@ -21,7 +21,8 @@
 
         public function checkFormFields() : void
         {
-            $data = $this->object->getMetaData();
+//            $data = $this->object->getMetaData();
+            $data = $this->object->getFormFields();
             $messages = $this->object->getErrorsList();
 
             foreach ($data as $index => $datum) {
@@ -31,14 +32,15 @@
             }
         }
 
-        public function validateData(array $callbackList) : void
+        public function additionalVerification(array $callbackList) : void
         {
             if (!empty($callbackList)) {
                 foreach ($callbackList as $method) {
                     if (method_exists($this, $method)) {
                         $this->container->add($this->$method());
-                    }
+                    } else {
 //                    TODO throw new exception ?
+                    }
                 }
             }
         }

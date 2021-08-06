@@ -48,7 +48,7 @@
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
                 $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->getId());
-                $this->errors = $this->article->checkData()->getErrors();
+                $this->errors = $this->article->checkData()->getErrorsContainer();
 
                 if (!$this->errors->notEmpty()) {
                     $this->article->save();

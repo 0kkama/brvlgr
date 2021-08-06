@@ -3,6 +3,7 @@
 
     namespace App\classes\abstract;
 
+
     use App\classes\controllers\Error;
     use App\classes\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper;

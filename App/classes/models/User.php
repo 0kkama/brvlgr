@@ -27,18 +27,18 @@
     class User extends Model implements UserInterface
     {
         protected const TABLE_NAME = 'users';
-        protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $hash = '', $email = '', $rights = '';
-        protected ?string $pass = null;
-        protected static array $checkList = ['checkEmail', 'checkLogin', 'checkHash'];
+        protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $email = '';
+        protected ?string $hash = null, $rights = null, $password1 = '', $password2 = '';
+        protected static array $checkList = ['checkEmail', 'checkLogin', 'checkPasswords'];
         protected static array $errorsList =
             [
-                ':login' => 'Логин отсутствует или некорректен',
-                ':firstName' => 'Отсутствует имя',
-                ':middleName' => 'Отсутствует отчество',
-                ':lastName' => 'Отсутствует фамилия',
-                ':email' => 'Не указан почтовый ящик',
-                ':hash' => 'Пароль отсутствует или некорректен',
-//                TODO не забыть заменить hash
+                'login' => 'Логин отсутствует или некорректен',
+                'firstName' => 'Отсутствует имя',
+                'middleName' => 'Отсутствует отчество',
+                'lastName' => 'Отсутствует фамилия',
+                'email' => 'Не указан почтовый ящик',
+                'password1' => 'Пароль отсутствует или некорректен',
+                'password2' => 'Необходимо ввести повторный пароль',
             ];
 
         use SetControlTrait;
@@ -117,12 +117,7 @@
             return "$this->login <br> $this->email <br> $this->date";
         }
 
-        //<editor-fold desc="======================= getters">
-        public function getErrors() : ErrorsContainer
-        {
-             return $this->errors;
-        }
-
+        //<editor-fold desc="getters =======================">
         /**
          * @return string|null
          */
@@ -132,7 +127,7 @@
         }
 
         /**
-         * @return string
+         * @return string|null
          */
         public function getHash() : ?string
         {
@@ -163,16 +158,37 @@
             return $this->email;
         }
 
+        public function getFirstName() : string
+        {
+            return $this->firstName;
+        }
+
+        /**
+         * @return string
+         */
+        public function getMiddleName(): string
+        {
+            return $this->middleName;
+        }
+
+        /**
+         * @return string
+         */
+        public function getLastName() : string
+        {
+            return $this->lastName;
+        }
+
         /**
          * @return string|null
          */
-        public function getPass() : ?string
+        public function getPasswords() : array
         {
-            return $this->pass;
+            return [$this->password1, $this->password2];
         }
         //</editor-fold>
 
-        //<editor-fold desc="======================= setters">
+        //<editor-fold desc="setters ========================">
         /**
          * @param string $email
          */
@@ -231,22 +247,24 @@
          * Temporary password fields for the moment when user make registration
          * @param string|null $pass
          */
-        public function setPassword(?string $pass) : User
+        public function setPasswords(string $password1, string $password2) : User
         {
-            $this->pass = $pass;
+            $this->password1 = $password1;
+            $this->password2 = $password2;
             return $this;
         }
 
         /**
-         * @param string $password
          * @return User
          */
-        public function setHash(string $password) : User
+        public function makeHash() : User
         {
-            $this->hash = password_hash($password, PASSWORD_BCRYPT);
-            $this->pass = null;
+            $this->hash = password_hash($this->password1, PASSWORD_BCRYPT);
+            $this->password1 = null;
+            $this->password2 = null;
             return $this;
         }
         //</editor-fold>
+
     }
 

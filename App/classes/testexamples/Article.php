@@ -86,7 +86,7 @@
                 $fields = extractFields(array_keys($_POST),$_POST);
                 $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->id);
                 //                $this->errors = $this->article->save()->errors;
-                $this->errors = $this->article->save()->getErrors();
+                $this->errors = $this->article->save()->getErrorsContainer();
 
                 if (!$this->errors->__invoke()) {
                     header('Location: /article/read/' . $this->article->id);

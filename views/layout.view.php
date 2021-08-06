@@ -14,7 +14,7 @@
 <body>
 <div class="root">
     <header id='header'>
-    <?= $user->getLogin() ?? ''?>
+    <?= ($user->exist()) ? $user->getLogin() : '' ?>
     </header>
 
     <main>
@@ -25,13 +25,13 @@
                         <ul>
                             <li> <a href="/login"> Войти </a> </li>
                             <li> <a href="/"> Главная </a> </li>
-                            <li> <a href="/news"> Новости </a> </li>
+                            <li> <a href="/news"> Статьи </a> </li>
                             <li> <a href="/gallery"> Галерея </a> </li>
-                            <li> <a href="/article/add"> Добавить </a> </li>
+                            <li> <a href="/article/add"> Добавить статью </a> </li>
 
-                        <?php for($i = 0 ; $i < 4 ; $i++): ?>
+                            <?php for($i = 0 ; $i < 4 ; $i++): ?>
                                 <li> Navigation </li>
-                        <?php endfor; ?>
+                            <?php endfor; ?>
 
                             <li> <a href="/logout"> Выйти </a> </li>
                             <li> <a href="/test.php"> Тест </a> </li>

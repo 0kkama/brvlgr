@@ -1,7 +1,12 @@
 <?php
 
+
     namespace App\classes\utility;
 
+
+    /**
+     * Extend for inspection model/User class
+     */
     class ErrorInspectorUser extends ErrorsInspector
     {
         protected static array $regexp =
@@ -39,11 +44,17 @@
             return '';
         }
 
-        protected function checkHash() : string
+        protected function checkPasswords() : string
         {
-            $password = $this->object->getPass();
-            $length = mb_strlen($password);
-            if ($length < 8 || $length > 30) {
+            $password = $this->object->getPasswords();
+
+            if ($password[0] !== $password[1]) {
+                return ('Пароли не совпадают');
+            }
+
+            $length1 = mb_strlen($password[0]);
+            $length2 = mb_strlen($password[1]);
+            if ($length1 < 8 || $length1 > 30) {
                 return 'Длина пароля должна быть от 8 до 30 символов';
             }
             return '';

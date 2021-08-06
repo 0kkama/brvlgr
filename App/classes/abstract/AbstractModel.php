@@ -57,6 +57,7 @@
          * @param string $type type of search subject (id, login, mail etc.)
          * @param string $subject
          * @return AbstractModel
+         * @throws CustomException
          */
         public static function findOneBy(string $type, string $subject) : static
         {
@@ -160,6 +161,7 @@
          */
         public function save() : static
         {
+            $this->makeSql();
             if (isset($this->id)) {
                 return $this->update();
             }
@@ -180,7 +182,8 @@
         protected function makeSql() : void
         {
             // удаляем значения id, date итд не являющиеся строками и генерируемые БД автоматически или выполняющие служебные цели
-            $fields = array_filter(get_object_vars($this), static function ($var) { return is_string($var); });
+//            $fields = array_filter(get_object_vars($this), static function ($var) { return is_string($var); });
+            $fields = $this->getFormFields();
             $this->meta['cols'] = $this->meta['data'] = [];
 
             foreach ($fields as $index => $value) {
@@ -194,17 +197,14 @@
 
         public function checkData() : static
         {
-            $this->makeSql();
             $this->inspector->checkFormFields();
-            if ($this->errors->notEmpty()) {
-                return $this;
-            }
             if (!empty(static::$checkList)) {
-                $this->inspector->validateData(static::$checkList);
+                $this->inspector->additionalVerification(static::$checkList);
             }
                 return $this;
         }
 
+        //<editor-fold desc="getters =======================">
         /**
          * Возвращает <b>string</b> с именем текущей таблицы
          * @return string
@@ -224,10 +224,21 @@
             return static::$errorsList;
         }
 
+        public function getErrorsContainer() : ErrorsContainer
+        {
+            return $this->errors;
+        }
+
+        public function getFormFields() : array
+        {
+            return array_filter(get_object_vars($this), static function ($var) { return is_string($var); });
+        }
+
         public function getMetaData() : array
         {
             return $this->meta['data'];
         }
+        //</editor-fold>
 
         abstract public function exist() : bool;
     }

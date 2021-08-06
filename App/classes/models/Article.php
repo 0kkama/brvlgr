@@ -22,9 +22,9 @@
         protected static array $checkList = [];
         protected static array $errorsList =
             [
-                ':title' => 'Отсутствует заголовок',
-                ':text' => 'Отсутствует текст статьи',
-                ':category' => 'Не указана категория',
+                'title' => 'Отсутствует заголовок',
+                'text' => 'Отсутствует текст статьи',
+                'category' => 'Не указана категория',
             ];
         //                              TRAIT!!!!!!!!!
         use  SetControlTrait;
@@ -121,7 +121,7 @@
         /**
          * @return ErrorsContainer
          */
-        public function getErrors() : ErrorsContainer
+        public function getErrorsContainer() : ErrorsContainer
         {
             return $this->errors;
         }

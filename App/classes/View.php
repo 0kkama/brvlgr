@@ -2,6 +2,7 @@
     namespace App\classes;
 
     use App\classes\Config;
+    use App\traits\IteratorTrait;
 
     class View implements \Countable, \Iterator
     {
@@ -9,8 +10,12 @@
          * @var array $data
          * @var int $key
          */
-        private array $data = [];
         private int $key = 0;
+        private array $data = [];
+
+        //<editor-fold desc="Iterator interface implementation">
+        use IteratorTrait;
+        //</editor-fold>
 
         public function assign(string $name, $value) : object
         {
@@ -46,30 +51,5 @@
         public function getData() : array
         {
             return $this->data;
-        }
-
-        public function current()
-        {
-            return $this->data[$this->key];
-        }
-
-        public function next() : void
-        {
-            ++$this->key;
-        }
-
-        public function key(): int
-        {
-            return $this->key;
-        }
-
-        public function valid() : bool
-        {
-            return isset($this->data[$this->key]);
-        }
-
-        public function rewind() : void
-        {
-            $this->key = 0;
         }
     }
