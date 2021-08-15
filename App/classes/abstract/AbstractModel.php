@@ -45,7 +45,6 @@
         public static function findOneBy(string $type, string $subject) : static
         {
             try {
-//                $db = new Db();
                 $db = Db::getInstance();
                 $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE ' . $type.' = :'.$type;
                 $result = $db->queryOne($sql, [$type => $subject], static::class);
@@ -61,7 +60,6 @@
          */
         public static function getAll() : array
         {
-//            $db = new Db();
             $db = Db::getInstance();
             $sql = 'SELECT * FROM ' . static::TABLE_NAME;
 //            $sql = 'SELECT * FROM ' . 'zorba';
@@ -93,7 +91,6 @@
             // создаем шаблон запроса вида INSERT INTO news (title,text,author,category) VALUES (:title,:text,:author,:category)
             $sql = "INSERT INTO {$this->meta['table']} ($insertions) VALUES ($values)";
 
-//            $db = new Db();
             $db = Db::getInstance();
             $db->execute($sql, $this->meta['data']);
             $this->id = $db->getLastId();
@@ -136,7 +133,6 @@
                 $sql = "DELETE FROM $table WHERE id = :id";
                 $data[':id'] = $this->id;
 
-//                $db = new Db();
                 $db = Db::getInstance();
                 return $db->execute($sql, $data);
             }

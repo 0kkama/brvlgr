@@ -40,7 +40,6 @@
                 $limit = 'LIMIT ' . $quantity;
             }
 
-//            $db = new Db;
             $db = Db::getInstance();
             $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `id` DESC ' . $limit;
             return $db->queryAll($sql, [], self::class);

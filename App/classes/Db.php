@@ -14,7 +14,6 @@
 
 //TODO разобраться с периодически возникающей ошибкой
 // 2 - Packets out of order. Expected 1 received 0. Packet size=145 in App/classes/Db.php line:45
-// и переделать класс Db в синглтон
     /**
 
      */
@@ -41,7 +40,7 @@
         protected function newConnection($params) : PDO
         {
             try {
-//                $config = Config::getInstance();
+
                 $config = $params;
                     $dbConnection = new PDO
                     ('mysql:host=' . $config->getDb('host') . ';dbname=' . $config->getDb('name') . ';charset=' . $config->getDb('char'),
@@ -55,7 +54,6 @@
             }
             catch (PDOException $ex) {
                 (new ExceptionWrapper('Ошибка при запросе к базе данных', 500, $ex, false))->throwIt();
-//                (new DbException($ex->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->throwIt();
             }
             return $dbConnection;
         }
@@ -136,7 +134,5 @@
         {
             return $this->dbh->lastInsertId();
         }
-
-
     }
 
