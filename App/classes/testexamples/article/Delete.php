@@ -4,7 +4,7 @@
     namespace App\classes\controllers\article;
 
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use App\classes\models\Article;
     use App\classes\controllers\article\Article as Essence;

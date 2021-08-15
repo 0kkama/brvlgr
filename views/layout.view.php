@@ -14,7 +14,7 @@
 <body>
 <div class="root">
     <header id='header'>
-    <?= ($user->exist()) ? $user->getLogin() : '' ?>
+    <?= ($user->hasUserRights()) ? $user->getLogin() : '' ?>
     </header>
 
     <main>
@@ -23,9 +23,8 @@
                 <aside id='nav'>
                     <nav>
                         <ul>
-                            <li> <a href="/login"> Войти </a> </li>
                             <li> <a href="/"> Главная </a> </li>
-                            <li> <a href="/news"> Статьи </a> </li>
+                            <li> <a href="/articles"> Статьи </a> </li>
                             <li> <a href="/gallery"> Галерея </a> </li>
                             <li> <a href="/article/add"> Добавить статью </a> </li>
 
@@ -33,7 +32,9 @@
                                 <li> Navigation </li>
                             <?php endfor; ?>
 
-                            <li> <a href="/logout"> Выйти </a> </li>
+                            <li> <a href="/user/login"> Войти </a> </li>
+                            <li> <a href="/user/registration"> Регистрация </a> </li>
+                            <li> <a href="/user/logout"> Выйти </a> </li>
                             <li> <a href="/test.php"> Тест </a> </li>
                             <li> <a href="/info.php"> Инфо </a> </li>
                         </ul>

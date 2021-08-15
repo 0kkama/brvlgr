@@ -32,13 +32,16 @@
         /**
          * @throws Exception
          */
-        public static function getLast(int $limit) : ?array
+        public static function getLast(int $quantity) : ?array
         {
-//            if ( $limit < 7 ) {
-//                (new DbException('Недостаточное количество айтемов', 404))->setAlert('')->setParam("")->throwIt();
-//            }
+            if ($quantity <= 0) {
+                $limit = '';
+            } else {
+                $limit = 'LIMIT ' . $quantity;
+            }
+
             $db = new Db;
-            $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `id` DESC LIMIT ' . $limit;
+            $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `id` DESC ' . $limit;
             return $db->queryAll($sql, [], self::class);
         }
 
@@ -95,7 +98,8 @@
 
         public function __toString() : string
         {
-            return "$this->title <br> $this->author <br> $this->date" ?? '';
+            return $this->date .'<br>'. 'Автор: ' . $this->author . '<br>' .' Категория: ' . $this->category;
+//            return "$this->title <br> $this->author <br> $this->date" ?? '';
         }
 
         /**

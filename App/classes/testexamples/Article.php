@@ -3,11 +3,11 @@
 
     namespace App\classes\testexamples;
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use App\classes\models\Article as Publication;
 
-    class Article extends Controller
+    class Article extends ControllerActing
     {
 
         protected string $title = 'PROBLEM!';

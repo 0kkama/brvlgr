@@ -47,7 +47,7 @@
     /**
      * generate random string (token)
      * @param int $length (by default equal 32)
-     * @return string $token (random string in hexadecimal representation. Max length of token is 128 bytes)
+     * @return string $token (random string in hexadecimal representation. Max length of token is 128 )
      *
      * @throws Exception
      */

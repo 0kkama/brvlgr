@@ -5,14 +5,6 @@
     use App\interfaces\SingletonInterface;
     use App\traits\SingletonTrait;
 
-    /*
-    * TODO
-    *   Добавьте в свое приложение класс App\Config. Объект этого класса при создании должен читать и сохранять в себе файл конфигурации. Его применение
-    *   $config = new \App\Config; echo $config->data['db']['host'];
-    *   пусть это пока коряво смотрится, но по-другому мы еще не умеем
-    *   Изучите что такое синглтон (слайды + консультация в чате поддержки) и сделайте класс App\Config синглтоном
-    */
-
     final class Config implements SingletonInterface
     {
         private array $configurations;

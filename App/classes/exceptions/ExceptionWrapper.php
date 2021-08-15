@@ -54,7 +54,6 @@
 //
 //        public function __isset(string $name) : bool
 //        {
-//            // TODO: Implement __isset() method.
 //        }
 
         public function getAlert() : string

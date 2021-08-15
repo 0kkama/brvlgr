@@ -6,42 +6,60 @@
 
     class ErrorsInspector
     {
-        protected ErrorsContainer $container;
         protected AbstractModel $object;
+        protected ErrorsContainer $container;
+        protected array $errorsList;
 
-        public function setObject(AbstractModel $object) : void
+        public function __construct(AbstractModel $object, ErrorsContainer $container)
         {
             $this->object = $object;
-        }
-
-        public function setContainer(ErrorsContainer $container) : void
-        {
             $this->container = $container;
         }
 
-        public function checkFormFields() : void
+        public function conductInspection() : self
         {
-//            $data = $this->object->getMetaData();
+            $this->checkFormFields();
+
+            $callback = $this->object->getCheckList();
+
+            if (!empty($callback) && $this->container->isEmpty()) {
+                $this->additionalVerification($callback);
+            }
+            return $this;
+        }
+
+        public function checkFormFields() : self
+        {
             $data = $this->object->getFormFields();
             $messages = $this->object->getErrorsList();
 
             foreach ($data as $index => $datum) {
                 if (empty($datum)) {
-                    $this->container->add($messages[$index]);
+                    $this->container[] = $messages[$index];
                 }
             }
+            return $this;
         }
 
-        public function additionalVerification(array $callbackList) : void
+        public function additionalVerification(array $callbackList) : self
         {
             if (!empty($callbackList)) {
                 foreach ($callbackList as $method) {
                     if (method_exists($this, $method)) {
-                        $this->container->add($this->$method());
+                        $errMessage = $this->$method();
+                        if(!empty($errMessage)) {
+                            $this->container[] = $errMessage;
+                        }
                     } else {
 //                    TODO throw new exception ?
                     }
                 }
             }
+            return $this;
+        }
+
+        public function getErrorsContainer() : ErrorsContainer
+        {
+            return $this->container;
         }
     }

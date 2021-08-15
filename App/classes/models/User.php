@@ -3,17 +3,10 @@
     namespace App\classes\models;
 
     use App\classes\abstract\Model;
-    use App\classes\Db;
     use App\classes\exceptions\ExceptionWrapper;
-    use App\classes\exceptions\FileException;
-    use App\classes\exceptions\CustomException;
-    use App\classes\utility\ErrorsContainer;
-    use App\interfaces\HasIdInterface;
     use App\interfaces\UserInterface;
-    use App\traits\GetSetTrait;
     use App\traits\SetControlTrait;
     use JetBrains\PhpStorm\Pure;
-    use JsonException;
 
     /**
      * Class User
@@ -29,7 +22,9 @@
         protected const TABLE_NAME = 'users';
         protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $email = '';
         protected ?string $hash = null, $rights = null, $password1 = '', $password2 = '';
+        protected Sessions $sessions;
         protected static array $checkList = ['checkEmail', 'checkLogin', 'checkPasswords'];
+//        protected array $registrData = ['password1' => '', 'password2' => '', 'email1' => '', 'email2' => ''];
         protected static array $errorsList =
             [
                 'login' => 'Логин отсутствует или некорректен',
@@ -44,59 +39,22 @@
         use SetControlTrait;
 
         /**
-         * Возвращает данные текущего пользователя по кукам и сесси, либо null
-         * @param string $sessionFile
-         * @return User
+         * Возвращает объект текущего пользователя по кукам и сесси, либо пустой объект User
          * @throws ExceptionWrapper
          */
 //        TODO обращение к сессии и куки в модели - плохая практика. исправить?
-        public static function getCurrent(string $sessionFile) : User
+        public static function getCurrent() : User
         {
-            $cookeToken = $_COOKIE['token'] ?? null; // TODO добавить валидацию токенов?
-            $sessionToken = $_SESSION['token'] ?? null;
-            // если токен установлен и в сессии и в куки, то проверяем их совпадение
-            // если совпадают, то возвращаем имя пользователя из сессии
-            if ( ( $cookeToken && $sessionToken ) && ( $cookeToken === $sessionToken) ) {
-                return self::findOneBy(type: 'login', subject: $_SESSION['user']) ?? new self;
-            }
-            // если токен в сессии и куке есть, но они не совпадают, то удаляем оба.
-            if ( ( $cookeToken && $sessionToken ) &&  ($cookeToken !== $sessionToken ) ) {
-                unset($_SESSION['user'], $_SESSION['token']);
-                setcookie('token', '', time() - 86400, '/');
-                return new self;
-            }
-            // если есть только куки-токен, или только сессионный токен, то сравниваем его с токеном из файла сессий (БД)
-            // если совпадают, то берём имя пользователя из файла сессий (БД) и даём соответствующие права.
-            $tokenOne =  $sessionToken ?? $cookeToken;
-
-//            TODO исправить работу исключения или иным способом решить проблему получения пользователя для заглушки-error
-//              ошибка при парсинге sessions.json способна остановить работу всего сайта из-за того, что попытка получения
-//              данных о текущем пользователе происходит на каждом из контроллеров
-            try {
-                $dbSession = getFileContent($sessionFile);
-            } catch (JsonException $e) {
-               (new ExceptionWrapper('Критическая ошибка на сервере. Сообщите администратору!', 500, $e, false))->throwIt();
-            }
-
-            $haystack = array_column($dbSession, 'user', 'token');
-            $userName = $haystack[$tokenOne] ?? null;
-            // если нет ни куки-токена ни сессионного-токена, то возвращаем null
-            // если пользователь получен, то вновь устанавливаем данные в сессию
-            if (null !== $userName) {
-                $_SESSION['user'] = $userName;
-                $_SESSION['token'] = $tokenOne;
-                return self::findOneBy(type: 'login', subject: $userName) ?? new self;
-            }
-            return new self;
+            return Sessions::getCurrent();
         }
 
-        public function checkPassword(string $password) : ?User
+        public static function checkPassword(string $login, string $password) : User
         {
-            $user = self::findOneBy('login', $this->login);
-            if (isset($user) && password_verify(password: $password, hash: $user->getHash())) {
+            $user = self::findOneBy('login', $login);
+            if ($user->exist() && password_verify(password: $password, hash: $user->getHash())) {
                 return $user;
             }
-                return null;
+                return new self();
         }
 
         /**
@@ -110,6 +68,11 @@
         #[Pure] public function exist() : bool
         {
             return (!empty($this->id) && !empty($this->login));
+        }
+
+        public function hasUserRights() : bool
+        {
+            return (!empty($this->id) && ((int) $this->rights >= 1));
         }
 
         public function __toString() : string
@@ -249,6 +212,8 @@
          */
         public function setPasswords(string $password1, string $password2) : User
         {
+//            $this->registrData['password1'] = $password1;
+//            $this->registrData['password2'] = $password2;
             $this->password1 = $password1;
             $this->password2 = $password2;
             return $this;
@@ -262,6 +227,8 @@
             $this->hash = password_hash($this->password1, PASSWORD_BCRYPT);
             $this->password1 = null;
             $this->password2 = null;
+//            $this->registrData['password1'] = null;
+//            $this->registrData['password2'] = null;
             return $this;
         }
         //</editor-fold>

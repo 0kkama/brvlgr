@@ -12,6 +12,7 @@
 
 //TODO разобраться с периодически возникающей ошибкой
 // 2 - Packets out of order. Expected 1 received 0. Packet size=145 in App/classes/Db.php line:45
+// и переделать класс Db в синглтон
     /**
 
      */

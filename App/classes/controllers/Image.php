@@ -4,14 +4,14 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use App\classes\exceptions\FileException;
     use App\classes\exceptions\CustomException;
     use App\classes\View;
     use JetBrains\PhpStorm\NoReturn;
 
-    class Image extends Controller
+    class Image extends ControllerActing
     {
         protected array $list;
         protected string $image;

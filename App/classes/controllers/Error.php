@@ -4,7 +4,7 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\AbstractController;
+    use App\classes\abstract\ControllerAbstraction;
     use App\classes\Config;
     use App\classes\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper;
@@ -17,7 +17,7 @@
     /**
      * Relocate user to respective blind plug by HTTP error code with short message about situation
     */
-    class Error extends AbstractController
+    class Error extends ControllerAbstraction
     {
         /**
          * @var string|mixed

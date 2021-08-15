@@ -8,7 +8,7 @@
     use App\classes\models\Article;
     use App\classes\View;
 
-    class News extends Controller
+    class Articles extends Controller
     {
         protected array $articles;
 
@@ -16,7 +16,7 @@
         {
             parent::__construct($params, $templateEngine);
             $this->title = 'Статьи';
-            $this->articles = Article::getAll();
+            $this->articles = Article::getLast(0);
             $this->content = $this->page->assign('news', $this->articles)->render('index');
         }
     }

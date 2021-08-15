@@ -53,14 +53,4 @@
             error_log("$msgStr\n", 3, "$errPath/$currentDate.log");
             echo 'ERROR!';
         }
-
-        //        protected function getClassName(FullException $ex) : string
-        //        {
-        //            $longName = $ex->;
-        //            $pos = strrpos($longName, '\\');
-        //            if (is_numeric($pos)) {
-        //                return substr($longName, $pos + 1);
-        //            }
-        //            return 'Unidentified class';
-        //        }
     }

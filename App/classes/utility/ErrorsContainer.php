@@ -14,7 +14,7 @@
     class ErrorsContainer implements \Countable, \Iterator, \ArrayAccess, \JsonSerializable
     {
         protected int $key = 0;
-        protected array $data = [];
+//        protected array $data = [];
         protected string $errorsString = '';
 
         //<editor-fold desc="Iterator interface implementation">

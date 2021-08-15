@@ -4,16 +4,18 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use App\classes\models\Article as Publication;
     use App\classes\utility\ErrorsInspector;
+    use App\classes\utility\UserErrorsInspector;
 
-    class Article extends Controller
+    class Article extends ControllerActing
     {
 
         protected string $title = 'PAGE NOT FOUND!', $content = 'PAGE NOT FOUND!';
         protected Publication $article;
+        protected UserErrorsInspector $inspector;
 
         protected function add() : void
         {
@@ -27,7 +29,7 @@
         {
             $this->checkArtID()->getArt()->checkArtExist();
             $this->title = $this->article->getTitle();
-            $this->content = $this->page->assign('title', $this->title)->assign('article', $this->article)->assign('author', $this->article->author())->render('article');
+            $this->content = $this->page->assign('article', $this->article)->assign('author', $this->article->author())->render('article');
         }
 
         protected function edit() : void
@@ -47,10 +49,10 @@
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
-                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->getId());
-                $this->errors = $this->article->checkData()->getErrorsContainer();
+                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->getLogin())->setAuthorId($this->user->getId());
+                ($this->inspector = new UserErrorsInspector($this->article, $this->errors))->conductInspection();
 
-                if (!$this->errors->notEmpty()) {
+                if ($this->errors->isEmpty()) {
                     $this->article->save();
                     header('Location: /article/read/' . $this->article->getID());
                 }
@@ -59,7 +61,7 @@
 
         protected function checkUser() : self
         {
-            if (!$this->user->exist()) {
+            if (!$this->user->hasUserRights()) {
                 Error::deadend(403);
             }
             return $this;

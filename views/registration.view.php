@@ -3,6 +3,7 @@
   * @var $errors \App\classes\utility\ErrorsContainer
   */
  ?>
+<div class="registration-forms">
 <form method="post">
     <?php if($errors->notEmpty()): ?>
         <hr>
@@ -12,19 +13,19 @@
     <?php endif; ?>
     <div class="form-group">
         <label for="auth-name">Имя</label>
-        <input type="text" class="form-control" id="auth-login" name="firstName" value="<?=$candidate->getFirstName() ?? ''?>">
+        <input type="text" class="form-control" id="auth-name" name="firstName" value="<?=$candidate->getFirstName() ?? ''?>">
     </div>
     <div class="form-group">
         <label for="auth-surname">Отчество</label>
-        <input type="text" class="form-control" id="auth-login" name="middleName" value="<?=$candidate->getMiddleName() ?? ''?>">
+        <input type="text" class="form-control" id="auth-surname" name="middleName" value="<?=$candidate->getMiddleName() ?? ''?>">
     </div>
     <div class="form-group">
-        <label for="auth-surname">Фамилия</label>
-        <input type="text" class="form-control" id="auth-login" name="lastName" value="<?=$candidate->getLastName() ?? ''?>">
+        <label for="auth-lastname">Фамилия</label>
+        <input type="text" class="form-control" id="auth-lastname" name="lastName" value="<?=$candidate->getLastName() ?? ''?>">
     </div>
     <div class="form-group">
         <label for="auth-login">Логин</label>
-        <input type="text" class="form-control" id="auth-login" name="login" value="<?=$candidate->getLogin() ?? ''?>">
+        <input type="text" class="form-control" id="auth-login" name="login" value="<?=$candidate->getLogin() ?? ''?>" placeholder="От 3 до 20 и может содержать цифры, буквы и символы _%+-!&()">
     </div>
     <div class="form-group">
         <label for="auth-password">Пароль</label>
@@ -47,3 +48,5 @@
     <hr>
     <button class="btn btn-primary">Зарегистрироваться</button>
 </form>
+</div>
+

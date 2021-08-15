@@ -6,13 +6,13 @@
     error_reporting(E_ALL);
 
     use App\classes\Config;
+    use App\classes\View;
     use App\classes\controllers\Error;
     use App\classes\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper as MyExWrapper;
+    use App\classes\utility\EmailSender;
     use App\classes\utility\LoggerForExceptions;
     use App\classes\utility\Router;
-    use App\classes\utility\EmailSender;
-    use App\classes\View;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
 
     // set composer autoload
@@ -24,8 +24,8 @@
         if (is_readable($include)) {
             require_once $include;
         } else {
-            trigger_error("Ошибка при попытке подключения класса $className. Файл $include не существует или повреждён");
-            Error::deadend(400, 'Ошибка при подключении класса');
+            trigger_error("Ошибка при подключении класса $className. Файл $include не существует или повреждён");
+//            Error::deadend(400, 'Ошибка при подключении класса');
         }
     });
 
@@ -47,7 +47,7 @@
     $className = "App\classes\controllers\\$cntrl";
 
     if (!class_exists($className)) {
-        trigger_error("Контроллер несуществующего класса $className в " . __FILE__ . __LINE__ );
+        trigger_error("Контроллер несуществующего класса $className");
         Error::deadEnd(400);
     }
 
@@ -58,11 +58,11 @@
     catch (CustomException|MyExWrapper $ex ) {
         (new LoggerForExceptions($ex, new EmailSender))();
         Error::deadend($ex->getHttpCode(), $ex->getAlert());
-        //                var_dump($ex);
+        // var_dump($ex);
     } catch (Exception $ex) {
         (new LoggerForExceptions($ex, new EmailSender))();
         Error::deadend();
-        //        var_dump($ex);
+        // var_dump($ex);
     }
 
 //    вывод данных о ресурсах
@@ -70,27 +70,29 @@
 
     //<editor-fold desc="TODO">
 /* TODO
+    - модуль юзер:
+        + решить, как именно лучше реализовать вывод ошибок при регистрации (все сразу или сперва только ошибки незаполненных форм)
+        - реализовать отправку письма на указанный ящик с кодом проверки и дальнейший ввод этого кода
+        - изменить механизм сессий с файла на БД
+    - модуль статьи:
+        - добавить проверку контента (по количеству символов)
+    - общее:
+        - реализовать переход на [Twig]
+        - подключить Телегу для отправки сообщений об ошибках
+        - изменить CSS для шаблона регистрации
     - допилить MultiException
     - решить проблему с повторной отправкой данных при F5 на Login и Gallery
     - решить проблему с костылями и путями на Login и Gallery
-    - доделать конфиг nginx для запрета доступа ко всем директориям, кроме public
-          а так же файлам типо /css/style.css
-    - https://stackoverflow.com/questions/40966017/nginx-deny-access-of-a-directory-and-files-inside-it
-    - сделать доступ по домену (http)
-    1. + Добавьте в свой проект класс исключений, возникающих при работе с базой данных.
-            Придумайте - где их можно бросать? Как вариант - нет соединения с БД, ошибка в запросе.
-    2. Ловите исключения из пункта 1 во фронт-контроллере, поймав же,
-       выдавайте пользователю красивую страницу с сообщением об ошибке.
-    3. Добавьте класс исключений, означающих "Ошибка 404 - не найдено". Бросайте такое исключение в ситуациях,
-       когда вы не можете найти в базе запрашиваемую запись. Добавьте обработку исключений этого типа во фронт-контроллер.
-    4. Добавьте в модель новостей (а лучше - в базовую модель) метод fill(array $data),
+        4. Добавьте в модель новостей (а лучше - в базовую модель) метод fill(array $data),
        который заполняет свойства модели данными из массива. Примените в этом методе паттерн "Мультиисключение".
-        + 5*. Добавьте в свой проект класс-логгер. Его задача - записывать в текстовый лог информацию об
-       ошибках - когда и где возникла ошибка, какая. Логируйте исключения из пунктов 1 и 3.
+    - серверная часть
+        - доделать конфиг nginx для запрета доступа ко всем директориям, кроме public
+          а так же файлам типа /css/style.css
+        - https://stackoverflow.com/questions/40966017/nginx-deny-access-of-a-directory-and-files-inside-it
+        - сделать доступ по домену [http]
 */
 
-//    TODO допилить или переделать способ парсинга в Роутере и
-//    TODO разобраться с проблемой в релокейтере
+//    TODO допилить или переделать способ парсинга в Роутере
         //</editor-fold>
 
 

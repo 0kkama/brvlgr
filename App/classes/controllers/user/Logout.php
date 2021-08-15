@@ -1,15 +1,16 @@
 <?php
 
 
-    namespace App\classes\controllers;
+    namespace App\classes\controllers\user;
+//    namespace App\classes\controllers;
 
 
-    use App\classes\abstract\AbstractController;
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\ControllerAbstraction;
+    use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use JetBrains\PhpStorm\NoReturn;
 
-    class Logout extends AbstractController
+    class Logout extends ControllerAbstraction
     {
 
         #[NoReturn] public function __invoke()

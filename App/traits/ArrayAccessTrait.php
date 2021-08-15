@@ -11,8 +11,10 @@
          */
         public function offsetSet($offset, $value) : void
         {
-            if (!empty($offset) && !empty($value)) {
+            if (!is_null($offset)) {
                 $this->data[$offset] = $value;
+            } else {
+                $this->data[] = $value;
             }
         }
         /**

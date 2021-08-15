@@ -14,16 +14,14 @@
     use PDO;
 
     /**
-     * Class AbstractModel has following methods : <ul>
+     * Class AbstractModel has following main methods : <ul>
      * - <b>findById</b> - return null|object</li>
      * - <b>getAll</b> - return array contain objects of respective class</li>
-     * - <b>insert</b>
-     * - <b>update</b>
-     * - <b>delete</b>
-     * - <b>save</b>
-     * - <b>makeSQL</b>
-     * - <b>checkFields</b>
-     * - <b>getTableName</b>
+     * - <b>insert</b> - insert a new record in the table
+     * - <b>update</b> - update already existed record in the table
+     * - <b>delete</b> - delete record from table
+     * - <b>save</b> - switcher for <b>insert</b> and <b>update</b> methods
+     * - <b>makeSQL</b> - service function for creating and preparing SQL query
      * @package App\classes
      */
     abstract class AbstractModel implements HasIdInterface
@@ -35,22 +33,7 @@
      */
     protected const TABLE_NAME = 'abstract';
     protected ?string $id = null;
-    protected ErrorsContainer $errors;
-    protected ErrorsInspector $inspector;
-    protected static array $errorsList;
-    protected static array $checkList;
     protected array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
-
-//    TODO перенести метода exist в абстракцию
-//    TODO вынести проверку заполненности полей в отдельный класс?
-        public function __construct(ErrorsInspector $inspector = null)
-        {
-            $this->errors = new ErrorsContainer();
-//            $this->inspector = new ErrorsInspector();
-            $this->inspector = $inspector ?: new ErrorsInspector();
-            $this->inspector->setObject($this);
-            $this->inspector->setContainer($this->errors);
-        }
 
         /**
          * Finds needed line in table by given <b>$subject</b> and return it like object of respective class
@@ -195,15 +178,6 @@
             $this->meta['table'] = static::TABLE_NAME; // имя таблицы в БД
         }
 
-        public function checkData() : static
-        {
-            $this->inspector->checkFormFields();
-            if (!empty(static::$checkList)) {
-                $this->inspector->additionalVerification(static::$checkList);
-            }
-                return $this;
-        }
-
         //<editor-fold desc="getters =======================">
         /**
          * Возвращает <b>string</b> с именем текущей таблицы
@@ -217,16 +191,6 @@
         public function getID() : null|string
         {
             return $this->id;
-        }
-
-        public function getErrorsList() : array
-        {
-            return static::$errorsList;
-        }
-
-        public function getErrorsContainer() : ErrorsContainer
-        {
-            return $this->errors;
         }
 
         public function getFormFields() : array

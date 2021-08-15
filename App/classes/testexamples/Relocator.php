@@ -4,13 +4,13 @@
     namespace App\classes\controllers\test;
 
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use App\classes\models\User;
     use App\classes\View;
     use JetBrains\PhpStorm\Pure;
 
-    class Relocator extends Controller
+    class Relocator extends ControllerActing
     {
         protected string $message, $header;
         protected static array $signals =

@@ -1,11 +1,13 @@
 <?php
     use App\classes\models\User;
     use App\classes\utility\ErrorsContainer;
-    /** @var ErrorsContainer $errMsg */
-    /** @var User $user */
+    /** @var ErrorsContainer $errMsg
+    * @var User $user
+     * @var array $list
+     */
 ?>
 <div id="content">
-    <?php if($errMsg()): ?>
+    <?php if($errMsg->notEmpty()): ?>
         <div class="alert alert-danger">
             <?=$errMsg?>
         </div>

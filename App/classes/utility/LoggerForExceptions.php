@@ -35,15 +35,18 @@
         {
             if ($this->ex instanceof Wrapper) {
                 $this->logMessage = "$this->time - {$this->ex->getCode()} - {$this->ex->getType()} {$this->ex->getMessage()} in {$this->ex->getFile()} line:{$this->ex->getLine()}";
+                $this->ifIsCritical();
             } elseif ($this->ex instanceof CustomException) {
                 $this->logMessage = "$this->time - {$this->ex->getCode()} - {$this->ex->getType()} {$this->ex->getMessage()} in {$this->ex->getFile()} line:{$this->ex->getLine()} {$this->ex->getParam()}";
+                $this->ifIsCritical();
             } else {
                 $this->logMessage = "$this->time - {$this->ex->getCode()} - {$this->ex->getMessage()} in {$this->ex->getFile()} line:{$this->ex->getLine()}";
             }
                 error_log("$this->logMessage\n", 3, $this->logFile);
+        }
 
-            // TODO переделать блок критикал
-        // if this error has critical status then email message will be send
+        public function ifIsCritical() : void
+        {
             if ($this->ex->isCritical()) {
                 $subject = $this->date."(Сообщение: {$this->ex->getAlert()} код: {$this->ex->getНttpCode()})";
                 EmailSender::sendMessage($subject, $this->logMessage);
