@@ -36,13 +36,14 @@
                 'password2' => 'Необходимо ввести повторный пароль',
             ];
 
+        //                              TODO убрать трейт?
+
         use SetControlTrait;
 
         /**
          * Возвращает объект текущего пользователя по кукам и сесси, либо пустой объект User
          * @throws ExceptionWrapper
          */
-//        TODO обращение к сессии и куки в модели - плохая практика. исправить?
         public static function getCurrent() : User
         {
             return Sessions::getCurrent();
@@ -95,14 +96,6 @@
         public function getHash() : ?string
         {
             return $this->hash;
-        }
-
-        /**
-         * @return string|null
-         */
-        public function getId() : ?string
-        {
-            return $this->id;
         }
 
         /**

@@ -45,7 +45,8 @@
         public static function findOneBy(string $type, string $subject) : static
         {
             try {
-                $db = new Db();
+//                $db = new Db();
+                $db = Db::getInstance();
                 $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE ' . $type.' = :'.$type;
                 $result = $db->queryOne($sql, [$type => $subject], static::class);
             } catch (Exception $e) {
@@ -60,7 +61,8 @@
          */
         public static function getAll() : array
         {
-            $db = new Db();
+//            $db = new Db();
+            $db = Db::getInstance();
             $sql = 'SELECT * FROM ' . static::TABLE_NAME;
 //            $sql = 'SELECT * FROM ' . 'zorba';
             return $db->queryAll($sql, [], static::class);
@@ -72,7 +74,8 @@
          */
         public static function getTotalQuantity()
         {
-            $db = new Db();
+//            $db = new Db();
+            $db = Db::getInstance();
             $sql = 'SELECT COUNT(*) AS ' . static::TABLE_NAME . ' FROM ' . static::TABLE_NAME;
             return $db->queryAll($sql, [], static::class, PDO::FETCH_ASSOC);
         }
@@ -90,7 +93,8 @@
             // создаем шаблон запроса вида INSERT INTO news (title,text,author,category) VALUES (:title,:text,:author,:category)
             $sql = "INSERT INTO {$this->meta['table']} ($insertions) VALUES ($values)";
 
-            $db = new Db();
+//            $db = new Db();
+            $db = Db::getInstance();
             $db->execute($sql, $this->meta['data']);
             $this->id = $db->getLastId();
             unset($this->meta);
@@ -114,7 +118,8 @@
             // шаблон подобный UPDATE news SET title = :title, text = :text, author = :author WHERE id = :id
             $sql = "UPDATE {$this->meta['table']} SET $set WHERE id = :id";
 
-            $db = new Db();
+//            $db = new Db();
+            $db = Db::getInstance();
             $db->execute($sql, $this->meta['data']);
             unset($this->meta);
             return $this;
@@ -131,7 +136,8 @@
                 $sql = "DELETE FROM $table WHERE id = :id";
                 $data[':id'] = $this->id;
 
-                $db = new Db();
+//                $db = new Db();
+                $db = Db::getInstance();
                 return $db->execute($sql, $data);
             }
             return false;
@@ -188,7 +194,7 @@
             return static::TABLE_NAME;
         }
 
-        public function getID() : null|string
+        public function getId() : null|string
         {
             return $this->id;
         }

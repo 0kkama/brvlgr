@@ -8,6 +8,6 @@
     {
 
         public static function getInstance();
-        public function setInstance(array $params) : void;
+        public function setInstance($params) : void;
 
     }

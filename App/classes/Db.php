@@ -5,6 +5,8 @@
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\exceptions\CustomException;
+    use App\interfaces\SingletonInterface;
+    use App\traits\SingletonTrait;
     use PDO;
     use PDOException;
     use PDOStatement;
@@ -16,30 +18,31 @@
     /**
 
      */
-    class Db
+    class Db implements SingletonInterface
     {
-        /**
-         * @var PDO
-         */
+
         private PDO $dbh;
 
-        /**
-         * Db constructor.
-         * @throws ExceptionWrapper
-         */
-        public function __construct()
+        private function __construct()
         {
-            $this->dbh = $this->newConnection();
+            $this->dbh = $this->newConnection(Config::getInstance());
         }
 
+        public function setInstance($params): void
+        {
+            $this->newConnection($params);
+        }
+
+        use SingletonTrait;
         /**
          * @return PDO
          * @throws ExceptionWrapper
          */
-        protected function newConnection() : PDO
+        protected function newConnection($params) : PDO
         {
             try {
-                $config = Config::getInstance();
+//                $config = Config::getInstance();
+                $config = $params;
                     $dbConnection = new PDO
                     ('mysql:host=' . $config->getDb('host') . ';dbname=' . $config->getDb('name') . ';charset=' . $config->getDb('char'),
                         $config->getDb('user'), $config->getDb('pass'),
@@ -133,6 +136,7 @@
         {
             return $this->dbh->lastInsertId();
         }
+
 
     }
 

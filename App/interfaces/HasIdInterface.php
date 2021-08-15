@@ -6,5 +6,5 @@
 
     interface HasIdInterface
     {
-        public function getID();
+        public function getId();
     }

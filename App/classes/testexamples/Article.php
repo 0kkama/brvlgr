@@ -84,12 +84,12 @@
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
-                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->id);
+                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->login)->setAuthorId($this->user->getId());
                 //                $this->errors = $this->article->save()->errors;
                 $this->errors = $this->article->save()->getErrorsContainer();
 
                 if (!$this->errors->__invoke()) {
-                    header('Location: /article/read/' . $this->article->id);
+                    header('Location: /article/read/' . $this->article->getId());
                 }
             }
         }
@@ -101,6 +101,3 @@
         }
 
     }
-
-//    TODO допилить или переделать способ парсинга в Роутере и
-//    TODO разобраться с проблемой в релокейтере

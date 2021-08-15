@@ -12,7 +12,7 @@
 
         use SingletonTrait;
 
-        public function setInstance(array $params) : void
+        public function setInstance($params) : void
         {
             if (!isset($this->configurations)) {
                 $this->configurations['db'] = $params['db'];

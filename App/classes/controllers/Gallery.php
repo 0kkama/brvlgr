@@ -48,10 +48,3 @@
             $this->content = $this->page->assign('list', $this->list)->assign('errMsg', $this->errors)->assign('user', $this->user)->render('gallery');
         }
     }
-
-    /*
-     * TODO ПЕРЕДЕЛАТЬ РАБОТУ КОНТРОЛЛЕРОВ Gallery и Image с учётом ЧПУ
-        TODO 1. м.б. добавить рандомайзер имени для файла
-        TODO 2. и/или добавить проверку совпадения нового имени и уже существущих
-        TODO возможно, создать в будущем модель Gallery, которая будет работать с изображениями
-    */

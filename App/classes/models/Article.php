@@ -26,7 +26,7 @@
                 'text' => 'Отсутствует текст статьи',
                 'category' => 'Не указана категория',
             ];
-        //                              TRAIT!!!!!!!!!
+        //                              TODO убрать трейт?
         use  SetControlTrait;
 
         /**
@@ -40,12 +40,38 @@
                 $limit = 'LIMIT ' . $quantity;
             }
 
-            $db = new Db;
+//            $db = new Db;
+            $db = Db::getInstance();
             $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' ORDER BY `id` DESC ' . $limit;
             return $db->queryAll($sql, [], self::class);
         }
 
-//        public function
+        public function __toString() : string
+        {
+            return $this->date .'<br>'. 'Автор: ' . $this->author . '<br>' .' Категория: ' . $this->category;
+        }
+
+        /**
+         * @throws MagickException|CustomException
+         */
+        public function __call($name, $arguments) : object
+        {
+            if ($name === 'author') {
+                return User::findOneBy(type: 'id', subject: $this->author_id);
+            }
+            throw (new MagickException('Вызов несуществующего метода','456',''))->setParam("Метод: $name Арг: $arguments");
+        }
+
+        /**
+         * Return TRUE if object has NOT empty fields $id and $date
+         * @return bool
+         */
+        public function exist() : bool
+        {
+            return (!empty($this->id) && !empty($this->date));
+        }
+
+        //<editor-fold desc="setters======================">
         public function setTitle(string $title) : Article
         {
             $this->title = $title;
@@ -69,7 +95,6 @@
             $this->author = $author;
             return $this;
         }
-
         /**
          * @param string $author_id
          */
@@ -77,7 +102,9 @@
         {
             $this->author_id = $author_id;
         }
+        //</editor-fold>
 
+        //<editor-fold desc="getters======================">
         public function getBriefContent() : string
         {
             return (mb_substr($this->text, 0, 150) . '...') ?? '';
@@ -94,32 +121,6 @@
             }
 
             return implode(PHP_EOL, $paragraphs);
-        }
-
-        public function __toString() : string
-        {
-            return $this->date .'<br>'. 'Автор: ' . $this->author . '<br>' .' Категория: ' . $this->category;
-//            return "$this->title <br> $this->author <br> $this->date" ?? '';
-        }
-
-        /**
-         * @throws MagickException|CustomException
-         */
-        public function __call($name, $arguments) : object
-        {
-            if ($name === 'author') {
-                return User::findOneBy(type: 'id', subject: $this->author_id);
-            }
-            throw (new MagickException('Вызов несуществующего метода','456',''))->setParam("Метод: $name Арг: $arguments");
-        }
-
-        /**
-         * Return TRUE if object has NOT empty fields $id and $date
-         * @return bool
-         */
-        public function exist() : bool
-        {
-            return (!empty($this->id) && !empty($this->date));
         }
 
         /**
@@ -139,5 +140,6 @@
         {
             return $this->title;
         }
+        //</editor-fold>
 
     }

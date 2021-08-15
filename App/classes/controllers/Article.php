@@ -54,7 +54,7 @@
 
                 if ($this->errors->isEmpty()) {
                     $this->article->save();
-                    header('Location: /article/read/' . $this->article->getID());
+                    header('Location: /article/read/' . $this->article->getId());
                 }
             }
         }
