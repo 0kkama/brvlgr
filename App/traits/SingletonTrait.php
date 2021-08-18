@@ -2,15 +2,13 @@
 
     namespace App\traits;
 
-    use App\classes\models\Article;
-
     trait SingletonTrait
     {
         private static $instance = null;
 
         public static function getInstance() : static
                 {
-            return self::$instance ?? (self::$instance = new self());
+            return self::$instance ?: (self::$instance = new self());
 //            return static::$instance ?? (static::$instance = new static());
         }
 

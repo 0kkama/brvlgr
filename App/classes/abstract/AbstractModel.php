@@ -7,10 +7,8 @@
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\utility\ErrorsContainer;
-    use App\classes\utility\ErrorsInspector;
     use App\interfaces\HasIdInterface;
     use Exception;
-    use JetBrains\PhpStorm\Pure;
     use PDO;
 
     /**
@@ -82,7 +80,7 @@
          * метод добавлет новую запись в БД, после чего возвращает <b>$this</b> или <b>null</b>
          * @return AbstractModel
          */
-        protected function insert() : static
+        private function insert() : static
         {
             // делаем строку подобную :title, :text, :author, :category
             $values = implode($this->meta['separator'], $this->meta['cols']);
@@ -102,7 +100,7 @@
          * Обновляет уже существующую запись, которая ранее была получена из базы данных по id
          * @return AbstractModel
          */
-        protected function update() : static
+        private function update() : static
         {
             //   TODO Как реализовать обновление только того поля, которое было изменено?
             $set = [];
@@ -164,7 +162,7 @@
          * <li><b>separator</b> - символ-разделитель, использующийся в запросе;</li></ul>
          * @return void
          */
-        protected function makeSql() : void
+        private function makeSql() : void
         {
             // удаляем значения id, date итд не являющиеся строками и генерируемые БД автоматически или выполняющие служебные цели
 //            $fields = array_filter(get_object_vars($this), static function ($var) { return is_string($var); });

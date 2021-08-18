@@ -6,11 +6,10 @@
 
     use App\classes\abstract\ControllerAbstraction;
     use App\classes\Config;
-    use App\classes\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\models\User;
-    use App\classes\utility\LoggerForExceptions;
     use App\classes\utility\EmailSender;
+    use App\classes\utility\LoggerForExceptions;
     use App\classes\View;
     use JetBrains\PhpStorm\NoReturn;
 

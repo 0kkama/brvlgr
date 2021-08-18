@@ -1,7 +1,6 @@
 <?php
     namespace App\classes;
 
-    use App\classes\Config;
     use App\traits\IteratorTrait;
 
     class View implements \Countable, \Iterator

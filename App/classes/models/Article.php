@@ -2,8 +2,8 @@
 
     namespace App\classes\models;
 
-    use App\classes\Db;
     use App\classes\abstract\Model;
+    use App\classes\Db;
     use App\classes\exceptions\CustomException;
     use App\classes\exceptions\MagickException;
     use App\classes\utility\ErrorsContainer;
@@ -12,7 +12,6 @@
     use App\interfaces\HasTitleInterface;
     use App\interfaces\PaginatedInterface;
     use App\traits\SetControlTrait;
-    use App\classes\exceptions\DbException;
     use Exception;
 
     class Article extends Model implements HasAuthorInterface, HasTitleInterface, PaginatedInterface, HasTableInterface

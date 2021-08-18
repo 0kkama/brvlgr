@@ -7,8 +7,6 @@
     use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use App\classes\exceptions\FileException;
-    use App\classes\exceptions\CustomException;
-    use App\classes\View;
     use JetBrains\PhpStorm\NoReturn;
 
     class Image extends ControllerActing

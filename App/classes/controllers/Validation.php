@@ -4,8 +4,6 @@
     namespace App\classes\controllers;
 
     use App\classes\abstract\Controller;
-    use App\classes\models\User;
-    use App\classes\utility\UserErrorsInspector;
 
     class Validation extends Controller
     {

@@ -4,7 +4,6 @@
     namespace App\traits;
 
 
-    use App\classes\Config;
     use App\classes\controllers\Error;
     use App\classes\models\Article;
 

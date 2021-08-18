@@ -39,8 +39,8 @@
             }
             // если токен в сессии и куке есть, но они не совпадают, то удаляем оба.
             if ( ( $cookeToken && $sessionToken ) &&  ($cookeToken !== $sessionToken ) ) {
-                unset($_SESSION['user'], $_SESSION['token']);
                 setcookie('token', '', time() - 86400, '/');
+                unset($_SESSION['user'], $_SESSION['token']);
                 return new User();
             }
             // если есть только один токен, то сравниваем его с токеном из БД, и пытаемся получить пользователя.

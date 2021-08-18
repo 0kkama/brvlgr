@@ -3,10 +3,9 @@
     namespace App\classes\exceptions;
 
 
-    use Exception;
     use App\interfaces\ArrayAccessInterface;
+    use Exception;
     use JsonException;
-    use Traversable;
 
     class MultiException extends CustomException implements ArrayAccessInterface
     {

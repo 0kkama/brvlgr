@@ -7,7 +7,6 @@
     use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use App\classes\models\Article as Publication;
-    use App\classes\utility\ErrorsInspector;
     use App\classes\utility\UserErrorsInspector;
 
     class Article extends ControllerActing

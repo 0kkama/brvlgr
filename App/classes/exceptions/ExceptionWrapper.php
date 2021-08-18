@@ -6,7 +6,6 @@
 
     use Exception;
     use JetBrains\PhpStorm\Pure;
-    use Throwable;
 
     class ExceptionWrapper extends Exception
     {

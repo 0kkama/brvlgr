@@ -3,14 +3,14 @@
 ?>
 <main>
     <div id="content">
-        <article class="article-preview">
+       <article class="article-preview">
             <h1><?= $article->title ?></h1>
             <blockquote><i> <?= $article ?></i></blockquote>
             <br>
             <?= $article->getFormattedContent() ?>
             <hr>
-            <a href="/article/edit/<?= $article->id ?>"> Редактировать </a>
-            <a href="/article/delete/<?= $article->id ?>"> Удалить </a>
+            <a href="/article/edit/<?= $article->getId() ?>"> Редактировать </a>
+            <a href="/article/delete/<?= $article->getId() ?>"> Удалить </a>
         </article>
     </div>
 </main>

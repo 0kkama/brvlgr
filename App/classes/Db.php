@@ -2,17 +2,16 @@
 
     namespace App\classes;
 
+    use App\classes\exceptions\CustomException;
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
-    use App\classes\exceptions\CustomException;
     use App\interfaces\SingletonInterface;
     use App\traits\SingletonTrait;
     use PDO;
     use PDOException;
     use PDOStatement;
-    use App\classes\Config;
 
-//TODO разобраться с периодически возникающей ошибкой
+    //TODO разобраться с периодически возникающей ошибкой
 // 2 - Packets out of order. Expected 1 received 0. Packet size=145 in App/classes/Db.php line:45
     /**
 
