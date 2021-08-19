@@ -23,7 +23,8 @@
          */
         protected function checkEmail() : string
         {
-            $mail = $this->object->getEmail();
+//            $mail = $this->object->getEmail();
+            $mail = $this->forms->getElement('email');
             if (!(preg_match(self::$regexp['email'], $mail))) {
                 return 'Некорректное название почтового ящика';
             }
@@ -36,7 +37,7 @@
 
         protected function checkLogin() : string
         {
-            $login = $this->object->getLogin();
+            $login = $this->forms->getElement('login');
             if (!(preg_match(self::$regexp['login'], $login))) {
                 return 'Некорректный логин';
             }
@@ -49,13 +50,14 @@
 
         protected function checkPasswords() : string
         {
-            $password = $this->object->getPasswords();
+            $password1 = $this->forms->getElement('password1');
+            $password2 = $this->forms->getElement('password2');
 
-            if ($password[0] !== $password[1]) {
+            if ($password1 !== $password2) {
                 return 'Пароли не совпадают';
             }
 
-            $length1 = mb_strlen($password[0]);
+            $length1 = mb_strlen($password1);
             if ($length1 < 8 || $length1 > 30) {
                 return 'Длина пароля должна быть от 8 до 30 символов';
             }

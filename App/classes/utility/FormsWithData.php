@@ -5,20 +5,24 @@
     use App\traits\ArrayAccessTrait;
     use App\traits\ArrayIteratorTrait;
     use App\traits\CountableTrait;
+    use App\traits\IteratorTrait;
     use App\traits\JsonSeializableTrait;
     use ArrayAccess;
     use ArrayIterator;
+    use ArrayObject;
     use Countable;
+    use Exception;
     use IteratorAggregate;
     use JsonSerializable;
+    use Serializable;
 
-    class FormsWithData implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
+    class FormsWithData implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable /*,Serializable*/
     {
         protected int $key = 0;
-        protected array $data = [];
+//        protected array $data = [];
 
         //<editor-fold desc="Interfaces implementation">
-//        use IteratorTrait;
+        use IteratorTrait;
         use ArrayAccessTrait;
         use CountableTrait;
         use JsonSeializableTrait;
@@ -48,7 +52,8 @@
             return $this;
         }
 
-        private static function validation(string &$element, $key, bool $strip) {
+        private static function validation(string &$element, $key, bool $strip) : void
+        {
             $element = match ($strip) {
                 true => trim(strip_tags($element)),
                 false => trim(htmlspecialchars($element)),
@@ -62,4 +67,19 @@
         {
             return $this->data;
         }
+
+        public function getElement(string $key) : string
+        {
+            return $this->data[$key] ?? '';
+        }
+
+//        public function serialize() : ?string
+//        {
+//            return serialize($this->data);
+//        }
+//
+//        public function unserialize($data) : void
+//        {
+//            $this->data = unserialize($data, false);
+//        }
     }

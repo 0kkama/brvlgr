@@ -28,6 +28,7 @@
                 $login = val($_POST['login']);
                 $password = val($_POST['password']);
                 $this->loginUser($login, $password);
+                var_dump($_POST);
             }
 
             $this->content = $this->page->assign('loginErr', $this->errors)->render('login');

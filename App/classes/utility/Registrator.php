@@ -9,6 +9,9 @@
     class Registrator
     {
         protected array $fields;
+        protected FormsWithData $forms;
+        protected UserErrorsInspector $inspector;
+//        protected array $callback = [];
 
         public function checkUserAbsent(User $user) : void
         {
@@ -16,6 +19,17 @@
                 header('Location: '. Config::getInstance()->BASE_URL);
                 die();
             }
+        }
+
+        public function doYourJob(UserErrorsInspector $inspector, array $callback = [])
+        {
+            $this->inspector = $inspector;
+//            if(!empty($callback)) {
+//                $this->callback = $callback;
+//            }
+
+            $this->checkFields($inspector, $callback);
+            $this->inspector->conductInspection($callback);
         }
 
         public function setFields(array $post, User $candidate) : self
@@ -39,8 +53,9 @@
         }
 
         public function checkFields(UserErrorsInspector $inspector, array $callback = []) : self
+//        public function checkFields(, array $callback = []) : self
         {
-            $inspector->conductInspection($callback);
+            $this->inspector->conductInspection($callback);
             return $this;
         }
 
