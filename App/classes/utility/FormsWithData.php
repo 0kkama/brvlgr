@@ -22,11 +22,12 @@
 //        protected array $data = [];
 
         //<editor-fold desc="Interfaces implementation">
-        use IteratorTrait;
-        use ArrayAccessTrait;
-        use CountableTrait;
-        use JsonSeializableTrait;
-        use ArrayIteratorTrait;
+        use  ArrayAccessTrait, CountableTrait, JsonSeializableTrait, ArrayIteratorTrait /*,IteratorTrait*/;
+
+        public function getIterator() : ArrayIterator
+        {
+            return new ArrayIterator($this->data);
+        }
         //</editor-fold>
 
         public function extractPostForms(array $keys, array $data, $validation = false) : self
@@ -68,7 +69,7 @@
             return $this->data;
         }
 
-        public function getElement(string $key) : string
+        public function get(string $key) : string
         {
             return $this->data[$key] ?? '';
         }

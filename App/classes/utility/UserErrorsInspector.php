@@ -4,6 +4,7 @@
     namespace App\classes\utility;
 
 
+    use App\classes\models\Sessions;
     use App\classes\models\User;
 
     /**
@@ -24,7 +25,7 @@
         protected function checkEmail() : string
         {
 //            $mail = $this->object->getEmail();
-            $mail = $this->forms->getElement('email');
+            $mail = $this->forms->get('email');
             if (!(preg_match(self::$regexp['email'], $mail))) {
                 return 'Некорректное название почтового ящика';
             }
@@ -37,7 +38,7 @@
 
         protected function checkLogin() : string
         {
-            $login = $this->forms->getElement('login');
+            $login = $this->forms->get('login');
             if (!(preg_match(self::$regexp['login'], $login))) {
                 return 'Некорректный логин';
             }
@@ -50,8 +51,8 @@
 
         protected function checkPasswords() : string
         {
-            $password1 = $this->forms->getElement('password1');
-            $password2 = $this->forms->getElement('password2');
+            $password1 = $this->forms->get('password1');
+            $password2 = $this->forms->get('password2');
 
             if ($password1 !== $password2) {
                 return 'Пароли не совпадают';
@@ -60,6 +61,17 @@
             $length1 = mb_strlen($password1);
             if ($length1 < 8 || $length1 > 30) {
                 return 'Длина пароля должна быть от 8 до 30 символов';
+            }
+            return '';
+        }
+
+        protected function checkEnter() : string
+        {
+            $password = $this->forms->get('password');
+            $login = $this->forms->get('login');
+            $candidate = User::checkPassword($login, $password);
+            if (!($candidate->exist())) {
+                return 'Неверный логин или пароль';
             }
             return '';
         }

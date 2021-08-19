@@ -21,20 +21,7 @@
     {
         protected const TABLE_NAME = 'users';
         protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $email = '';
-        protected ?string $hash = null, $rights = null, $password1 = '', $password2 = '';
-        protected Sessions $sessions;
-        protected static array $checkList = ['checkEmail', 'checkLogin', 'checkPasswords'];
-//        protected array $registrData = ['password1' => '', 'password2' => '', 'email1' => '', 'email2' => ''];
-        protected static array $errorsList =
-            [
-                'login' => 'Логин отсутствует или некорректен',
-                'firstName' => 'Отсутствует имя',
-                'middleName' => 'Отсутствует отчество',
-                'lastName' => 'Отсутствует фамилия',
-                'email' => 'Не указан почтовый ящик',
-                'password1' => 'Пароль отсутствует или некорректен',
-                'password2' => 'Необходимо ввести повторный пароль',
-            ];
+        protected ?string $hash = null, $rights = null;
 
         //                              TODO убрать трейт?
 
@@ -138,15 +125,7 @@
         /**
          * @return string|null
          */
-        public function getPasswords() : array
-        {
-            return [$this->password1, $this->password2];
-        }
 
-        public function getPass() : string
-        {
-
-        }
         //</editor-fold>
 
         //<editor-fold desc="setters ========================">
@@ -208,25 +187,13 @@
          * Temporary password fields for the moment when user make registration
          * @param string|null $pass
          */
-        public function setPasswords(string $password1, string $password2) : User
-        {
-//            $this->registrData['password1'] = $password1;
-//            $this->registrData['password2'] = $password2;
-            $this->password1 = $password1;
-            $this->password2 = $password2;
-            return $this;
-        }
 
         /**
          * @return User
          */
-        public function makeHash() : User
+        public function makeHash($password) : User
         {
-            $this->hash = password_hash($this->password1, PASSWORD_BCRYPT);
-            $this->password1 = null;
-            $this->password2 = null;
-//            $this->registrData['password1'] = null;
-//            $this->registrData['password2'] = null;
+            $this->hash = password_hash($password, PASSWORD_BCRYPT);
             return $this;
         }
         //</editor-fold>

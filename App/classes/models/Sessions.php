@@ -12,18 +12,32 @@
         // использовать сессию для передачи ошибки и переадресацию на страницу по новой
         protected const TABLE_NAME = 'sessions';
         protected string $user_id, $token;
-        protected ?string $date_add = null, $date_last = null;
+        protected ?string $date_add = null;
+        protected User $entering;
 
-        public function createNewSession(User $entering) : void
+        public function __construct(User $entering)
+        {
+            $this->entering = $entering;
+        }
+
+
+        public function createNewSession(bool $checkbox = false) : void
         {
             $this->token = makeToken(64);
-            $this->user_id = $entering->getId();
+            $this->user_id = $this->entering->getId();
             $this->save();
-            setcookie('token', $this->token, time() + 86400, Config::getInstance()->BASE_URL);
-            $_SESSION['user'] = $entering->getLogin();
-            $_SESSION['id'] = $entering->getId();
+            $_SESSION['user'] = $this->entering->getLogin();
+            $_SESSION['id'] = $this->entering->getId();
             $_SESSION['token'] = $this->token;
+            if (true === $checkbox) {
+                $this->makeCookie();
+            }
             header('Location: ' . Config::getInstance()->BASE_URL);
+        }
+
+        private function makeCookie() : void
+        {
+            setcookie('token', $this->token, time() + 86400, Config::getInstance()->BASE_URL);
         }
 
         /**
@@ -33,12 +47,12 @@
         {
             $cookeToken = $_COOKIE['token'] ?? null; // TODO добавить валидацию токенов?
             $sessionToken = $_SESSION['token'] ?? null;
-            // если токен установлен и в сессии и в куки и совпадают, то возвращаем имя пользователя из сессии
+            // если токен установлен и в сессии и в куки и совпадают, то возвращаем пользователя по id из сессии
             if ( ( $cookeToken && $sessionToken ) && ( $cookeToken === $sessionToken) ) {
                 return User::findOneBy(type: 'id', subject: $_SESSION['id']) ?? new User();
             }
             // если токен в сессии и куке есть, но они не совпадают, то удаляем оба.
-            if ( ( $cookeToken && $sessionToken ) &&  ($cookeToken !== $sessionToken ) ) {
+            if (isset($cookeToken, $sessionToken) && ($cookeToken !== $sessionToken)) {
                 setcookie('token', '', time() - 86400, '/');
                 unset($_SESSION['user'], $_SESSION['token']);
                 return new User();

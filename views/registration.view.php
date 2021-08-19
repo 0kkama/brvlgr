@@ -42,7 +42,7 @@
     <div class="form-check">
         <input class="form-check-input" type="checkbox" id="login-remember" name="remember">
         <label class="form-check-label" for="login-remember">
-            Запомнить меня на один месяц
+            Запомнить меня
         </label>
     </div>
     <hr>
