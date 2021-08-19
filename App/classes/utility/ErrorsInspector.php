@@ -6,14 +6,18 @@
 
     class ErrorsInspector
     {
-        protected AbstractModel $object;
+//        protected AbstractModel $object;
+        protected FormsWithData $forms;
         protected ErrorsContainer $container;
         protected array $errorsList;
 
-        public function __construct(AbstractModel $object, ErrorsContainer $container)
+//        public function __construct(AbstractModel $object, ErrorsContainer $container)
+        public function __construct(FormsWithData $forms, ErrorsContainer $container, array $list)
         {
-            $this->object = $object;
+//            $this->object = $object;
             $this->container = $container;
+            $this->forms = $forms;
+            $this->errorsList = $list;
         }
 
         public function conductInspection(array $callback = []) : self
@@ -28,10 +32,18 @@
 
         private function checkFormFields() : self
         {
-            $data = $this->object->getFormFields();
-            $messages = $this->object->getErrorsList();
+//            $data = $this->object->getFormFields();
+//            $messages = $this->object->getErrorsList();
+//            $data = $this->object->getFormFields();
 
-            foreach ($data as $index => $datum) {
+            //            foreach ($data as $index => $datum) {
+            //                if (empty($datum)) {
+            //                    $this->container[] = $messages[$index];
+            //                }
+            //            }
+            $messages = $this->errorsList;
+
+            foreach ($this->forms as $index => $datum) {
                 if (empty($datum)) {
                     $this->container[] = $messages[$index];
                 }

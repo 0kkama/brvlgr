@@ -4,6 +4,8 @@
     namespace App\classes\utility;
 
 
+    use App\classes\models\User;
+
     /**
      * Extend for inspection model/User class
      */
@@ -25,7 +27,8 @@
             if (!(preg_match(self::$regexp['email'], $mail))) {
                 return 'Некорректное название почтового ящика';
             }
-            if (($this->object::findOneBy('email', $mail))->exist()) {
+//            if (($this->object::findOneBy('email', $mail))->exist()) {
+            if ((User::findOneBy('email', $mail))->exist()) {
                 return 'Такой почтовый ящик уже используется';
             }
             return '';
@@ -37,7 +40,8 @@
             if (!(preg_match(self::$regexp['login'], $login))) {
                 return 'Некорректный логин';
             }
-            if (($this->object::findOneBy('login', $login))->exist()) {
+//            if (($this->object::findOneBy('login', $login))->exist()) {
+            if ((User::findOneBy('login', $login))->exist()) {
                 return 'Подобный логин уже используется';
             }
             return '';

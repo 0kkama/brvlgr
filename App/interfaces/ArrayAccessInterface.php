@@ -6,12 +6,12 @@
 
     use ArrayAccess;
     use Countable;
-//    use IteratorAggregate;
+    use Iterator;
     use JsonSerializable;
-//    use Serializable;
 
 //    interface ArrayAccessInterface extends ArrayAccess, Countable, IteratorAggregate, Serializable
-    interface ArrayAccessInterface extends ArrayAccess, Countable, JsonSerializable
+
+    interface ArrayAccessInterface extends ArrayAccess, Countable, Iterator, JsonSerializable
     {
 
     }

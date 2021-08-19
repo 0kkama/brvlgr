@@ -7,6 +7,7 @@
     use App\classes\abstract\ControllerActing;
     use App\classes\Config;
     use App\classes\models\Article as Publication;
+    use App\classes\utility\FormsWithData;
     use App\classes\utility\UserErrorsInspector;
 
     class Article extends ControllerActing
@@ -15,10 +16,15 @@
         protected string $title = 'PAGE NOT FOUND!', $content = 'PAGE NOT FOUND!';
         protected Publication $article;
         protected UserErrorsInspector $inspector;
+        protected FormsWithData $forms;
+        protected static array $errorsList = [
+            'title' => 'Отсутствует заголовок',
+            'text' => 'Отсутствует текст статьи',
+            'category' => 'Не указана категория',
+        ];
 
         protected function add() : void
         {
-
             $this->title = 'Добавить публикацию';
             $this->article = new Publication();
             $this->checkUser()->sendData();
@@ -48,9 +54,10 @@
         private function sendData() : void
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $fields = extractFields(array_keys($_POST),$_POST);
-                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category'])->setAuthor($this->user->getLogin())->setAuthorId($this->user->getId());
-                ($this->inspector = new UserErrorsInspector($this->article, $this->errors))->conductInspection();
+                $fields = array_keys(self::$errorsList);
+                ($this->forms = new FormsWithData())->extractPostForms($fields, $_POST)->validateForms(false);
+                ($this->inspector = new UserErrorsInspector($this->forms, $this->errors, self::$errorsList))->conductInspection();
+                $this->article->setFields($this->forms)->setAuthor($this->user->getLogin())->setAuthorId($this->user->getId());
 
                 if ($this->errors->isEmpty()) {
                     $this->article->save();

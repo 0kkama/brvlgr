@@ -7,6 +7,7 @@
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\utility\ErrorsContainer;
+    use App\classes\utility\FormsWithData;
     use App\interfaces\HasIdInterface;
     use Exception;
     use PDO;
@@ -183,6 +184,18 @@
          * Возвращает <b>string</b> с именем текущей таблицы
          * @return string
          */
+
+        public function setFields(FormsWithData $forms) : static
+        {
+            foreach ($forms as $index => $form) {
+                $method = 'set' . ucfirst($index);
+                if (method_exists($this, $method)) {
+                    $this->$method($form);
+                }
+            }
+            return $this;
+        }
+
         public static function getTableName() : string
         {
             return static::TABLE_NAME;
@@ -195,7 +208,16 @@
 
         public function getFormFields() : array
         {
-            return array_filter(get_object_vars($this), static function ($var) { return is_string($var); });
+            return array_filter(get_object_vars($this), static function ($var) {
+                return is_string($var);
+            });
+        }
+
+        public function getFieldsName() : array
+        {
+            return array_keys(array_filter(get_object_vars($this), static function ($var) {
+                return is_string($var);
+            }));
         }
 
         public function getMetaData() : array
