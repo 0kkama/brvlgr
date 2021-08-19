@@ -142,6 +142,11 @@
         {
             return [$this->password1, $this->password2];
         }
+
+        public function getPass() : string
+        {
+
+        }
         //</editor-fold>
 
         //<editor-fold desc="setters ========================">

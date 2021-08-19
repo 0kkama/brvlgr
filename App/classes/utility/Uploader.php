@@ -5,6 +5,7 @@
     use App\classes\models\User;
     use Exception;
     use Intervention\Image\ImageManagerStatic as Image;
+    use App\classes\utility\LoggerForAuth as AuthLog;
 
     /**
      * Class Uploader
@@ -77,17 +78,15 @@
                 Image::configure(['driver' => 'imagick']);
 
                 $this->newFileName = makeToken(16).'.jpg';
-                $currentTime =  date('H:i:s');
-                $currentDate = date('d-m-Y');
                 $userName = $this->user->login;
-                $userID = $this->user->id;
+                $userID = $this->user->getId();
 
                 $this->checkName();
 
                 Image::make($this->file['tmp_name'])->resize(200, 200)->save($this->prePath . $this->newFileName);
                 move_uploaded_file($this->file['tmp_name'], $this->origPath . $this->newFileName);
-                $msgStr =  "$currentTime - Пользователь id $userID логин: $userName загрузил jpg файл $this->newFileName в галерею\n";
-                file_put_contents(Config::getInstance()->AUTH_LOG . "$currentDate.log", $msgStr, FILE_APPEND);
+                $message =  "Пользователь id $userID логин: $userName загрузил jpg файл $this->newFileName в галерею\n";
+                (new AuthLog($message))->write();
             }
             return $this->errors;
         }

@@ -3,6 +3,7 @@
     namespace App\classes\utility;
 
     use App\classes\Config;
+    use App\classes\models\Sessions;
     use App\classes\models\User;
 
     class Registrator
@@ -37,17 +38,28 @@
             return $this;
         }
 
-        public function checkFields(UserErrorsInspector $inspector) : self
+        public function checkFields(UserErrorsInspector $inspector, array $callback = []) : self
         {
-            $inspector->conductInspection();
+            $inspector->conductInspection($callback);
             return $this;
         }
 
         public function createNewUser(User $candidate) : void
         {
-                $candidate->makeHash();
-                $candidate->save();
-                header('Location: '. Config::getInstance()->BASE_URL);
+            $candidate->makeHash();
+            $candidate->save();
+            header('Location: '. Config::getInstance()->BASE_URL);
         }
+
+//        public function loginUser(User $candidate, ErrorsContainer $errors) : void
+//        {
+//
+//            $candidate = User::checkPassword($candidate->, $password);
+//            if ($this->candidate->exist()) {
+//                (new Sessions())->createNewSession($this->candidate) ;
+//            } else {
+//                $errors[] = 'Неверный логин или пароль';
+//            }
+//        }
 
     }

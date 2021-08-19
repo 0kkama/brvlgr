@@ -18,6 +18,7 @@
 
         protected function add() : void
         {
+
             $this->title = 'Добавить публикацию';
             $this->article = new Publication();
             $this->checkUser()->sendData();

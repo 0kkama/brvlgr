@@ -58,11 +58,9 @@
     catch (CustomException|MyExWrapper $ex ) {
         (new LoggerForExceptions($ex, new EmailSender))();
         Error::deadend($ex->getHttpCode(), $ex->getAlert());
-        // var_dump($ex);
     } catch (Exception $ex) {
         (new LoggerForExceptions($ex, new EmailSender))();
         Error::deadend();
-        // var_dump($ex);
     }
 
 //    вывод данных о ресурсах

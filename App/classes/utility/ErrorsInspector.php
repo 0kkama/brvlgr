@@ -16,11 +16,9 @@
             $this->container = $container;
         }
 
-        public function conductInspection() : self
+        public function conductInspection(array $callback = []) : self
         {
             $this->checkFormFields();
-
-            $callback = $this->object->getCheckList();
 
             if (!empty($callback) && $this->container->isEmpty()) {
                 $this->additionalVerification($callback);
@@ -28,7 +26,7 @@
             return $this;
         }
 
-        public function checkFormFields() : self
+        private function checkFormFields() : self
         {
             $data = $this->object->getFormFields();
             $messages = $this->object->getErrorsList();
@@ -41,7 +39,7 @@
             return $this;
         }
 
-        public function additionalVerification(array $callbackList) : self
+        private function additionalVerification(array $callbackList) : self
         {
             if (!empty($callbackList)) {
                 foreach ($callbackList as $method) {
@@ -50,9 +48,10 @@
                         if(!empty($errMessage)) {
                             $this->container[] = $errMessage;
                         }
-                    } else {
-//                    TODO throw new exception ?
                     }
+                    //else {
+//                    TODO throw new exception ?
+                    //}
                 }
             }
             return $this;

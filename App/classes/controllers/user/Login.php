@@ -20,16 +20,9 @@
         protected ?string $relocation;
         protected User $entering;
 
-        public function __construct(array $params, View $templateEngine)
-        {
-            parent::__construct($params, $templateEngine);
-            $this->relocation = Config::getInstance()->BASE_URL;
-        }
-
         public function __invoke()
         {
             $this->checkUser();
-            $this->error = new ErrorsContainer();
             if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
                 //                TODO проверка на пустые поля
                 $login = val($_POST['login']);
@@ -37,14 +30,14 @@
                 $this->loginUser($login, $password);
             }
 
-            $this->content = $this->page->assign('loginErr', $this->error)->render('login');
+            $this->content = $this->page->assign('loginErr', $this->errors)->render('login');
             parent::__invoke();
         }
 
         private function checkUser() : void
         {
             if ($this->user->exist()) {
-                header('Location: ' . $this->relocation); exit();
+                header('Location: ' . Config::getInstance()->BASE_URL); exit();
             }
         }
 
@@ -55,7 +48,7 @@
                 $sessions = new Sessions();
                 $sessions->createNewSession($this->entering);
             } else {
-                $this->error[] = 'Неверный логин или пароль';
+                $this->errors[] = 'Неверный логин или пароль';
             }
         }
     }
