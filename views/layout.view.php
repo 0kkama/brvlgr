@@ -1,5 +1,6 @@
 <?php
 /** @var  App\classes\models\User $user */
+/** @var  App\classes\utility\NavigationBar $menu */
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -23,38 +24,19 @@
                 <aside id='nav'>
                     <nav>
                         <ul>
-                            <li> <a href="/"> Главная </a> </li>
-                            <li> <a href="/articles"> Статьи </a> </li>
-                            <li> <a href="/gallery"> Галерея </a> </li>
-                            <li> <a href="/article/add"> Добавить статью </a> </li>
-
-                            <?php for($i = 0 ; $i < 4 ; $i++): ?>
-                                <li> Navigation </li>
-                            <?php endfor; ?>
-
-                            <li> <a href="/user/login"> Войти </a> </li>
-                            <li> <a href="/user/registration"> Регистрация </a> </li>
-                            <li> <a href="/user/logout"> Выйти </a> </li>
-                            <li> <a href="/test.php"> Тест </a> </li>
-                            <li> <a href="/info.php"> Инфо </a> </li>
+                           <?= $menu('aside') ?>
                         </ul>
                     </nav>
                 </aside>
-
-                <?=$content  ?? ''?>
-
+                <?= $content  ?? ''?>
             </div>
         </div>
     </main>
 
     <footer id="footer">
-
         <div>
             <ul>
-                <?php for($i = 0 ; $i < 6 ; $i++): ?>
-                    <li style='display:inline;margin-right:15px'> Navigation </li>
-                <?php endfor; ?>
-
+                <?= $menu('footer') ?>
             </ul>
         </div>
         &copy 2020  &#8211 2021

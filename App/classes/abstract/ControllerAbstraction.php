@@ -4,8 +4,9 @@
     namespace App\classes\abstract;
 
 
+    use App\classes\models\Navigation;
     use App\classes\models\User;
-    use App\classes\utility\ErrorsContainer;
+    use App\classes\utility\NavigationBar;
     use App\classes\View;
     use JetBrains\PhpStorm\Pure;
 
@@ -18,18 +19,23 @@
          */
         protected View $page;
         protected User $user;
+        protected NavigationBar $menu;
         protected array $params;
         protected string $title, $content, $id;
 
-        #[Pure] public function __construct(array $params, View $templateEngine)
+        public function __construct(array $params, View $templateEngine)
         {
             $this->page = $templateEngine;
             $this->params = $params;
+            ($this->menu = new NavigationBar())->addArray(Navigation::getAll());
         }
 
         public function __invoke()
         {
-            $this->page->assign('title', $this->title)->assign('content', $this->content)->assign('user', $this->user)->display('layout');
+            $this->page->assignArray([
+                'title' => $this->title, 'menu' => $this->menu, 'content' => $this->content,'user' => $this->user,]
+            )->display('layout');
+//            assign('title', $this->title)->assign('content', $this->content)->assign('user', $this->user)->display('layout');
         }
 
         /**
