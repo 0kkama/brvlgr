@@ -2,33 +2,10 @@
 
     namespace App\classes\utility;
 
-    use App\traits\ArrayAccessTrait;
-    use App\traits\ArrayIteratorTrait;
-    use App\traits\CountableTrait;
-    use App\traits\IteratorTrait;
-    use App\traits\JsonSeializableTrait;
-    use ArrayAccess;
-    use ArrayIterator;
-    use ArrayObject;
-    use Countable;
-    use Exception;
-    use IteratorAggregate;
-    use JsonSerializable;
-    use Serializable;
+    use App\classes\abstract\utility\AbstractContainer;
 
-    class FormsWithData implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable /*,Serializable*/
+    class FormsWithData extends AbstractContainer
     {
-        protected int $key = 0;
-//        protected array $data = [];
-
-        //<editor-fold desc="Interfaces implementation">
-        use  ArrayAccessTrait, CountableTrait, JsonSeializableTrait, ArrayIteratorTrait /*,IteratorTrait*/;
-
-        public function getIterator() : ArrayIterator
-        {
-            return new ArrayIterator($this->data);
-        }
-        //</editor-fold>
 
         public function extractPostForms(array $keys, array $data, $validation = false) : self
         {

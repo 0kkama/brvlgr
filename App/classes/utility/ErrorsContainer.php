@@ -4,33 +4,12 @@
     namespace App\classes\utility;
 
 
-    use App\traits\ArrayAccessTrait;
-    use App\traits\ArrayIteratorTrait;
-    use App\traits\CountableTrait;
-    use App\traits\IteratorTrait;
-    use App\traits\JsonSeializableTrait;
-    use ArrayAccess;
-    use ArrayIterator;
-    use Countable;
-    use Iterator;
-    use IteratorAggregate;
+    use App\classes\abstract\utility\AbstractContainer;
     use JetBrains\PhpStorm\Pure;
-    use JsonSerializable;
 
-    class ErrorsContainer implements ArrayAccess, Countable, JsonSerializable, IteratorAggregate/*, Iterator*/
+    class ErrorsContainer extends AbstractContainer
     {
-        protected int $key = 0;
         protected string $errorsString = '';
-//        protected array $data = [];
-
-        //<editor-fold desc="Interfaces implementation">
-        use ArrayAccessTrait, CountableTrait, JsonSeializableTrait, ArrayIteratorTrait /*,IteratorTrait*/;
-
-        public function getIterator() : ArrayIterator
-        {
-            return new ArrayIterator($this->data[]);
-        }
-        //</editor-fold>
 
         /**
          * Return all contained errors as one formatted string
