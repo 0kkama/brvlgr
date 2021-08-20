@@ -1,4 +1,4 @@
-<?php /** @var App\classes\utility\ErrorsContainer $loginErr */ ?>
+<?php /** @var App\classes\utility\ErrorsContainer $errors */ ?>
 <?php /** @var App\classes\models\User $candidate */ ?>
 <form method="post">
     <div class="form-group">
@@ -18,11 +18,11 @@
 
     <hr>
     <button class="btn btn-primary">Войти</button>
-    <?php if($loginErr->notEmpty()) : ?>
+    <?php if($errors->notEmpty()) : ?>
         <hr>
         <div class="alert alert-danger">
-            <?= $loginErr ?>
-            <?php unset($loginErr) ?>
+            <?= $errors ?>
+            <?php unset($errors) ?>
         </div>
     <?php endif; ?>
 </form>

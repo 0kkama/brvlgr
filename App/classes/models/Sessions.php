@@ -15,14 +15,9 @@
         protected ?string $date_add = null;
         protected User $entering;
 
-        public function __construct(User $entering)
+        public function createNewSession(User $entering, bool $checkbox = false) : void
         {
             $this->entering = $entering;
-        }
-
-
-        public function createNewSession(bool $checkbox = false) : void
-        {
             $this->token = makeToken(64);
             $this->user_id = $this->entering->getId();
             $this->save();

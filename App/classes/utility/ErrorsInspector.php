@@ -24,7 +24,8 @@
         {
             $this->checkFormFields();
 
-            if (!empty($callback) && $this->container->isEmpty()) {
+//            if (!empty($callback) && $this->container->isEmpty()) {
+            if (!empty($callback)) {
                 $this->additionalVerification($callback);
             }
             return $this;
@@ -44,7 +45,7 @@
             $messages = $this->errorsList;
 
             foreach ($this->forms as $index => $datum) {
-                if (empty($datum)) {
+                if (empty($datum) && isset($messages[$index])) {
                     $this->container[] = $messages[$index];
                 }
             }

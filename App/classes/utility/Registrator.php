@@ -11,7 +11,9 @@
         protected array $fields;
         protected FormsWithData $forms;
         protected UserErrorsInspector $inspector;
-//        protected array $callback = [];
+        protected User $candidate;
+        protected Sessions $sessions;
+        protected array $callback = [];
 
         public static function checkUserAbsent(User $user) : void
         {
@@ -21,6 +23,24 @@
             }
         }
 
+        public function createNewUser(User $candidate, FormsWithData $forms) : void
+        {
+            $this->candidate = $candidate;
+            $this->forms = $forms;
+            $this->candidate->makeHash($this->forms->get('password1'));
+            $this->candidate->save();
+            (new Sessions())->createNewSession($this->candidate, $this->forms->get('checkbox'));
+            (new LoggerForAuth('Зарегистрирован пользователь '. $this->candidate))->write();
+            header('Location: '. Config::getInstance()->BASE_URL);
+        }
 
+        public function loginUser(User $candidate, FormsWithData $forms) : void
+        {
+            $this->candidate = $candidate;
+            $this->forms = $forms;
+            $this->candidate = User::findOneBy('login', $this->forms->get('login'));
+            (new Sessions())->createNewSession($this->candidate, $this->forms->get('checkbox'));
+            (new LoggerForAuth('Пользователь ' . $this->candidate->getLogin() . 'вошёл в систему'))->write();
+        }
 
     }
