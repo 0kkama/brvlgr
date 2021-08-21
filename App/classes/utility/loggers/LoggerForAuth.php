@@ -9,12 +9,12 @@
         private string $message;
         private string $path;
 
-        public function __construct(string $message)
+        public function __construct(string $message, $path)
         {
             $currentDate = date('Y-m-d');
             $currentTime =  date('H:i:s');
             $this->message = $currentTime . ' - ' . $message;
-            $this->path = Config::getInstance()->AUTH_LOG . "$currentDate.log";
+            $this->path = $path . "$currentDate.log";
         }
 
         public function write() : void

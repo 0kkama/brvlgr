@@ -8,6 +8,7 @@
     use App\classes\Config;
     use App\classes\models\Article as Publication;
     use App\classes\utility\FormsWithData;
+    use App\classes\utility\LoggerSelector;
     use App\classes\utility\UserErrorsInspector;
 
     class Article extends ControllerActing
@@ -23,11 +24,20 @@
             'category' => 'Не указана категория',
         ];
 
-        protected function add() : void
+        public function __invoke()
+        {
+            $this->action($this->params['action']);
+            parent::__invoke();
+        }
+
+        protected function create() : void
         {
             $this->title = 'Добавить публикацию';
             $this->article = new Publication();
-            $this->checkUser()->sendData();
+//            $this->checkUser()->prepareData();
+            if($this->checkUser()->prepareData()) {
+                $this->sendDataAndMessage('Пользователь ' . $this->user->getLogin() . ' добавил статью ' . $this->article->getTitle());
+            }
             $this->content = $this->page->assign('article', $this->article)->assign('errors', $this->errors)->render('add');
         }
 
@@ -38,10 +48,13 @@
             $this->content = $this->page->assign('article', $this->article)->assign('author', $this->article->author())->render('article');
         }
 
-        protected function edit() : void
+        protected function update() : void
         {
             $this->title = 'Редактировать статью';
-            $this->checkUser()->checkArtID()->getArt()->checkArtExist()->sendData();
+            $this->checkUser()->checkArtID()->getArt()->checkArtExist();
+            if($this->prepareData()) {
+            $this->sendDataAndMessage('Пользователь ' . $this->user->getLogin() . ' обновил статью ' . $this->article->getTitle());
+            }
             $this->content = $this->page->assign('article', $this->article)->assign('errors', $this->errors)->render('add');
         }
 
@@ -51,19 +64,34 @@
             header('Location: ' . Config::getInstance()->BASE_URL);
         }
 
-        private function sendData() : void
+        protected function prepareData() : bool
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = array_keys(self::$errorsList);
                 ($this->forms = new FormsWithData())->extractPostForms($fields, $_POST)->validateForms(false);
                 ($this->inspector = new UserErrorsInspector($this->forms, $this->errors, self::$errorsList))->conductInspection();
                 $this->article->setFields($this->forms)->setAuthor($this->user->getLogin())->setAuthorId($this->user->getId());
-
-                if ($this->errors->isEmpty()) {
-                    $this->article->save();
-                    header('Location: /article/read/' . $this->article->getId());
-                }
+                return true;
             }
+            return false;
+        }
+
+        protected function sendDataAndMessage(string $message) : void
+        {
+            if ($this->sendData()) {
+                LoggerSelector::publication($message);
+                $this->relocate();
+            }
+        }
+
+        protected function sendData() : bool
+        {
+            return $this->errors->isEmpty() && $this->article->save();
+        }
+
+        protected function relocate() : void
+        {
+            header('Location: /article/read/' . $this->article->getId());
         }
 
         protected function checkUser() : self
@@ -94,12 +122,6 @@
         {
             $this->article = Publication::findOneBy('id', $this->params['id']);
             return $this;
-        }
-
-        public function __invoke()
-        {
-            $this->action($this->params['action']);
-            parent::__invoke();
         }
     }
 

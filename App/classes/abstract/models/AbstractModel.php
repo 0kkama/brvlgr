@@ -81,7 +81,7 @@
          * метод добавлет новую запись в БД, после чего возвращает <b>$this</b> или <b>null</b>
          * @return AbstractModel
          */
-        private function insert() : static
+        private function insert() : bool
         {
             // делаем строку подобную :title, :text, :author, :category
             $values = implode($this->meta['separator'], $this->meta['cols']);
@@ -94,14 +94,15 @@
             $db->execute($sql, $this->meta['data']);
             $this->id = $db->getLastId();
             unset($this->meta);
-            return $this;
+//            return $this;
+            return true;
         }
 
         /**
          * Обновляет уже существующую запись, которая ранее была получена из базы данных по id
          * @return AbstractModel
          */
-        private function update() : static
+        private function update() : bool
         {
             //   TODO Как реализовать обновление только того поля, которое было изменено?
             $set = [];
@@ -118,7 +119,8 @@
             $db = Db::getInstance();
             $db->execute($sql, $this->meta['data']);
             unset($this->meta);
-            return $this;
+//            return $this;
+            return true;
         }
 
         /**
@@ -141,9 +143,9 @@
         /**
          * Defines whether a record is old or new. If the record is new,
          * then the <b>insert</b> method will be called, otherwise the <b>update</b> method.
-         * @return AbstractModel
+         * @return boolean
          */
-        public function save() : static
+        public function save() : bool
         {
             $this->makeSql();
             if (isset($this->id)) {
