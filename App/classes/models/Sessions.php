@@ -4,6 +4,7 @@
 
     use App\classes\abstract\AbstractModel;
     use App\classes\Config;
+    use App\classes\utility\Time;
 
     class Sessions extends AbstractModel
     {
@@ -18,7 +19,7 @@
         public function createNewSession(User $entering, bool $checkbox = false) : void
         {
             $this->entering = $entering;
-            $this->token = makeToken(64);
+            $this->token = makeToken(32);
             $this->user_id = $this->entering->getId();
             $this->save();
             $_SESSION['user'] = $this->entering->getLogin();
@@ -32,7 +33,7 @@
 
         private function makeCookie() : void
         {
-            setcookie('token', $this->token, time() + 86400, Config::getInstance()->BASE_URL);
+            setcookie('token', $this->token, time() + Time::daysFromNow(14), Config::getInstance()->BASE_URL);
         }
 
         /**
@@ -43,7 +44,7 @@
             $cookeToken = $_COOKIE['token'] ?? null; // TODO добавить валидацию токенов?
             $sessionToken = $_SESSION['token'] ?? null;
             // если токен установлен и в сессии и в куки и совпадают, то возвращаем пользователя по id из сессии
-            if ( ( $cookeToken && $sessionToken ) && ( $cookeToken === $sessionToken) ) {
+            if (isset($cookeToken, $sessionToken) && ($cookeToken === $sessionToken) ) {
                 return User::findOneBy(type: 'id', subject: $_SESSION['id']) ?? new User();
             }
             // если токен в сессии и куке есть, но они не совпадают, то удаляем оба.
