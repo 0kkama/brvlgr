@@ -4,9 +4,8 @@
     namespace App\classes\utility;
 
 
-    use App\classes\exceptions\ExceptionWrapper as Wrapper;
     use App\classes\exceptions\CustomException;
-    use App\classes\utility\EmailSender;
+    use App\classes\exceptions\ExceptionWrapper as Wrapper;
     use App\interfaces\CanSendMessageInterface;
     use Exception;
 
@@ -45,6 +44,7 @@
                 error_log("$this->logMessage\n", 3, $this->logFile);
         }
 
+//        TODO доделать!
         public function ifIsCritical() : void
         {
             if ($this->ex->isCritical()) {

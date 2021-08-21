@@ -5,6 +5,7 @@
     use App\classes\Config;
     use App\classes\models\Sessions;
     use App\classes\models\User;
+    use App\classes\utility\LoggerSelector;
 
     class Registrator
     {
@@ -30,7 +31,7 @@
             $this->candidate->makeHash($this->forms->get('password1'));
             $this->candidate->save();
             (new Sessions())->createNewSession($this->candidate, $this->forms->get('checkbox'));
-            (new LoggerForAuth('Зарегистрирован пользователь '. $this->candidate))->write();
+            LoggerSelector::authentication('Зарегистрирован пользователь ' . $this->candidate->getLogin());
             header('Location: '. Config::getInstance()->BASE_URL);
         }
 
@@ -40,7 +41,7 @@
             $this->forms = $forms;
             $this->candidate = User::findOneBy('login', $this->forms->get('login'));
             (new Sessions())->createNewSession($this->candidate, $this->forms->get('checkbox'));
-            (new LoggerForAuth('Пользователь ' . $this->candidate->getLogin() . 'вошёл в систему'))->write();
+            LoggerSelector::authentication('Пользователь ' . $this->candidate->getLogin() . ' вошёл в систему');
         }
 
     }

@@ -6,6 +6,7 @@
     use Exception;
     use Intervention\Image\ImageManagerStatic as Image;
     use App\classes\utility\LoggerForAuth as AuthLog;
+    use App\classes\utility\LoggerSelector;
 
     /**
      * Class Uploader
@@ -85,8 +86,8 @@
 
                 Image::make($this->file['tmp_name'])->resize(200, 200)->save($this->prePath . $this->newFileName);
                 move_uploaded_file($this->file['tmp_name'], $this->origPath . $this->newFileName);
-                $message =  "Пользователь id $userID логин: $userName загрузил jpg файл $this->newFileName в галерею\n";
-                (new AuthLog($message))->write();
+                $message =  "Пользователь id $userID логин: $userName загрузил jpg файл $this->newFileName в галерею";
+                LoggerSelector::authentication($message);
             }
             return $this->errors;
         }
