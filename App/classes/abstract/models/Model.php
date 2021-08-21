@@ -1,7 +1,7 @@
 <?php
 
 
-    namespace App\classes\abstract;
+    namespace App\classes\abstract\models;
 
 
     abstract class Model extends AbstractModel

@@ -1,7 +1,7 @@
 <?php
 
 
-    namespace App\classes\utility;
+    namespace App\classes\utility\loggers;
 
 
     class LogCleaner

@@ -1,5 +1,5 @@
 <?php
-    namespace App\classes\abstract;
+    namespace App\classes\abstract\controllers;
 
     use App\classes\abstract\Controller;
     use App\classes\models\User;

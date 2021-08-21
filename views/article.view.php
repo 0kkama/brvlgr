@@ -9,7 +9,7 @@
             <br>
             <?= $article->getFormattedContent() ?>
             <hr>
-            <a href="/article/edit/<?= $article->getId() ?>"> Редактировать </a>
+            <a href="/article/update/<?= $article->getId() ?>"> Редактировать </a>
             <a href="/article/delete/<?= $article->getId() ?>"> Удалить </a>
         </article>
     </div>

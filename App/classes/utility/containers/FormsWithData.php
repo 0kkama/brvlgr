@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\utility;
+    namespace App\classes\utility\containers;
 
     use App\classes\abstract\utility\AbstractContainer;
 

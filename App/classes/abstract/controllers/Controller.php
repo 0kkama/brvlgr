@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\abstract;
+    namespace App\classes\abstract\controllers;
 
     use App\classes\Config;
     use App\classes\models\User;

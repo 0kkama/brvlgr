@@ -1,7 +1,7 @@
 <?php
 
 
-    namespace App\classes\abstract;
+    namespace App\classes\abstract\controllers;
 
     use App\classes\controllers\Error;
 

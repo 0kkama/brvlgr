@@ -11,6 +11,7 @@
     use App\classes\utility\EmailSender;
     use App\classes\utility\LoggerForExceptions;
     use App\classes\View;
+    use App\classes\utility\LoggerSelector;
     use JetBrains\PhpStorm\NoReturn;
 
     /**
@@ -54,7 +55,7 @@
             try {
                 $this->user = User::getCurrent(Config::getInstance()->SESSIONS);
             } catch (ExceptionWrapper $ex) {
-                (new LoggerForExceptions($ex, new EmailSender))();
+                LoggerSelector::exception($ex, new EmailSender);
                 $this->user = new User();
             }
 //          если ключ отсутствует или неверен, то присваивается дефолтное значение для сигнала

@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\abstract;
+    namespace App\classes\abstract\controllers;
 
 
     abstract class ControllerAccess extends Controller

@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\abstract;
+    namespace App\classes\abstract\models;
 
     use App\classes\Db;
     use App\classes\exceptions\CustomException;

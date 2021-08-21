@@ -6,6 +6,7 @@
     error_reporting(E_ALL);
 
     use App\classes\Config;
+    use App\classes\utility\LoggerSelector;
     use App\classes\View;
     use App\classes\controllers\Error;
     use App\classes\exceptions\CustomException;
@@ -56,10 +57,10 @@
         (new $className($params, new View))();
     }
     catch (CustomException|MyExWrapper $ex ) {
-        (new LoggerForExceptions($ex, new EmailSender))();
+        LoggerSelector::exception($ex, new EmailSender);
         Error::deadend($ex->getHttpCode(), $ex->getAlert());
     } catch (Exception $ex) {
-        (new LoggerForExceptions($ex, new EmailSender))();
+        LoggerSelector::exception($ex, new EmailSender);
         Error::deadend();
     }
 
