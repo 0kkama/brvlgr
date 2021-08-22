@@ -4,6 +4,8 @@
     namespace App\classes\exceptions;
 
 
+    use App\classes\abstract\exceptions\CustomException;
+
     /**
      * Class MagickException
      * Throw exception connected with magick methods

@@ -1,8 +1,8 @@
 <?php
 
-    namespace App\classes;
+    namespace App\classes\utility;
 
-    use App\classes\exceptions\CustomException;
+    use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
     use App\interfaces\SingletonInterface;

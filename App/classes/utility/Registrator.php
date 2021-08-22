@@ -2,10 +2,10 @@
 
     namespace App\classes\utility;
 
-    use App\classes\Config;
     use App\classes\models\Sessions;
     use App\classes\models\User;
-    use App\classes\utility\LoggerSelector;
+    use App\classes\utility\containers\FormsWithData;
+    use App\classes\utility\loggers\LoggerSelector;
 
     class Registrator
     {

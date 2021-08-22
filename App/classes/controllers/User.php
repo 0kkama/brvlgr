@@ -4,7 +4,7 @@
     namespace App\classes\controllers;
 
     use App\classes\abstract\ControllerSelector;
-    use App\classes\View;
+    use App\classes\utility\View;
 
     class User extends ControllerSelector
     {

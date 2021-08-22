@@ -2,10 +2,10 @@
 
     namespace App\classes\controllers;
 
-    use App\classes\abstract\ControllerActing;
-    use App\classes\Config;
+    use App\classes\abstract\controllers\ControllerActing;
+    use App\classes\utility\Config;
     use App\classes\exceptions\FileException;
-    use App\classes\utility\ErrorsContainer;
+    use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\Uploader;
     use Exception;
 

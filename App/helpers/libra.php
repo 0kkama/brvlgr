@@ -1,6 +1,6 @@
 <?php
 
-    use App\classes\Config;
+    use App\classes\utility\Config;
 
     function addMessage(array $newMessage, string $fileName) : bool
     {

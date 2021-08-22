@@ -4,7 +4,7 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\controllers\Controller;
     use App\classes\models\Article as News;
     use Exception;
 

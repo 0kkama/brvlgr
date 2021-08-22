@@ -2,8 +2,8 @@
 
     namespace App\classes\testexamples;
 
-    use App\classes\Db;
-    use App\classes\abstract\AbstractModel;
+    use App\classes\utility\Db;
+    use App\classes\abstract\models\AbstractModel;
     use App\interfaces\HasAuthorInterface;
     use App\interfaces\HasIdInterface;
     use App\interfaces\HasTitleInterface;

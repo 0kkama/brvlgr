@@ -4,9 +4,9 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\controllers\Controller;
     use App\classes\models\Article;
-    use App\classes\View;
+    use App\classes\utility\View;
 
     class Articles extends Controller
     {

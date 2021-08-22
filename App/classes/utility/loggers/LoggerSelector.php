@@ -4,7 +4,7 @@
 
     use App\interfaces\CanSendMessageInterface;
     use Exception;
-    use App\classes\Config;
+    use App\classes\utility\Config;
 
     class LoggerSelector
     {

@@ -4,14 +4,14 @@
     date_default_timezone_set('Europe/Moscow');
     error_reporting(E_ALL);
 
-    use App\classes\Config;
+    use App\classes\utility\Config;
     use App\classes\controllers\Error;
-    use App\classes\exceptions\CustomException;
+    use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper as MyExWrapper;
     use App\classes\utility\LoggerForExceptions;
     use App\classes\utility\Router;
     use App\classes\utility\EmailSender;
-    use App\classes\View;
+    use App\classes\utility\View;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
 
     // set composer autoload

@@ -4,14 +4,14 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\ControllerAbstraction;
-    use App\classes\Config;
+    use App\classes\abstract\controllers\ControllerAbstraction;
+    use App\classes\utility\Config;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\models\User;
     use App\classes\utility\EmailSender;
     use App\classes\utility\LoggerForExceptions;
-    use App\classes\View;
-    use App\classes\utility\LoggerSelector;
+    use App\classes\utility\View;
+    use App\classes\utility\loggers\LoggerSelector;
     use JetBrains\PhpStorm\NoReturn;
 
     /**

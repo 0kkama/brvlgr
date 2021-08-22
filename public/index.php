@@ -5,14 +5,13 @@
     date_default_timezone_set('Europe/Moscow');
     error_reporting(E_ALL);
 
-    use App\classes\Config;
-    use App\classes\utility\LoggerSelector;
-    use App\classes\View;
+    use App\classes\utility\Config;
+    use App\classes\utility\loggers\LoggerSelector;
+    use App\classes\utility\View;
     use App\classes\controllers\Error;
-    use App\classes\exceptions\CustomException;
+    use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper as MyExWrapper;
     use App\classes\utility\EmailSender;
-    use App\classes\utility\LoggerForExceptions;
     use App\classes\utility\Router;
     use SebastianBergmann\Timer\ResourceUsageFormatter;
 
@@ -26,11 +25,10 @@
             require_once $include;
         } else {
             trigger_error("Ошибка при подключении класса $className. Файл $include не существует или повреждён");
-//            Error::deadend(400, 'Ошибка при подключении класса');
         }
     });
 
-    set_error_handler('App\classes\utility\LittleLogger::errorCatcher', E_ALL);
+    set_error_handler('App\classes\utility\loggers\LittleLogger::errorCatcher', E_ALL);
     // set config instance
     Config::getInstance()->setInstance(include (__DIR__ . '/../config/config.php'));
 

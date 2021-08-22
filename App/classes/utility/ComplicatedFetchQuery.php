@@ -5,12 +5,8 @@
 
 
 
-    use App\classes\Db;
-    use App\classes\exceptions\CustomException;
-    use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
     use App\interfaces\HasTableInterface;
-    use JetBrains\PhpStorm\Pure;
     use PDO;
 
     class ComplicatedFetchQuery

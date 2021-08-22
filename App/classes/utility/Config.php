@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes;
+    namespace App\classes\utility;
 
     use App\interfaces\SingletonInterface;
     use App\traits\SingletonTrait;

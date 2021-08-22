@@ -2,7 +2,7 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\AbstractModel;
+    use App\classes\abstract\models\AbstractModel;
 
     class Navigation extends AbstractModel
     {

@@ -2,11 +2,11 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\Model;
-    use App\classes\Db;
-    use App\classes\exceptions\CustomException;
+    use App\classes\abstract\models\Model;
+    use App\classes\utility\Db;
+    use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\MagickException;
-    use App\classes\utility\ErrorsContainer;
+    use App\classes\utility\containers\ErrorsContainer;
     use App\interfaces\HasAuthorInterface;
     use App\interfaces\HasTableInterface;
     use App\interfaces\HasTitleInterface;

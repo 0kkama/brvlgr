@@ -4,11 +4,11 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\ControllerActing;
-    use App\classes\Config;
+    use App\classes\abstract\controllers\ControllerActing;
+    use App\classes\utility\Config;
     use App\classes\models\Article as Publication;
-    use App\classes\utility\FormsWithData;
-    use App\classes\utility\LoggerSelector;
+    use App\classes\utility\containers\FormsWithData;
+    use App\classes\utility\loggers\LoggerSelector;
     use App\classes\utility\UserErrorsInspector;
 
     class Article extends ControllerActing

@@ -3,8 +3,8 @@
 
     namespace App\classes\controllers\user;
 
-    use App\classes\abstract\ControllerAbstraction;
-    use App\classes\Config;
+    use App\classes\abstract\controllers\ControllerAbstraction;
+    use App\classes\utility\Config;
     use JetBrains\PhpStorm\NoReturn;
 
     class Logout extends ControllerAbstraction

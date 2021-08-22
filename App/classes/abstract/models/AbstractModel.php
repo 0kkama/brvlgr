@@ -2,12 +2,12 @@
 
     namespace App\classes\abstract\models;
 
-    use App\classes\Db;
-    use App\classes\exceptions\CustomException;
+    use App\classes\utility\Db;
+    use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
-    use App\classes\utility\ErrorsContainer;
-    use App\classes\utility\FormsWithData;
+    use App\classes\utility\containers\ErrorsContainer;
+    use App\classes\utility\containers\FormsWithData;
     use App\interfaces\HasIdInterface;
     use Exception;
     use PDO;

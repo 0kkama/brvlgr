@@ -2,7 +2,7 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\Model;
+    use App\classes\abstract\models\Model;
     use App\classes\exceptions\ExceptionWrapper;
     use App\interfaces\UserInterface;
     use App\traits\SetControlTrait;

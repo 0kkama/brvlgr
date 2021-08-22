@@ -4,7 +4,7 @@
     namespace App\traits;
 
 
-    use App\classes\exceptions\CustomException;
+    use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\MagickException;
 
     trait SetControlTrait

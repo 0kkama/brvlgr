@@ -5,7 +5,7 @@
 
 
     use App\classes\models\Article;
-    use App\classes\Config;
+    use App\classes\utility\Config;
     use App\traits\ValidateArticleTrait;
 
     class Edit extends Add

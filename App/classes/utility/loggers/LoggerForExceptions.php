@@ -4,7 +4,7 @@
     namespace App\classes\utility\loggers;
 
 
-    use App\classes\exceptions\CustomException;
+    use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper as Wrapper;
     use App\interfaces\CanSendMessageInterface;
     use Exception;

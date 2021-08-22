@@ -2,8 +2,8 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\AbstractModel;
-    use App\classes\Config;
+    use App\classes\abstract\models\AbstractModel;
+    use App\classes\utility\Config;
     use App\classes\utility\Time;
 
     class Sessions extends AbstractModel

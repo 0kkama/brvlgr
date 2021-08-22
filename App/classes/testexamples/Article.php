@@ -3,8 +3,8 @@
 
     namespace App\classes\testexamples;
 
-    use App\classes\abstract\ControllerActing;
-    use App\classes\Config;
+    use App\classes\abstract\controllers\ControllerActing;
+    use App\classes\utility\Config;
     use App\classes\models\Article as Publication;
 
     class Article extends ControllerActing

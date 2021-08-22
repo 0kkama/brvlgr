@@ -2,10 +2,11 @@
 
     namespace App\classes\abstract\controllers;
 
-    use App\classes\Config;
+    use App\classes\exceptions\ExceptionWrapper;
+    use App\classes\utility\Config;
     use App\classes\models\User;
-    use App\classes\utility\ErrorsContainer;
-    use App\classes\View;
+    use App\classes\utility\containers\ErrorsContainer;
+    use App\classes\utility\View;
 
     abstract class Controller extends ControllerAbstraction
     {
@@ -16,7 +17,7 @@
          */
         protected ErrorsContainer $errors;
         /**
-         * @throws \App\classes\exceptions\ExceptionWrapper
+         * @throws ExceptionWrapper
          */
         public function __construct(array $params, View $templateEngine)
         {

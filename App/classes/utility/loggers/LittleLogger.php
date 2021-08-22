@@ -2,7 +2,7 @@
 
 
     namespace App\classes\utility\loggers;
-    use App\classes\exceptions\CustomException;
+    use App\classes\abstract\exceptions\CustomException;
     use Exception;
     use JetBrains\PhpStorm\Pure;
 
@@ -11,7 +11,7 @@
     {
         protected int|string $number;
         protected string $file, $line, $date, $time, $message, $log = '', $type = '', $alert = '', $param = '';
-        protected static string $path = __DIR__ . '/../../../logs/errors/';
+        protected static string $path = __DIR__ . '/../../../../logs/errors/';
 
         #[Pure] protected function __construct(Exception $ex)
         {
@@ -47,7 +47,7 @@
         {
             $currentDate = date('Y-m-d');
             $currentTime = date('H:i:s');
-            $errPath = __DIR__ . '/../../../logs/errors';
+            $errPath = self::$path;
 
             $msgStr = "$currentTime - $errNo - $errMsg in $errFile line:$errLine";
             error_log("$msgStr\n", 3, "$errPath/$currentDate.log");

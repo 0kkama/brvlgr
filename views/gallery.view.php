@@ -1,6 +1,6 @@
 <?php
     use App\classes\models\User;
-    use App\classes\utility\ErrorsContainer;
+    use App\classes\utility\containers\ErrorsContainer;
     /** @var ErrorsContainer $errMsg
     * @var User $user
      * @var array $list

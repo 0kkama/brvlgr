@@ -6,8 +6,8 @@
 
     use App\classes\abstract\ControllerEntering;
     use App\classes\models\User;
-    use App\classes\utility\ErrorsContainer;
-    use App\classes\utility\FormsWithData;
+    use App\classes\utility\containers\ErrorsContainer;
+    use App\classes\utility\containers\FormsWithData;
     use App\classes\utility\Registrator;
     use App\classes\utility\UserErrorsInspector;
 

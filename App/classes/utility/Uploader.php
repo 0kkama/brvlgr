@@ -1,12 +1,11 @@
 <?php
     namespace App\classes\utility;
 
-    use App\classes\Config;
     use App\classes\models\User;
+    use App\classes\utility\containers\ErrorsContainer;
+    use App\classes\utility\loggers\LoggerSelector;
     use Exception;
     use Intervention\Image\ImageManagerStatic as Image;
-    use App\classes\utility\LoggerForAuth as AuthLog;
-    use App\classes\utility\LoggerSelector;
 
     /**
      * Class Uploader

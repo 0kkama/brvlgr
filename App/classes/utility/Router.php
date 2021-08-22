@@ -2,9 +2,6 @@
 
     namespace App\classes\utility;
 
-    use App\classes\Config;
-    use App\classes\controllers\Error;
-
     class Router
     {
         protected string $uri;

@@ -1,6 +1,6 @@
 <?php
-    use App\classes\Config;
-    use App\classes\utility\ErrorsContainer;
+    use App\classes\utility\Config;
+    use App\classes\utility\containers\ErrorsContainer;
     use App\classes\models\Article;
     /** @var Article $article  */
     /** @var ErrorsContainer $errors  */

@@ -1,5 +1,5 @@
 <?php
-    namespace App\classes;
+    namespace App\classes\utility;
 
     use App\traits\IteratorTrait;
 

@@ -2,7 +2,8 @@
 
     namespace App\classes\utility;
 
-    use App\classes\abstract\AbstractModel;
+    use App\classes\utility\containers\ErrorsContainer;
+    use App\classes\utility\containers\FormsWithData;
 
     class ErrorsInspector
     {

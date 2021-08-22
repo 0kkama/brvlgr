@@ -3,7 +3,7 @@
 //    namespace App\classes\controllers\user;
     namespace App\classes\controllers;
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\controllers\Controller;
 
     class ResendToken extends Controller
     {

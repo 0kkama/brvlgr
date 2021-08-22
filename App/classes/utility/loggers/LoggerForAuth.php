@@ -2,7 +2,7 @@
 
     namespace App\classes\utility\loggers;
 
-    use App\classes\Config;
+    use App\classes\utility\Config;
 
     class LoggerForAuth
     {

@@ -4,7 +4,6 @@
     namespace App\classes\utility;
 
 
-    use App\classes\models\Sessions;
     use App\classes\models\User;
 
     /**

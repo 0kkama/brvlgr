@@ -4,8 +4,8 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\ControllerActing;
-    use App\classes\Config;
+    use App\classes\abstract\controllers\ControllerActing;
+    use App\classes\utility\Config;
     use App\classes\exceptions\FileException;
     use JetBrains\PhpStorm\NoReturn;
 

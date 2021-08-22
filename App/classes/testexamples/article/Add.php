@@ -4,7 +4,7 @@
     namespace App\classes\controllers\article;
 
     use App\classes\controllers\Error;
-    use App\classes\utility\ErrorsContainer;
+    use App\classes\utility\containers\ErrorsContainer;
     use App\classes\controllers\article\Article as Essence;
     use App\classes\models\Article;
 

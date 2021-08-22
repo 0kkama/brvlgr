@@ -1,13 +1,16 @@
 <?php
     namespace App\classes\abstract\controllers;
 
-    use App\classes\abstract\Controller;
+    use App\classes\abstract\controllers\Controller;
     use App\classes\models\User;
-    use App\classes\utility\FormsWithData;
+    use App\classes\utility\containers\FormsWithData;
     use App\classes\utility\Registrator;
     use App\classes\utility\UserErrorsInspector;
-    use App\classes\View;
+    use App\classes\utility\View;
 
+    /**
+     Controller for inheritance to Registration and Login controllers
+     */
     abstract class ControllerEntering extends Controller
     {
         protected string $title;
@@ -19,6 +22,11 @@
         protected static array $errorsList = [];
         protected static string $action = '';
 
+        /**
+         * @param array $params
+         * @param View $templateEngine
+         * @throws \App\classes\exceptions\ExceptionWrapper
+         */
         public function __construct(array $params, View $templateEngine)
         {
             parent::__construct($params, $templateEngine);

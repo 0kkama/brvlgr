@@ -6,9 +6,8 @@
 
     use App\classes\models\Navigation;
     use App\classes\models\User;
-    use App\classes\utility\NavigationBar;
-    use App\classes\View;
-    use JetBrains\PhpStorm\Pure;
+    use App\classes\utility\containers\NavigationBar;
+    use App\classes\utility\View;
 
     abstract class ControllerAbstraction
     {

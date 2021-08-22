@@ -4,10 +4,10 @@
     namespace App\classes\controllers\test;
 
 
-    use App\classes\abstract\ControllerActing;
-    use App\classes\Config;
+    use App\classes\abstract\controllers\ControllerActing;
+    use App\classes\utility\Config;
     use App\classes\models\User;
-    use App\classes\View;
+    use App\classes\utility\View;
     use JetBrains\PhpStorm\Pure;
 
     class Relocator extends ControllerActing
