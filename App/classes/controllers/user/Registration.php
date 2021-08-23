@@ -2,7 +2,7 @@
 
     namespace App\classes\controllers\user;
 
-    use App\classes\abstract\ControllerEntering;
+    use App\classes\abstract\controllers\ControllerEntering;
     use App\classes\models\User;
     use App\classes\utility\Registrator;
     use App\classes\utility\UserErrorsInspector;

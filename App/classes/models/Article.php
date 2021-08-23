@@ -18,13 +18,7 @@
     {
         protected const TABLE_NAME = 'articles';
         protected string $title, $text, $author, $category, $author_id;
-        protected static array $checkList = [];
-        protected static array $errorsList =
-            [
-                'title' => 'Отсутствует заголовок',
-                'text' => 'Отсутствует текст статьи',
-                'category' => 'Не указана категория',
-            ];
+
         //                              TODO убрать трейт?
         use  SetControlTrait;
 

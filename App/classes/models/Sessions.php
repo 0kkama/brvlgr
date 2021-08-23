@@ -36,6 +36,11 @@
             setcookie('token', $this->token, time() + Time::daysFromNow(14), Config::getInstance()->BASE_URL);
         }
 
+        protected function hj()
+        {
+
+        }
+
         /**
          * @throws \App\classes\exceptions\CustomException
          */

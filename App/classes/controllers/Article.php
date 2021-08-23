@@ -34,8 +34,7 @@
         {
             $this->title = 'Добавить публикацию';
             $this->article = new Publication();
-//            $this->checkUser()->prepareData();
-            if($this->checkUser()->prepareData()) {
+            if ($this->checkUser()->prepareData()) {
                 $this->sendDataAndMessage('Пользователь ' . $this->user->getLogin() . ' добавил статью ' . $this->article->getTitle());
             }
             $this->content = $this->page->assign('article', $this->article)->assign('errors', $this->errors)->render('add');
@@ -52,8 +51,8 @@
         {
             $this->title = 'Редактировать статью';
             $this->checkUser()->checkArtID()->getArt()->checkArtExist();
-            if($this->prepareData()) {
-            $this->sendDataAndMessage('Пользователь ' . $this->user->getLogin() . ' обновил статью ' . $this->article->getTitle());
+            if ($this->prepareData()) {
+                $this->sendDataAndMessage('Пользователь ' . $this->user->getLogin() . ' обновил статью ' . $this->article->getTitle());
             }
             $this->content = $this->page->assign('article', $this->article)->assign('errors', $this->errors)->render('add');
         }
