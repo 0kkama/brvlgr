@@ -12,7 +12,7 @@
     use IteratorAggregate;
     use JsonSerializable;
 
-    class AbstractContainer implements ArrayAccess, Countable, JsonSerializable, IteratorAggregate
+    abstract class AbstractContainer implements ArrayAccess, Countable, JsonSerializable, IteratorAggregate
     {
         protected int $key = 0;
 
@@ -21,6 +21,14 @@
         public function getIterator() : ArrayIterator
         {
             return new ArrayIterator($this->data);
+        }
+//        abstract public function add(object $row) : void;
+
+        public function addArray(array $elements) : void
+        {
+            foreach ($elements as $element) {
+                $this->add($element);
+            }
         }
 
 

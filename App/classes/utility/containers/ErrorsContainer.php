@@ -31,15 +31,6 @@
             }
         }
 
-        public function addArray(array $errors) : void
-        {
-            foreach ($errors as $error) {
-                if (!empty($error)) {
-                    $this->data[] = $error;
-                }
-            }
-        }
-
         public function reset() : void {
             $this->data = [];
         }

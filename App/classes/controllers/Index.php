@@ -5,7 +5,8 @@
 
 
     use App\classes\abstract\controllers\Controller;
-    use App\classes\models\Article as News;
+//    use App\classes\models\Article as News;
+    use App\classes\models\ViewArticle as News;
     use Exception;
 
 

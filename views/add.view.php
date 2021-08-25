@@ -1,9 +1,13 @@
 <?php
+
     use App\classes\utility\Config;
+    use App\classes\utility\containers\CategoriesList;
     use App\classes\utility\containers\ErrorsContainer;
-    use App\classes\models\Article;
-    /** @var Article $article  */
+    use App\classes\utility\containers\FormsForArticle;
+
+    /** @var FormsForArticle $forms  */
     /** @var ErrorsContainer $errors  */
+    /** @var CategoriesList $categories  */
 ?>
 <div id="content">
     <?php if($errors->notEmpty()): ?>
@@ -13,18 +17,22 @@
     <?php endif; ?>
 
         <form method="post">
-            Заголовок статьи:<br>
             <div class="form-group">
-                <input type="text" name="title" class="form-control" value="<?=$article->title ?? '' ?>" size="40" placeholder="Title">
+                <label> Заголовок статьи:
+                    <input type="text" name="title" class="form-control" value="<?= $forms->get('title') ?: '' ?>" size="40" placeholder="Title">
+                </label>
             </div>
-            Содержимое статьи:<br>
             <div class="form-group">
-                <textarea name="text" placeholder="Content" cols="57" class="form-control" rows="30"><?=$article->text ?? '' ?></textarea>
+                <label> Содержимое статьи:
+                    <textarea name="text" placeholder="Content" cols="57" class="form-control" rows="30"><?=$forms->get('text') ?: '' ?></textarea>
+                </label>
             </div>
-            Введите категорию статьи: <br>
             <div class="form-group">
-                <input type="text" name="category" class="form-control" value="<?=$article->category  ?? '' ?>" size="40" placeholder="Category">
-
+                <label> Выберите категорию статьи:
+                <select name='category' class="custom-select" size='1'>
+                    <?= $categories($forms->get('category') ?: '') ?>
+                </select>
+                </label>
             </div>
             <button type="submit" class="btn btn-primary">Отправить</button>
         </form>

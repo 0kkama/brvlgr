@@ -4,6 +4,7 @@
 
     use App\classes\models\Sessions;
     use App\classes\models\User;
+    use App\classes\models\UserSessions;
     use App\classes\utility\containers\FormsWithData;
     use App\classes\utility\loggers\LoggerSelector;
 
@@ -11,10 +12,17 @@
     {
         protected array $fields;
         protected FormsWithData $forms;
-        protected UserErrorsInspector $inspector;
+        protected UserInspector $inspector;
         protected User $candidate;
         protected Sessions $sessions;
+        protected UserSessions $userSessions;
         protected array $callback = [];
+
+        public function __construct(User $candidate, FormsWithData $forms)
+        {
+            $this->candidate = $candidate;
+            $this->forms = $forms;
+        }
 
         public static function checkUserAbsent(User $user) : void
         {
@@ -24,24 +32,26 @@
             }
         }
 
-        public function createNewUser(User $candidate, FormsWithData $forms) : void
+        public function createNewUser() : void
         {
-            $this->candidate = $candidate;
-            $this->forms = $forms;
-            $this->candidate->makeHash($this->forms->get('password1'));
-            $this->candidate->save();
-            (new Sessions())->createNewSession($this->candidate, $this->forms->get('checkbox'));
+            $this->candidate->makeHash($this->forms->get('password1'))->save();
+            $this->writeSession();
             LoggerSelector::authentication('Зарегистрирован пользователь ' . $this->candidate->getLogin());
             header('Location: '. Config::getInstance()->BASE_URL);
         }
 
-        public function loginUser(User $candidate, FormsWithData $forms) : void
+        public function loginUser() : void
         {
-            $this->candidate = $candidate;
-            $this->forms = $forms;
             $this->candidate = User::findOneBy('login', $this->forms->get('login'));
-            (new Sessions())->createNewSession($this->candidate, $this->forms->get('checkbox'));
+            $this->writeSession();
             LoggerSelector::authentication('Пользователь ' . $this->candidate->getLogin() . ' вошёл в систему');
+            header('Location: '. Config::getInstance()->BASE_URL);
+        }
+
+        protected function writeSession() : void
+        {
+            ($this->sessions = new Sessions())->createNewSession($this->forms->get('checkbox'));
+            ($this->userSessions = new UserSessions())->setUserId($this->candidate->getId())->setSessId($this->sessions->getId())->save();
         }
 
     }

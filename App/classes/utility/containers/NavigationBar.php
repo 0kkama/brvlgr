@@ -11,15 +11,6 @@
             $this->data[] = $row;
         }
 
-        public function addArray(array $rows) : void
-        {
-            foreach ($rows as $row) {
-                if (!empty($row)) {
-                    $this->data[] = $row;
-                }
-            }
-        }
-
         public function __invoke($place) : string
         {
             $string = '';

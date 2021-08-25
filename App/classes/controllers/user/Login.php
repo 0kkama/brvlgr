@@ -9,7 +9,7 @@
     use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\containers\FormsWithData;
     use App\classes\utility\Registrator;
-    use App\classes\utility\UserErrorsInspector;
+    use App\classes\utility\UserInspector;
 
     class Login extends ControllerEntering
     {
@@ -18,13 +18,14 @@
         protected User $candidate;
         protected FormsWithData $forms;
         protected Registrator $registrator;
-        protected UserErrorsInspector $inspector;
+        protected UserInspector $inspector;
         protected static string $action = 'loginUser';
         protected static array $checkList = ['checkEnter'];
-        protected static array $errorsList = [
-            'login'    => 'Введите логин',
-            'password' => 'Введите пароль',
-        ];
+        protected static array $errorsList =
+            [
+                'login'    => 'Введите логин',
+                'password' => 'Введите пароль',
+            ];
 
         protected function entering() : void
         {

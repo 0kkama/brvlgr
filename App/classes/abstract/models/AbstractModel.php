@@ -61,7 +61,6 @@
         {
             $db = Db::getInstance();
             $sql = 'SELECT * FROM ' . static::TABLE_NAME;
-//            $sql = 'SELECT * FROM ' . 'zorba';
             return $db->queryAll($sql, [], static::class);
         }
 
@@ -71,7 +70,6 @@
          */
         public static function getTotalQuantity()
         {
-//            $db = new Db();
             $db = Db::getInstance();
             $sql = 'SELECT COUNT(*) AS ' . static::TABLE_NAME . ' FROM ' . static::TABLE_NAME;
             return $db->queryAll($sql, [], static::class, PDO::FETCH_ASSOC);
@@ -94,7 +92,6 @@
             $db->execute($sql, $this->meta['data']);
             $this->id = $db->getLastId();
             unset($this->meta);
-//            return $this;
             return true;
         }
 
@@ -104,7 +101,6 @@
          */
         private function update() : bool
         {
-            //   TODO Как реализовать обновление только того поля, которое было изменено?
             $set = [];
             foreach ($this->meta['cols'] as $index => $value) {
                 $set[] = "$index = $value";
@@ -115,7 +111,6 @@
             // шаблон подобный UPDATE news SET title = :title, text = :text, author = :author WHERE id = :id
             $sql = "UPDATE {$this->meta['table']} SET $set WHERE id = :id";
 
-//            $db = new Db();
             $db = Db::getInstance();
             $db->execute($sql, $this->meta['data']);
             unset($this->meta);
@@ -168,7 +163,6 @@
         private function makeSql() : void
         {
             // удаляем значения id, date итд не являющиеся строками и генерируемые БД автоматически или выполняющие служебные цели
-//            $fields = array_filter(get_object_vars($this), static function ($var) { return is_string($var); });
             $fields = $this->getFormFields();
             $this->meta['cols'] = $this->meta['data'] = [];
 
@@ -222,10 +216,6 @@
             }));
         }
 
-        public function getMetaData() : array
-        {
-            return $this->meta['data'];
-        }
         //</editor-fold>
 
         abstract public function exist() : bool;

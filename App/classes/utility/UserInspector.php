@@ -9,7 +9,7 @@
     /**
      * Extend for inspection model/User class
      */
-    class UserErrorsInspector extends ErrorsInspector
+    class UserInspector extends ErrorsInspector
     {
         protected static array $regexp =
             [

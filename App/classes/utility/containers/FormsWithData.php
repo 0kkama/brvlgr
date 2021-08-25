@@ -7,6 +7,11 @@
     class FormsWithData extends AbstractContainer
     {
 
+        public function add(string $row) : void
+        {
+            $this->data[] = $row;
+        }
+
         public function extractPostForms(array $keys, array $data, $validation = false) : self
         {
             $result = [];

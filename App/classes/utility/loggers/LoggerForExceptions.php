@@ -6,6 +6,7 @@
 
     use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper as Wrapper;
+    use App\classes\utility\EmailSender;
     use App\interfaces\CanSendMessageInterface;
     use Exception;
 
@@ -19,7 +20,7 @@
         protected string $date, $time, $logFile, $logMessage;
         protected Exception $ex;
         protected CanSendMessageInterface $sender;
-        protected static string $path = __DIR__ . '/../../../logs/errors/';
+        protected static string $path = __DIR__ . '/../../../../logs/errors/';
 
         public function __construct(Exception $ex, CanSendMessageInterface $sender)
         {
@@ -44,7 +45,7 @@
                 error_log("$this->logMessage\n", 3, $this->logFile);
         }
 
-//        TODO доделать!
+//        TODO доделать работу метода ifIsCritical!
         public function ifIsCritical() : void
         {
             if ($this->ex->isCritical()) {

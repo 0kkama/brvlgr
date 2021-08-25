@@ -2,22 +2,20 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\models\Model;
-    use App\classes\utility\Db;
     use App\classes\abstract\exceptions\CustomException;
+    use App\classes\abstract\models\Model;
     use App\classes\exceptions\MagickException;
     use App\classes\utility\containers\ErrorsContainer;
-    use App\interfaces\HasAuthorInterface;
+    use App\classes\utility\Db;
     use App\interfaces\HasTableInterface;
     use App\interfaces\HasTitleInterface;
-    use App\interfaces\PaginatedInterface;
     use App\traits\SetControlTrait;
     use Exception;
 
-    class Article extends Model implements HasAuthorInterface, HasTitleInterface, PaginatedInterface, HasTableInterface
+    class Article extends Model implements HasTitleInterface, HasTableInterface
     {
         protected const TABLE_NAME = 'articles';
-        protected string $title, $text, $author, $category, $author_id;
+        protected string $title, $text;
 
         //                              TODO убрать трейт?
         use  SetControlTrait;
@@ -40,7 +38,7 @@
 
         public function __toString() : string
         {
-            return $this->date .'<br>'. 'Автор: ' . $this->author . '<br>' .' Категория: ' . $this->category;
+            return $this->date .'<br>';
         }
 
         /**
@@ -76,17 +74,12 @@
             return $this;
         }
 
-        public function setCategory(string $category) : Article
+        public function setTags(string $tags) : Article
         {
-            $this->category = $category;
+            $this->tags = $tags;
             return $this;
         }
 
-        public function setAuthor(string $author) : Article
-        {
-            $this->author = $author;
-            return $this;
-        }
         /**
          * @param string $author_id
          */
@@ -121,11 +114,6 @@
         public function getErrorsContainer() : ErrorsContainer
         {
             return $this->errors;
-        }
-
-        public function getAuthor() : User
-        {
-            return User::findOneBy(type: 'id', subject: $this->author_id);
         }
 
         public function getTitle() : string

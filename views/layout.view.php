@@ -1,6 +1,6 @@
 <?php
 /** @var  App\classes\models\User $user */
-/** @var  App\classes\utility\NavigationBar $menu */
+/** @var  App\classes\utility\containers\NavigationBar $menu */
 ?>
 <!DOCTYPE html>
 <html lang="ru">

@@ -5,7 +5,7 @@
 
 
     use App\classes\abstract\controllers\Controller;
-    use App\classes\models\Article;
+    use App\classes\models\ViewArticle;
     use App\classes\utility\View;
 
     class Articles extends Controller
@@ -16,7 +16,7 @@
         {
             parent::__construct($params, $templateEngine);
             $this->title = 'Статьи';
-            $this->articles = Article::getLast(0);
+            $this->articles = ViewArticle::getLast(0);
             $this->content = $this->page->assign('news', $this->articles)->render('index');
         }
     }

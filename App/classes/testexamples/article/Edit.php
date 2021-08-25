@@ -23,7 +23,7 @@
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fields = extractFields(array_keys($_POST),$_POST);
-                $this->article->setTitle($fields['title'])->setText($fields['text'])->setCategory($fields['category']);
+                $this->article->setTitle($fields['title'])->setText($fields['text'])->setTags($fields['category']);
 //                $this->errors = $this->article->save()->errors;
                 $this->errors = $this->article->save()->getErrorsContainer();
 

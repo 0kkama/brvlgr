@@ -5,7 +5,7 @@
     use App\classes\abstract\controllers\ControllerEntering;
     use App\classes\models\User;
     use App\classes\utility\Registrator;
-    use App\classes\utility\UserErrorsInspector;
+    use App\classes\utility\UserInspector;
 
 
     class Registration extends ControllerEntering
@@ -14,7 +14,7 @@
         protected string $title = 'Регистрация';
         protected User $candidate;
         protected Registrator $registrator;
-        protected UserErrorsInspector $inspector;
+        protected UserInspector $inspector;
         protected static string $action = 'createNewUser';
         protected static array $checkList = ['checkEmail', 'checkLogin', 'checkPasswords'];
         protected static array $errorsList =

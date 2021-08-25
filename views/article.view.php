@@ -1,10 +1,11 @@
-<?php    /** @var App\classes\models\Article $article  */
-        /** @var App\classes\models\User $author */
+<?php
+    /** @var App\classes\models\User $author */
+    /** @var App\classes\models\ViewArticle $article */
 ?>
 <main>
     <div id="content">
        <article class="article-preview">
-            <h1><?= $article->title ?></h1>
+            <h1><?= $article->getTitle() ?></h1>
             <blockquote><i> <?= $article ?></i></blockquote>
             <br>
             <?= $article->getFormattedContent() ?>
