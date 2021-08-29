@@ -8,7 +8,7 @@
     use App\classes\controllers\Error;
     use App\classes\abstract\exceptions\CustomException;
     use App\classes\exceptions\ExceptionWrapper as MyExWrapper;
-    use App\classes\utility\LoggerForExceptions;
+    use App\classes\utility\loggers\LoggerForExceptions;
     use App\classes\utility\Router;
     use App\classes\utility\EmailSender;
     use App\classes\utility\View;
@@ -28,7 +28,7 @@
         }
     });
 
-    set_error_handler('App\classes\utility\LittleLogger::errorCatcher', E_ALL);
+    set_error_handler('App\classes\utility\loggers\LittleLogger::errorCatcher', E_ALL);
     // set config instance
     Config::getInstance()->setInstance(include (__DIR__ . '/../config/config.php'));
 
@@ -39,17 +39,16 @@
     //    /var/lib/php/sessions
     session_start();
 
-
-    $uri = val($_SERVER['REQUEST_URI']);
-    $params = (new Router($uri))();
-
-    $cntrl = ucfirst($params['controller']);
+    $cntrl = 'Admin';
     $className = "App\classes\controllers\\$cntrl";
+    $params = (new Router(val($_GET['request'])))();
 
     if (!class_exists($className)) {
         trigger_error("Контроллер несуществующего класса $className в " . __FILE__ . __LINE__ );
         Error::deadEnd(400);
     }
+
+//    var_dump($className, $params);
 
     try {
         // запуск контроллера с параметрами
@@ -67,3 +66,5 @@
 
     //    вывод данных о ресурсах
     echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
+
+

@@ -63,6 +63,11 @@
             return (!empty($this->id) && ((int) $this->rights >= 1));
         }
 
+        public function hasAdminRights() : bool
+        {
+            return (!empty($this->id) && ((int) $this->rights === 10));
+        }
+
         public function __toString() : string
         {
             return "$this->login <br> $this->email <br> $this->date";

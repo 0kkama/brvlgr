@@ -13,8 +13,8 @@
 
         public function __invoke()
         {
-            $this->action($this->params['action']);
+            $this->action();
         }
 
-        abstract public function action(string $action) : void;
+        abstract public function action() : void;
     }

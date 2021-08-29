@@ -25,7 +25,6 @@
         {
             $this->checkFormFields();
 
-//            if (!empty($callback) && $this->container->isEmpty()) {
             if (!empty($callback)) {
                 $this->additionalVerification($callback);
             }
@@ -34,15 +33,6 @@
 
         private function checkFormFields() : self
         {
-//            $data = $this->object->getFormFields();
-//            $messages = $this->object->getErrorsList();
-//            $data = $this->object->getFormFields();
-
-            //            foreach ($data as $index => $datum) {
-            //                if (empty($datum)) {
-            //                    $this->container[] = $messages[$index];
-            //                }
-            //            }
             $messages = $this->errorsList;
 
             foreach ($this->forms as $index => $datum) {

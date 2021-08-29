@@ -12,7 +12,7 @@
             $this->data[] = $row;
         }
 
-        public function extractPostForms(array $keys, array $data, $validation = false) : self
+        public function extractPostForms(array $keys, array $data) : self
         {
             $result = [];
             foreach ($keys as $key) {

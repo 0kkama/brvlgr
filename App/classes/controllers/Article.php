@@ -47,7 +47,7 @@
         protected function create() : void
         {
             $this->title = 'Добавить публикацию';
-            ($this->categories = new CategoriesList())->addArray(Categories::getAll());
+            ($this->categories = new CategoriesList())->addArray(Categories::getAllBy('status','1'));
             if ($this->prepareData() && $this->errors->isEmpty()) {
                 $this->representation->createArticle($this->forms, $this->user);
             }
@@ -64,7 +64,7 @@
         protected function update() : void
         {
             $this->title = 'Редактировать статью';
-            ($this->categories = new CategoriesList())->addArray(Categories::getAll());
+            ($this->categories = new CategoriesList())->addArray(Categories::getAllBy('status','1'));
             $this->viewArticle = $this->representation->readArticle($this->getId());
             ($this->forms = new FormsForArticle())->extractViewArticle($this->viewArticle);
             if ($this->prepareData() && $this->errors->isEmpty()) {

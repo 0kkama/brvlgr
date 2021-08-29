@@ -64,6 +64,16 @@
             return $db->queryAll($sql, [], static::class);
         }
 
+        public static function getAllBy(string $type = null, string $subject = null) : array
+        {
+            $paramsArr = (isset($type, $subject)) ? [$type => $subject]  : [];
+            $where = ($paramsArr === []) ? '' : " WHERE $type = :$type";
+
+            $db = Db::getInstance();
+            $sql = 'SELECT * FROM ' . static::TABLE_NAME . $where;
+            return $db->queryAll($sql, $paramsArr, static::class);
+        }
+
         /**
          * @throws DbException|CustomException
          * @throws ExceptionWrapper

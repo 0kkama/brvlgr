@@ -9,9 +9,9 @@
     class User extends ControllerSelector
     {
 
-        public function action(string $action) : void
+        public function action() : void
         {
-            $class = ucfirst($action);
+            $class = ucfirst($this->params['action']);
             $controller = 'App\classes\controllers\user\\' . $class;
             if (class_exists($controller)) {
                 (new $controller([], new View))();

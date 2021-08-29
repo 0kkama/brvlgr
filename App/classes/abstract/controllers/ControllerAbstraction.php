@@ -32,9 +32,10 @@
         public function __invoke()
         {
             $this->page->assignArray([
-                'title' => $this->title, 'menu' => $this->menu, 'content' => $this->content,'user' => $this->user,]
+                'title' => $this->title, 'menu' => $this->menu,
+                'content' => $this->content,'user' => $this->user,]
             )->display('layout');
-//            assign('title', $this->title)->assign('content', $this->content)->assign('user', $this->user)->display('layout');
+
         }
 
         /**
