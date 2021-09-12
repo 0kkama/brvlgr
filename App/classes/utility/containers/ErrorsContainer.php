@@ -40,6 +40,19 @@
             return $this->data;
         }
 
+        public function get(string $key) : string
+        {
+            return $this->data[$key] ?? '';
+        }
+
+        public function set($key, $value) : self
+        {
+            if (!empty($key) && !empty($value)) {
+                $this->data[$key] = $value;
+            }
+            return $this;
+        }
+
         #[Pure] public function getFirst() : string {
             if ($this->count() !== 0) {
                 return $this->data[0];

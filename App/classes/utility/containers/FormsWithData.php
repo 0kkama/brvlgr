@@ -56,6 +56,14 @@
             return $this->data[$key] ?? '';
         }
 
+        public function set($key, $value) : self
+        {
+            if (isset($key, $value)) {
+                $this->data[$key] = $value;
+            }
+            return $this;
+        }
+
 //        public function serialize() : ?string
 //        {
 //            return serialize($this->data);

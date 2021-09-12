@@ -19,4 +19,9 @@
             }
             return $string;
         }
+
+        public function __toString() : string
+        {
+            return '<ul>' . implode('', $this->data) . '</ul>';
+        }
     }

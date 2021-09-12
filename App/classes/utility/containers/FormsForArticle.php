@@ -8,7 +8,7 @@
     {
         protected array $fields = ['id', 'login', 'user_id', 'title', 'text', 'category', 'date'];
 
-        public function  extractViewArticle(ViewArticle $viewArticle)
+        public function  extractViewArticle(ViewArticle $viewArticle): void
         {
             $reuslt = [];
             foreach ($this->fields as $index => $field) {

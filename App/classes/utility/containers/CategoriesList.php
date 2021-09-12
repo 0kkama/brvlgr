@@ -14,7 +14,7 @@
 
         public function __toString() : string
         {
-            return implode('', $this->data);
+            return '<ul>' . implode('', $this->data) . '</ul>';
         }
 
         public function __invoke(string $cat_mark) : string
