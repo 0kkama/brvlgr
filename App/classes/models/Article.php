@@ -7,15 +7,14 @@
     use App\classes\exceptions\MagickException;
     use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\Db;
-    use App\interfaces\HasTableInterface;
     use App\interfaces\HasTitleInterface;
     use App\traits\SetControlTrait;
     use Exception;
 
-    class Article extends Model implements HasTitleInterface, HasTableInterface
+    class Article extends Model implements HasTitleInterface
     {
         protected const TABLE_NAME = 'articles';
-        protected string $title, $text;
+        protected string $title, $text, $moder;
 
         //                              TODO убрать трейт?
         use  SetControlTrait;
@@ -74,19 +73,31 @@
             return $this;
         }
 
-        public function setTags(string $tags) : Article
+        public function setStatus(int $moder) : self
         {
-            $this->tags = $tags;
+            $result = match($moder) {
+                1 => '1',
+                2 => '2',
+                default => '0',
+            };
+
+            $this->moder = $result;
             return $this;
         }
+
+//        public function setTags(string $tags) : Article
+//        {
+//            $this->tags = $tags;
+//            return $this;
+//        }
 
         /**
          * @param string $author_id
          */
-        public function setAuthorId(string $author_id) : void
-        {
-            $this->author_id = $author_id;
-        }
+//        public function setAuthorId(string $author_id) : void
+//        {
+//            $this->author_id = $author_id;
+//        }
         //</editor-fold>
 
         //<editor-fold desc="getters======================">
@@ -111,10 +122,10 @@
         /**
          * @return ErrorsContainer
          */
-        public function getErrorsContainer() : ErrorsContainer
-        {
-            return $this->errors;
-        }
+//        public function getErrorsContainer() : ErrorsContainer
+//        {
+//            return $this->errors;
+//        }
 
         public function getTitle() : string
         {

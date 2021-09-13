@@ -28,70 +28,6 @@
             return $db->queryAll($sql, [], self::class);
         }
 
-        /**
-         * @return string
-         */
-        public function getTitle(): string
-        {
-            return $this->title;
-        }
-
-        /**
-         * @return string
-         */
-        public function getLogin(): string
-        {
-            return $this->login;
-        }
-
-        /**
-         * @return string
-         */
-        public function getText(): string
-        {
-            return $this->text;
-        }
-
-        /**
-         * @return string
-         */
-        public function getCategory(): string
-        {
-            return $this->category;
-        }
-
-        /**
-         * @return string
-         */
-        public function getCatId(): string
-        {
-            return $this->cat_id;
-        }
-
-        /**
-         * @return string
-         */
-        public function getId(): string
-        {
-            return $this->id;
-        }
-
-        /**
-         * @return string
-         */
-        public function getDate(): string
-        {
-            return $this->date;
-        }
-
-        /**
-         * @return string
-         */
-        public function getUserId(): string
-        {
-            return $this->user_id;
-        }
-
         public function  getFormattedContent() : string
         {
             $string = $this->text;
@@ -113,5 +49,80 @@
         public function __toString() : string
         {
             return 'Дата: ' . $this->date . '<br>' . 'Автор: ' . $this->login . '<br>' . 'Категория: '. $this->category . '<br>';
+        }
+
+        //<editor-fold desc="Getters">
+        /**
+         * @return string
+         */
+        public function getId(): string
+        {
+            return $this->id;
+        }
+
+        /**
+         * @return string
+         */
+        public function getLogin(): string
+        {
+            return $this->login;
+        }
+
+        /**
+         * @return string
+         */
+        public function getUserId(): string
+        {
+            return $this->user_id;
+        }
+
+        /**
+         * @return string
+         */
+        public function getTitle(): string
+        {
+            return $this->title;
+        }
+
+        /**
+         * @return string
+         */
+        public function getText(): string
+        {
+            return $this->text;
+        }
+
+         /**
+         * @return string
+         */
+        public function getCategory(): string
+        {
+            return $this->category;
+        }
+
+        /**
+         * @return string
+         */
+        public function getCatId(): string
+        {
+            return $this->cat_id;
+        }
+
+        /**
+         * @return string
+         */
+        public function getDate(): string
+        {
+            return $this->date;
+        }
+
+        /**
+         * @param string $date
+         * @return ViewArticle
+         */
+        //</editor-fold>
+        public static function getTableName(): string
+        {
+            // TODO: Implement getTableName() method.
         }
     }

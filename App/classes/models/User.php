@@ -38,6 +38,7 @@
 
         public static function checkPassword(string $login, string $password) : User
         {
+//            todo here is a problem
             $user = self::findOneBy('login', $login);
             if ($user->exist() && password_verify(password: $password, hash: $user->getHash())) {
                 return $user;
@@ -83,19 +84,20 @@
         }
 
         /**
-         * @return string|null
+         * @return int
          */
-        public function getHash() : ?string
+        public function getRights() : int
         {
-            return $this->hash;
+            return (int) $this->rights;
         }
 
         /**
          * @return string|null
          */
-        public function getRights() : ?string
+        public function getHash() : ?string
         {
-            return $this->rights;
+            return $this->hash;
+//            todo delete this method and make hash more private
         }
 
         /**
@@ -126,6 +128,15 @@
         {
             return $this->lastName;
         }
+
+        /**
+         * @return string|null
+         */
+        public function getDate(): ?string
+        {
+            return $this->date;
+        }
+
 
         /**
          * @return string|null

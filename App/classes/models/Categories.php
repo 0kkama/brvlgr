@@ -13,7 +13,7 @@
 
         public function __toString() : string
         {
-            return '<option value=' . (string) $this->id . '>' . $this->title . '</option>';
+            return "<li><a href=/categories/{$this->getUrl()}>{$this->getTitle()}</a></li>";
         }
 
         public function __invoke(string $cat_mark) : string
@@ -21,12 +21,12 @@
             if ($this->title === $cat_mark || $cat_mark === $this->id) {
                 return '<option value=' . "$this->id selected>"  . $this->title . '</option>';
             }
-            return (string) $this;
+            return '<option value=' . $this->id . '>' . $this->title . '</option>';
         }
 
         public function exist() : bool
         {
-            return (!empty($this->id) && !empty($this->title));
+            return (!empty($this->id) && !empty($this->date));
         }
 
         public function setUrl(string $url) : self
@@ -49,13 +49,6 @@
 //                throw new exception
             }
             return  $this;
-        }
-        public static function getAllCondition() : array
-        {
-
-            $db = Db::getInstance();
-            $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE status = :status';
-            return $db->queryAll($sql, ['status' => 1], static::class);
         }
 
         /**
@@ -88,12 +81,5 @@
         public function getDate() : ?string
         {
             return $this->date;
-        }
-
-        public static function getAllPart($what = 'id') : array
-        {
-            $db = Db::getInstance();
-            $sql = 'SELECT '. $what .' FROM ' . static::TABLE_NAME;
-            return $db->queryAll($sql, [], static::class);
         }
     }

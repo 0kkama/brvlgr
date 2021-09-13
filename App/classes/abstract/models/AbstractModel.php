@@ -8,7 +8,9 @@
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\containers\FormsWithData;
+    use App\interfaces\ExistenceInterface;
     use App\interfaces\HasIdInterface;
+    use App\interfaces\HasTableInterface;
     use Exception;
     use PDO;
 
@@ -23,7 +25,7 @@
      * - <b>makeSQL</b> - service function for creating and preparing SQL query
      * @package App\classes
      */
-    abstract class AbstractModel implements HasIdInterface
+    abstract class AbstractModel implements HasIdInterface, HasTableInterface, ExistenceInterface
     {
     /**
      *@const const TABLE_NAME dynamically changing in inheriting classes
@@ -45,7 +47,19 @@
         {
             try {
                 $db = Db::getInstance();
-                $sql = 'SELECT * FROM ' . static::TABLE_NAME . ' WHERE ' . $type.' = :'.$type;
+                $sql = 'SELECT * FROM ' . static::TABLE_NAME . " WHERE `{$type}` = :{$type}";
+                $result = $db->queryOne($sql, [$type => $subject], static::class);
+            } catch (Exception $e) {
+                (new DbException($e->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->setParam("Ошибка при запросе: `$sql`")->throwIt();
+            }
+            return $result ?? new static;
+        }
+
+        public static function findOneByExcept(string $type, string $subject, string $exType, )
+        {
+            try {
+                $db = Db::getInstance();
+                $sql = 'SELECT * FROM ' . static::TABLE_NAME . " WHERE `{$type}` = :{$type} AND `id` != :id";
                 $result = $db->queryOne($sql, [$type => $subject], static::class);
             } catch (Exception $e) {
                 (new DbException($e->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->setParam("Ошибка при запросе: `$sql`")->throwIt();
@@ -64,14 +78,25 @@
             return $db->queryAll($sql, [], static::class);
         }
 
-        public static function getAllBy(string $type = null, string $subject = null) : array
+        public static function getAllBy(string $type = null, string $subject = null, string $sort = null) : array
         {
             $paramsArr = (isset($type, $subject)) ? [$type => $subject]  : [];
-            $where = ($paramsArr === []) ? '' : " WHERE $type = :$type";
-
+            $where = ($paramsArr === []) ? '' : " WHERE `$type` = :$type";
+            $order = $sort ? ("ORDER BY `$sort`") : '';
             $db = Db::getInstance();
-            $sql = 'SELECT * FROM ' . static::TABLE_NAME . $where;
+            $sql = 'SELECT * FROM ' . static::TABLE_NAME . $where . $order;
             return $db->queryAll($sql, $paramsArr, static::class);
+        }
+
+        public static function getAllInBy(string $type, array $params, string $sort = null) : array
+        {
+            $paramsArr = [$type => $params];
+            $in  = str_repeat('?,', count($params) - 1) . '?';
+            $order = $sort ? ("ORDER BY `$sort`") : '';
+            $where = ($paramsArr === []) ? '' : " WHERE `$type` IN ( $in ) " ;
+            $db = Db::getInstance();
+            $sql = 'SELECT * FROM ' . static::TABLE_NAME . $where . $order;
+            return $db->queryAll($sql, $params, static::class);
         }
 
         /**
@@ -117,6 +142,7 @@
             }
 
             $this->meta['data'][":id"] = $this->id;
+
             $set = implode($this->meta['separator'], $set);
             // шаблон подобный UPDATE news SET title = :title, text = :text, author = :author WHERE id = :id
             $sql = "UPDATE {$this->meta['table']} SET $set WHERE id = :id";
@@ -177,7 +203,7 @@
             $this->meta['cols'] = $this->meta['data'] = [];
 
             foreach ($fields as $index => $value) {
-                $this->meta['cols'][$index] = ":$index"; // массив вида 'index' => ':index'
+                $this->meta['cols']["`$index`"] = ":$index"; // массив вида 'index' => ':index'
                 $this->meta['data'][":$index"] = $value; // данные для внедрения вида ':user' => 'Ahmed'
             }
 
@@ -210,6 +236,11 @@
         public function getId() : null|string
         {
             return $this->id;
+        }
+
+        public function get(string $key) : string
+        {
+            return $this->$key ?? '';
         }
 
         public function getFormFields() : array
