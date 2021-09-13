@@ -1,9 +1,8 @@
-<?php /** @var App\classes\utility\ErrorsContainer $errors */ ?>
-<?php /** @var App\classes\models\User $candidate */ ?>
+<?php /** @var App\classes\utility\containers\ErrorsContainer $errors */ ?>
 <form method="post">
     <div class="form-group">
         <label for="auth-login">Логин</label>
-        <input type="text" class="form-control" id="auth-login" name="login" value="<?=$candidate->getLogin() ?? ''?>">
+        <input type="text" class="form-control" id="auth-login" name="login" value="">
     </div>
     <div class="form-group">
         <label for="auth-password">Пароль</label>

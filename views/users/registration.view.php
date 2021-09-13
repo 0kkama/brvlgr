@@ -1,7 +1,7 @@
 <?php
- /** @var $candidate \App\classes\models\User
-  * @var $errors \App\classes\utility\ErrorsContainer
-  */
+    /** @var $candidate \App\classes\models\User */
+    /** @var $forms \App\classes\utility\containers\FormsWithData */
+    /** @var $errors \App\classes\utility\containers\ErrorsContainer */
  ?>
 <div class="registration-forms">
 <form method="post">
@@ -13,19 +13,19 @@
     <?php endif; ?>
     <div class="form-group">
         <label for="auth-name">Имя</label>
-        <input type="text" class="form-control" id="auth-name" name="firstName" value="<?=$candidate->getFirstName() ?? ''?>">
+        <input type="text" class="form-control" id="auth-name" name="firstName" value="<?=$forms->get('firstName') ?? ''?>">
     </div>
     <div class="form-group">
         <label for="auth-surname">Отчество</label>
-        <input type="text" class="form-control" id="auth-surname" name="middleName" value="<?=$candidate->getMiddleName() ?? ''?>">
+        <input type="text" class="form-control" id="auth-surname" name="middleName" value="<?=$forms->get('middleName') ?? ''?>">
     </div>
     <div class="form-group">
         <label for="auth-lastname">Фамилия</label>
-        <input type="text" class="form-control" id="auth-lastname" name="lastName" value="<?=$candidate->getLastName() ?? ''?>">
+        <input type="text" class="form-control" id="auth-lastname" name="lastName" value="<?=$forms->get('lastName') ?? ''?>">
     </div>
     <div class="form-group">
         <label for="auth-login">Логин</label>
-        <input type="text" class="form-control" id="auth-login" name="login" value="<?=$candidate->getLogin() ?? ''?>" placeholder="От 3 до 20 и может содержать цифры, буквы и символы _%+-!&()">
+        <input type="text" class="form-control" id="auth-login" name="login" value="<?=$forms->get('login') ?? ''?>" placeholder="От 3 до 20 и может содержать цифры, буквы и символы _%+-!&()">
     </div>
     <div class="form-group">
         <label for="auth-password">Пароль</label>
@@ -37,7 +37,7 @@
     </div>
     <div class="form-group">
         <label for="auth-email">Email</label>
-        <input type="text" class="form-control" id="auth-email" name="email" value="<?=$candidate->getEmail() ?? ''?>">
+        <input type="text" class="form-control" id="auth-email" name="email" value="<?=$forms->get('email') ?? ''?>">
     </div>
     <div class="form-check">
         <input class="form-check-input" type="checkbox" id="login-remember" name="remember">

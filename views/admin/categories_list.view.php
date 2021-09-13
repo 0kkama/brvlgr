@@ -11,7 +11,6 @@
         <th>ID</th>
         <th>Title</th>
         <th>URL</th>
-        <th>Date</th>
         <th>Status</th>
         <th>Edit</th>
         <th>Hide</th>
@@ -23,7 +22,6 @@
             <td><?=$category->getId()?></td>
             <td><?=$category->getTitle()?></td>
             <td><?=$category->getUrl()?></td>
-            <td><?=$category->getDate()?></td>
             <td><?=$category->getStatus()?></td>
             <td><a href="/overseer/categories/edit/<?=$category->getId()?>">Edit</a></td>
             <td><a href="/overseer/categories/hide/<?=$category->getId()?>">Hide</a></td>
