@@ -4,20 +4,19 @@
     namespace App\classes\controllers;
 
 
-    use App\classes\abstract\controllers\ControllerAbstraction;
-    use App\classes\utility\Config;
+    use App\classes\abstract\controllers\Controller;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\models\User;
+    use App\classes\utility\Config;
     use App\classes\utility\EmailSender;
-    use App\classes\utility\LoggerForExceptions;
-    use App\classes\utility\View;
     use App\classes\utility\loggers\LoggerSelector;
+    use App\classes\utility\View;
     use JetBrains\PhpStorm\NoReturn;
 
     /**
      * Relocate user to respective blind plug by HTTP error code with short message about situation
     */
-    class Error extends ControllerAbstraction
+    class Error extends Controller
     {
         /**
          * @var string|mixed

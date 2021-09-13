@@ -8,17 +8,16 @@
     use App\classes\utility\containers\CategoriesList;
     use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\containers\FormsWithData;
-    use App\classes\utility\ErrorsInspector;
+    use App\classes\utility\inspectors\CategoriesInspector;
     use App\classes\utility\loggers\LoggerSelector;
+    use App\interfaces\InspectorInterface;
 
     class Categories extends Controller
     {
-        private CategoriesList $categories;
-        private CatModel $category;
-        protected ErrorsContainer $errors;
-        protected array $errorsList = [
-            'title' => 'Введите название категории',
-            'url' => 'Введите URL'];
+        protected CategoriesList $categories;
+        protected CatModel $category;
+        protected InspectorInterface $inspector;
+        protected static array $fields = ['title', 'url'];
 
         public function __invoke()
         {
@@ -33,39 +32,39 @@
             parent::__invoke();
         }
 
-        public function show()
+        public function show() : void
         {
             $this->title = 'Список категорий';
             ($this->categories = new CategoriesList())->addArray(CatModel::getAll());
-            $this->category = new CatModel();
-            $this->sendData('добавил');
-//            $this->add();
-            $this->content = $this->page->assign('categories', $this->categories)->assign('errors', $this->errors)->assign('cat', $this->category)->render('categories_list');
+            $this->add();
+            $this->content = $this->page->assign('categories', $this->categories)->assign('errors', $this->errors)->assign('cat', $this->category)->render('admin/categories_list');
         }
 
-        public function add()
+        public function add() : void
         {
             $this->category = new CatModel();
+            ($this->inspector = new CategoriesInspector())->setModel($this->category);
             $this->sendData('добавил');
-//            $this->content = $this->page->assign('categories', $this->categories)->assign('errors', $this->errors)->assign('cat', $this->category)->render('categories_list');
         }
 
         public function edit() : void
         {
             $this->title = 'Изменить категорию';
             $this->category = CatModel::findOneBy('id', $this->id);
+//            ($this->inspector = new CategoriesInspector())->setModel($this->category)->setObjectId($this->id);
+            ($this->inspector = new CategoriesInspector())->setModel($this->category);
             if ($this->category->exist()) {
                 $this->sendData('изменил');
             }
-            $this->content = $this->page->assign('cat', $this->category)->assign('errors', $this->errors)->render('category_edit');
+            $this->content = $this->page->assign('cat', $this->category)->assign('errors', $this->errors)->render('admin/category_edit');
         }
 
-        public function hide()
+        public function hide() : void
         {
             $this->modifyCategory(0, 'скрыл');
         }
 
-        public function regain()
+        public function regain() : void
         {
             $this->modifyCategory(1, 'открыл');
         }
@@ -80,23 +79,20 @@
             }
         }
 
-        public function delete(string $id) : void
+        public function delete() : void
         {
-            $this->category = CatModel::findOneBy('id', $id);
-            if ($this->category->exist()) {
-                if ($this->category->delete()) {
-                    $this->writeAndGo('удалил');
-                }
+            $this->category = CatModel::findOneBy('id', $this->id);
+            if ($this->category->exist() && $this->category->delete()) {
+                $this->writeAndGo('удалил');
             }
         }
 
         protected function sendData(string $action) : void
         {
             if ('POST' === $_SERVER['REQUEST_METHOD']) {
-                $fields = array_keys($this->errorsList);
+                $fields = self::$fields;
                 ($forms = new FormsWithData())->extractPostForms($fields, $_POST)->validateForms();
-                $this->errors = new ErrorsContainer();
-                (new ErrorsInspector($forms, $this->errors, $this->errorsList))->conductInspection();
+                $this->inspector->setForms($forms)->setContainer($this->errors)->conductInspection();
                 $this->category->setFields($forms);
                 if ($this->errors->isEmpty() && $this->category->save()) {
                     $this->writeAndGo($action);
@@ -106,7 +102,7 @@
 
         protected function writeAndGo(string $action) : void
         {
-            $message = 'Администратор: ' . $this->user . " $action категорию " .$this->category->getId() .' ' . $this->category->getTitle();
+            $message = 'Администратор: ' . $this->user->getId() . ' ' . $this->user->getLogin() . " $action категорию " . $this->category->getId() . ' ' . $this->category->getTitle();
             LoggerSelector::publication($message);
             header('Location: /overseer/categories');
         }

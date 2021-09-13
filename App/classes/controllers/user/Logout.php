@@ -3,11 +3,11 @@
 
     namespace App\classes\controllers\user;
 
-    use App\classes\abstract\controllers\ControllerAbstraction;
+    use App\classes\abstract\controllers\Controller;
     use App\classes\utility\Config;
     use JetBrains\PhpStorm\NoReturn;
 
-    class Logout extends ControllerAbstraction
+    class Logout extends Controller
     {
 
         #[NoReturn] public function __invoke()
