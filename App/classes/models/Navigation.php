@@ -7,8 +7,8 @@
     class Navigation extends AbstractModel
     {
         protected const TABLE_NAME = 'navigation';
-        protected string $title = '', $url = '', $order = '';
-        protected ?string $status;
+        protected string $title = '', $url = '', $order = '', $status = '';
+//        protected ?string $status;
 
         public function exist() : bool
         {

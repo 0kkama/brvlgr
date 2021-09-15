@@ -3,7 +3,6 @@
     namespace App\classes\models;
 
     use App\classes\abstract\models\AbstractModel;
-    use App\classes\utility\Db;
 
     class Categories extends AbstractModel
     {
