@@ -39,16 +39,15 @@
     //    /var/lib/php/sessions
     session_start();
 
-    $cntrl = 'Admin';
+    $cntrl = 'AdminSelector';
+    $uri = ltrim(val($_SERVER['REQUEST_URI']), '/overseer');
+    $params = (new Router($uri))();
     $className = "App\classes\controllers\\$cntrl";
-    $params = (new Router(val($_GET['request'])))();
 
     if (!class_exists($className)) {
         trigger_error("Контроллер несуществующего класса $className в " . __FILE__ . __LINE__ );
         Error::deadEnd(400);
     }
-
-//    var_dump($className, $params);
 
     try {
         // запуск контроллера с параметрами
