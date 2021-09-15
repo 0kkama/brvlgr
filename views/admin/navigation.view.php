@@ -17,9 +17,11 @@
         <th>Order</th>
         <th>Status</th>
         <th>Edit</th>
-        <th>Hide</th>
-        <th>Regain</th>
-        <th>Private</th>
+        <th>Forbid</th>
+        <th>Main</th>
+        <th>Noname</th>
+        <th>User</th>
+        <th>Admin</th>
         <th>Delete</th>
     </tr>
     <?php foreach ($naviBar as $navi): ?>
@@ -30,9 +32,11 @@
             <td><?=$navi->getOrder()?></td>
             <td><?=$navi->getStatus()?></td>
             <td><a href="/overseer/navigation/edit/<?=$navi->getId()?>">E</a></td>
-            <td><a href="/overseer/navigation/hide/<?=$navi->getId()?>">H</a></td>
-            <td><a href="/overseer/navigation/regain/<?=$navi->getId()?>">R</a></td>
-            <td><a href="/overseer/navigation/private/<?=$navi->getId()?>">P</a></td>
+            <td><a href="/overseer/navigation/forbid/<?=$navi->getId()?>">F</a></td>
+            <td><a href="/overseer/navigation/main/<?=$navi->getId()?>">M</a></td>
+            <td><a href="/overseer/navigation/noname/<?=$navi->getId()?>">N</a></td>
+            <td><a href="/overseer/navigation/user/<?=$navi->getId()?>">U</a></td>
+            <td><a href="/overseer/navigation/admin/<?=$navi->getId()?>">A</a></td>
             <td><a href="/overseer/navigation/delete/<?=$navi->getId()?>">D</a></td>
         </tr>
     <?php endforeach;?>
