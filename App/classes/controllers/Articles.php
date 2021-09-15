@@ -7,7 +7,7 @@
     use App\classes\abstract\controllers\Controller;
     use App\classes\models\ViewArticle;
     use App\classes\utility\View;
-
+// todo Think about merge this controller and controller Index
     class Articles extends Controller
     {
         protected array $articles;
