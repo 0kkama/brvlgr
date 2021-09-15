@@ -11,15 +11,16 @@
     use PDOException;
     use PDOStatement;
 
-    //TODO разобраться с периодически возникающей ошибкой
-// 2 - Packets out of order. Expected 1 received 0. Packet size=145 in App/classes/Db.php line:45
+    // TODO error
+        // 2 - Packets out of order. Expected 1 received 0. Packet size=145 in App/classes/Db.php line:45
     /**
 
      */
     class Db implements SingletonInterface
     {
-
         private PDO $dbh;
+
+        use SingletonTrait; // todo ty-dy-dy
 
         private function __construct()
         {
@@ -31,7 +32,6 @@
             $this->newConnection($params);
         }
 
-        use SingletonTrait;
         /**
          * @return PDO
          * @throws ExceptionWrapper

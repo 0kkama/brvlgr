@@ -16,9 +16,10 @@
 
         protected array $regex =
             [
-                'controller' => '@\w+@',
-                'action' => '@[A-z]+@',
-                'id' => "@[0-9]+\d*@",
+//                'controller' => '~\w+~',
+                'controller' => '~^[a-z]{3,}$~',
+                'action' => '~[a-z]+~',
+                'id' => "~^[1-9]{1,1}[0-9]*$~",
             ];
 
         public function __construct(string $uri)

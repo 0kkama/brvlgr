@@ -17,6 +17,7 @@
             if (!isset($this->configurations)) {
                 $this->configurations['db'] = $params['db'];
                 $this->configurations['swift'] = $params['swift'];
+                $this->configurations['RIGHTS'] = $params['RIGHTS'];
                 $this->constants = $params['CONSTANTS'];
             }
         }
@@ -29,6 +30,16 @@
         public function getSwift(string $name) : string
         {
             return $this->configurations['swift'][$name] ?? '';
+        }
+
+        public function getRightsLvl(string $position) : int
+        {
+            return $this->configurations['RIGHTS'][$position] ?? 0;
+        }
+
+        public function getAllRights() : array
+        {
+            return $this->configurations['RIGHTS'];
         }
 
         public function __isset($param)
