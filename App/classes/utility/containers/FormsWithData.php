@@ -35,7 +35,7 @@
             return $this;
         }
 
-        private static function validation(string &$element, $key, bool $strip) : void
+        private static function validation(string &$element, bool $strip) : void
         {
             $element = match ($strip) {
                 true => trim(strip_tags($element)),
