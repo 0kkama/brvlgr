@@ -3,7 +3,6 @@
     namespace App\traits;
 
     use App\classes\abstract\exceptions\CustomException;
-    use App\classes\abstract\models\AbstractModel;
     use App\classes\exceptions\DbException;
     use App\classes\exceptions\ExceptionWrapper;
     use App\classes\utility\Db;
@@ -26,7 +25,6 @@
          * Finds needed line in table by given <b>$subject</b> and return it like object of respective class
          * @param string $type type of search subject (id, login, mail etc.)
          * @param string $subject
-         * @return AbstractModel
          * @throws CustomException
          */
         public static function findOneBy(string $type, string $subject) : static
@@ -39,5 +37,15 @@
                 (new DbException($e->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->setParam("Ошибка при запросе: `$sql`")->throwIt();
             }
             return $result ?? new static;
+        }
+
+        public static function getAllBy(string $type = null, string $subject = null) : array
+        {
+            $paramsArr = (isset($type, $subject)) ? [$type => $subject]  : [];
+            $where = ($paramsArr === []) ? '' : " WHERE $type = :$type";
+
+            $db = Db::getInstance();
+            $sql = 'SELECT * FROM ' . static::TABLE_NAME . $where;
+            return $db->queryAll($sql, $paramsArr, static::class);
         }
     }

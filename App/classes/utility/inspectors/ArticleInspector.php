@@ -29,7 +29,7 @@
             // TODO: Implement prepareData() method.
         }
 
-        protected function checkCategory() : string
+        protected function checkCategory(): string
         {
             $subject = 'category';
             $err = $this->formalCheck($subject);

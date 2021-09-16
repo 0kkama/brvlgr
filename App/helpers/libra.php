@@ -1,5 +1,6 @@
 <?php
 
+    use App\classes\models\User;
     use App\classes\utility\Config;
 
     function addMessage(array $newMessage, string $fileName) : bool
@@ -109,4 +110,18 @@
         $seconds = 3600;
         $hours = 24;
         return time() + $seconds * $hours * $days;
+    }
+
+    function getNavigationByRigths(User $user) {
+        $userRights = (int) $user->getRights();
+        $config = Config::getInstance();
+
+        return match ($userRights) {
+            $config->getRightsLvl('user') => ['sign' => '<=', 'lvl' => 2],
+            $config->getRightsLvl('moderator'),
+            $config->getRightsLvl('admin'),
+            $config->getRightsLvl('overseer') => ['sign' => '<=', 'lvl' => 3],
+            default => ['sign' => '=', 'lvl' => 1]
+
+        };
     }

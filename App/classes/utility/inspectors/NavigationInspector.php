@@ -17,6 +17,7 @@
                 'title' => 'Введите название элемента навигации',
                 'url' => 'Введите URL для элемента навигации',
                 'order' => 'Укажите порядковый номер элемента',
+                'status' => 'Укажите статус: main, user, noname, admin, forbid',
             ];
 
         protected static array $errorsMessages =
