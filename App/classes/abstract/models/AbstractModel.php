@@ -34,7 +34,7 @@
      */
     protected const TABLE_NAME = 'abstract';
     protected ?string $id = null;
-    protected array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
+    private array $meta = ['table' => null, 'cols' => null, 'data' => null, 'separator' => null];
 
         /**
          * Finds needed line in table by given <b>$subject</b> and return it like object of respective class
