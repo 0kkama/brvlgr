@@ -6,6 +6,7 @@
     use App\classes\models\User;
     use App\classes\models\UserSessions;
     use App\classes\utility\containers\FormsWithData;
+    use App\classes\testexamples\UserInspector;
     use App\classes\utility\loggers\LoggerSelector;
 
     class Registrator

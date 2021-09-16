@@ -34,7 +34,7 @@
             $this->code = $previous->getCode();
             $this->file= $previous->getFile();
             $this->line = $previous->getLine();
-            $this->code = $previous->getCode();
+            $this->code = (int) $previous->getCode();
             $this->trace = $previous->getTrace();
 
             parent::__construct($this->message, $this->code);

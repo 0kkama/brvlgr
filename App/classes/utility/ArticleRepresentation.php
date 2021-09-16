@@ -5,6 +5,7 @@
     use App\classes\controllers\Error;
     use App\classes\exceptions\DbException;
     use App\classes\models\Article;
+    use App\classes\models\Article as ArtModel;
     use App\classes\models\ArticleCategories;
     use App\classes\models\Categories;
     use App\classes\models\User;
@@ -21,7 +22,6 @@
         protected UserArticles $userArticles;
         protected ArticleCategories $articleCategories;
         protected ViewArticle $view;
-        protected array $properties = ['id' => '', 'login' => '', 'user_id' => '', 'title' => '', 'text' => '', 'category' => '', 'date' => ''];
 
         /**
          * @throws DbException
@@ -34,7 +34,7 @@
                 $articleId = $this->article->getId();
                 $this->userArticles->setArtId($articleId)->setUserId($this->author->getId())->save();
                 $this->articleCategories->setArtId($articleId)->setCatId($forms->get('category'))->save();
-                $this->sendMessage($this->author->getLogin(),'добавил', $this->article->getTitle())->relocate('Location: /article/read/' . $articleId);
+                $this->writeAndGo('добавил', ' /article/read/' . $articleId);
             }
             else {
                 throw new DbException('Не удалось сохранить статью',456);
@@ -53,30 +53,35 @@
 
         public function updateArticle(string $id, FormsWithData $forms, User $user) : void
         {
-            $this->author = $user;
-            $this->article = new Article();
-            $this->userArticles = new UserArticles();
-
             $this->initialize($user)->checkArtID($id)->article = Article::findOneBy('id', $id);
             if ($this->article->setFields($forms)->save()) {
                 $articleId = $this->article->getId();
                 $this->articleCategories = ArticleCategories::findOneBy('art_id', $articleId);
                 $this->articleCategories->setArtId($articleId)->setCatId($forms->get('category'))->save();
-                $this->sendMessage($this->author->getLogin(),'обновил', $this->article->getTitle())->relocate('Location: /article/read/' . $this->article->getId());
+                $this->writeAndGo('обновил', ' /article/read/' . $this->article->getId());
             } else {
                 throw new DbException('Ошибка при обновлении статьи',456);
             }
         }
 
-        public function deleteArticle(string $id, User $user) : void
+        public function deleteArticle(string $id) : void
         {
+            $this->author = User::getCurrent();
             $this->checkArtID($id)->article = Article::findOneBy('id', $id);
-            $title = $this->article->getTitle();
             $this->checkArtExist()->article->delete();
-            $this->sendMessage($user->getLogin(), 'удалил', $title)->relocate('Location: ' . Config::getInstance()->BASE_URL);
+            $this->writeAndGo('удалил', '/overseer/articles/');
         }
 
-//        todo Заменить на __call() ??
+        public function archiveArticle(string $id): void
+        {
+            $this->author = User::getCurrent();
+            $this->view = ViewArticle::findOneBy('id', $id);
+            $this->checkEditRights($this->author, $this->view);
+            $this->checkArtID($id)->article = Article::findOneBy('id', $id);
+            $this->checkArtExist()->article->setStatus(2)->save();
+            $this->writeAndGo('заархивировал', Config::getInstance()->BASE_URL);
+        }
+
         public function get(string $key) : string
         {
             $method = 'get' . ucfirst($key);
@@ -84,6 +89,21 @@
                 return $this->article->$method;
             }
             return '';
+        }
+
+        public static function checkUser(User $user) : bool
+        {
+            if(!$user->hasUserRights()) {
+                Error::deadend(403);
+            }
+            return true;
+        }
+
+        public function checkEditRights(User $user, ViewArticle $view) : void
+        {
+            if(!$user->hasAdminRights() && !($user->getId() === $view->getUserId())) {
+                Error::deadend(403, 'Действие доступно только автору или модератору');
+            }
         }
 
         protected function checkArtID (string $id) : self
@@ -110,23 +130,10 @@
             return $this;
         }
 
-        public static function checkUser(User $user) : bool
+        protected function writeAndGo(string $action, string $destination) : void
         {
-            if(!$user->hasUserRights()) {
-                Error::deadend(403);
-            }
-            return true;
-        }
-
-        protected function sendMessage( string $subject, string $action, string $object) : self
-        {
-            $result = "Пользователь $subject $action статью $object";
-            LoggerSelector::publication($result);
-            return $this;
-        }
-
-        protected function relocate(string $destination) : void
-        {
-            header($destination);
+            $message = 'Пользователь ' . $this->author->getLogin() . " $action статью " .$this->article->getId() .' ' . $this->article->getTitle();
+            LoggerSelector::publication($message);
+            header("Location: $destination");
         }
     }

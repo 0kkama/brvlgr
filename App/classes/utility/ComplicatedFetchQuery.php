@@ -6,18 +6,19 @@
 
 
     use App\classes\exceptions\ExceptionWrapper;
+    use App\interfaces\ExistenceInterface;
     use App\interfaces\HasTableInterface;
     use PDO;
 
     class ComplicatedFetchQuery
     {
-        protected string $orderly, $column, $subject, $tableName, $sql, $class;
+        protected string $orderly, $column, $subject, $tableName, $sql, $class, $sign, $and;
         protected int $start, $end;
         protected bool $desc = false;
         protected Db $db;
         private int $fetchMode;
 
-        public function __construct(HasTableInterface $object, Db $dbHandler, $fetch = PDO::FETCH_CLASS)
+        public function __construct(HasTableInterface|ExistenceInterface $object, Db $dbHandler, $fetch = PDO::FETCH_CLASS)
         {
             $this->tableName = $object::getTableName();
             $this->class = $object::class;
@@ -47,12 +48,12 @@
         }
 
         //<editor-fold desc="GETTERS">
-        public function getOrderly() : string
+        protected function getOrderly() : string
         {
             return isset($this->orderly) ? "ORDER BY `$this->orderly`" : '';
         }
 
-        public function getLimit() : string
+        protected function getLimit() : string
         {
             if (isset($this->start, $this->end) && $this->start < $this->end) {
                 $str = "LIMIT $this->start, $this->end";
@@ -64,9 +65,9 @@
             return $str;
         }
 
-        public function getWhere() : string
+        protected function getWhere() : string
         {
-            return isset($this->column, $this->subject) ? ('WHERE ' . $this->column . ' = :' . $this->column) : '';
+            return (!empty($this->column) && !empty($this->subject)) ? ("WHERE `{$this->column}` $this->sign :{$this->column}") : '';
         }
 
         /**
@@ -74,6 +75,7 @@
          */
         public function getSql() : string
         {
+            $this->makeSql();
             return $this->sql ?? '';
         }
         //</editor-fold>
@@ -111,35 +113,32 @@
         {
             $this->start = $start;
             $this->end = $end;
-//            if end > start - throw exception?
+//            todo if end > start - throw exception?
             return $this;
         }
 
         /**
-         * @param int $end
+         * @param string $column - name of column for WHERE filter
+         * @param string $subject - value of column for WHERE filter
          */
-        public function setEnd(int $end) : static
-        {
-            $this->end = $end;
-            return $this;
-        }
-
-        /**
-         * @param string $column
-         */
-        public function setColumn(string $column) : static
+        public function setWhere(string $column, string $subject, string $sign = '=') : self
         {
             $this->column = $column;
+            $this->subject = $subject;
+            $this->sign = $sign;
             return $this;
         }
 
-        /**
-         * @param string $subject
-         */
-        public function setSubject(string $subject) : static
-        {
-            $this->subject = $subject;
-            return $this;
-        }
+//        public function setAnd(string $column, string $subject, string $sign = '=') : self
+//        {
+//            $this->and = " AND `{$column}` $sign :{$column}";
+//        }
+
+//        public function setIN(string $column,array $sequence) : self
+//        {
+//            $this->column = $column;
+//            $this->subject = '(' . implode(',', $sequence) . ')';
+//            return $this;
+//        }
         //</editor-fold>
     }

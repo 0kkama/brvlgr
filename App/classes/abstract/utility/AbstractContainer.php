@@ -18,10 +18,10 @@
 
         use ArrayAccessTrait, CountableTrait, JsonSeializableTrait, ArrayIteratorTrait /*,IteratorTrait*/;
 
-        public function getIterator() : ArrayIterator
-        {
-            return new ArrayIterator($this->data);
-        }
+//        public function getIterator() : ArrayIterator
+//        {
+//            return new ArrayIterator($this->data);
+//        }
 //        abstract public function add(object $row) : void;
 
         public function addArray(array $elements) : void
@@ -31,5 +31,21 @@
             }
         }
 
+        public function integrateOne(string $key, string $value)
+        {
+            if (isset($key, $value)) {
+                $this->data[$key] = $value;
+            }
+        }
+
+        public function integrateArray(array $elements) : void
+        {
+            $this->data = array_merge($this->data, $elements);
+        }
+
+        public function unset($key): void
+        {
+            unset($this->data[$key]);
+        }
 
     }
