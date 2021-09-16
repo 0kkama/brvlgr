@@ -2,7 +2,13 @@
 
     namespace App\classes\controllers;
 
-    class Article_
-    {
+    use App\classes\abstract\controllers\ControllerSelector;
+    use App\traits\ControllerSelectorActionTrait;
 
+
+    class Article_ extends ControllerSelector
+    {
+        private string $path = 'App\classes\controllers\article\\';
+
+        use ControllerSelectorActionTrait;
     }
