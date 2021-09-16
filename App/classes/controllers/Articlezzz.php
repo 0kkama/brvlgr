@@ -3,18 +3,14 @@
     namespace App\classes\controllers;
 
     use App\classes\abstract\controllers\ControllerActing;
-    use App\classes\exceptions\DbException;
-    use App\classes\exceptions\ExceptionWrapper;
-    use App\classes\models\Article as ArticleModel;
     use App\classes\models\Categories;
     use App\classes\models\ViewPublishedArticles;
-    use App\classes\utility\ArticleRepresentation as Representation;
+    use App\classes\utility\ArticleRepresentationzzz as Representation;
     use App\classes\utility\containers\CategoriesList;
     use App\classes\utility\containers\FormsForArticle;
-    use App\classes\utility\inspectors\ArticleInspector;
     use App\interfaces\InspectorInterface;
 
-    class Article extends ControllerActing
+    class Articlezzz extends ControllerActing
     {
         protected string $title = 'PAGE NOT FOUND!', $content = 'PAGE NOT FOUND!';
         protected Representation $representation;
@@ -30,6 +26,7 @@
             if ($this->params['action'] !== 'read') {
                 Representation::checkUser($this->user);
                 $this->forms = new FormsForArticle();
+                ($this->categories = new CategoriesList())->addArray(Categories::getAllBy('status','1'));
             }
             $this->representation = new Representation();
             $this->action($this->params['action']);
@@ -39,17 +36,15 @@
         protected function create() : void
         {
             $this->title = 'Добавить публикацию';
-            ($this->categories = new CategoriesList())->addArray(Categories::getAllBy('status','1'));
-            ($this->inspector = new ArticleInspector())->setModel(new ArticleModel());
-            if ($this->prepareData() && $this->errors->isEmpty()) {
-                $this->representation->createArticle($this->forms, $this->user);
+            if ($this->prepareData()) {
+                $this->representation->createArticle($this->user);
             }
             $this->content = $this->page->assign('forms', $this->forms)->assign('categories', $this->categories)->assign('errors', $this->errors)->render('articles/add');
         }
 
         protected function read() : void
         {
-            $this->viewArticle = $this->representation->readArticle($this->getId());
+            $this->viewArticle = $this->representation->readArticle($this->id);
             $this->title = $this->viewArticle->getTitle();
             $this->content = $this->page->assign('article', $this->viewArticle)->assign('author', $this->viewArticle->getLogin())->render('articles/article');
         }
@@ -57,13 +52,8 @@
         protected function update() : void
         {
             $this->title = 'Редактировать статью';
-            ($this->categories = new CategoriesList())->addArray(Categories::getAllBy('status','1'));
-            $this->viewArticle = $this->representation->readArticle($this->getId());
-            $this->representation->checkEditRights($this->user, $this->viewArticle);
-            ($this->forms = new FormsForArticle())->extractViewArticle($this->viewArticle);
-            ($this->inspector = new ArticleInspector())->setModel(ArticleModel::findOneBy('id', $this->id));
-
-            if ($this->prepareData() && $this->errors->isEmpty()) {
+            $this->forms = $this->representation->prepareUpdate($this->id, $this->user);
+            if ($this->prepareData()) {
                 $this->representation->updateArticle($this->getId(), $this->forms, $this->user);
             }
             $this->content = $this->page->assign('forms', $this->forms)->assign('categories', $this->categories)->assign('errors', $this->errors)->render('articles/add');
@@ -71,14 +61,13 @@
 
         protected function delete() : void
         {
-            $this->representation->archiveArticle($this->id);
+            $this->representation->archiveArticle($this->getId());
         }
 
         protected function prepareData() : bool
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $this->forms->extractPostForms(self::$fields, $_POST)->validateForms(false);
-                $this->inspector->setForms($this->forms)->setContainer($this->errors)->conductInspection();
+                $this->representation->setData(self::$fields, $this->errors, $this->forms);
                 return true;
             }
             return false;

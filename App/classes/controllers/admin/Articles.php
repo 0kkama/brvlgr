@@ -5,7 +5,7 @@
     use App\classes\abstract\controllers\Controller;
     use App\classes\controllers\Error;
     use App\classes\models\Article as ArtModel;
-    use App\classes\models\ViewArticleForAdmin;
+    use App\classes\models\ViewAllArticles;
     use App\classes\utility\ArticleRepresentation;
     use App\classes\utility\loggers\LoggerSelector;
 
@@ -14,7 +14,7 @@
         protected array $articles;
         protected ArtModel $art;
         protected ArticleRepresentation $representation;
-        protected ViewArticleForAdmin $artView;
+        protected ViewAllArticles $artView;
 
         //        вывести список статей
         //        1) список видимых и 2) список закрытых
@@ -42,7 +42,7 @@
         public function show()
         {
             $this->title = 'Список статей';
-            $this->articles = ViewArticleForAdmin::getAllBy();
+            $this->articles = ViewAllArticles::getAllBy();
             $this->content = $this->page->assign('articles', $this->articles)->assign('errors', $this->errors)->render('admin/articles_list');
         }
 

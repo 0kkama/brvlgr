@@ -1,6 +1,6 @@
 <?php
     /** @var App\classes\models\User $author */
-    /** @var App\classes\models\ViewArticle $article */
+    /** @var App\classes\models\ViewPublishedArticles $article */
 ?>
 <main>
     <div id="content">

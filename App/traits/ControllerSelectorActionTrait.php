@@ -12,7 +12,7 @@
             $class = ucfirst($this->params['action']);
             $controller = $this->path . $class;
             if (class_exists($controller)) {
-                (new $controller([], new View))();
+                (new $controller($this->params, new View))();
             } else {
                 Error::deadend(400, 'Неизвестное действие');
             }

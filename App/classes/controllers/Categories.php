@@ -3,7 +3,7 @@
     namespace App\classes\controllers;
 
     use App\classes\abstract\controllers\Controller;
-    use App\classes\models\ViewArticle;
+    use App\classes\models\ViewPublishedArticles;
     use App\classes\utility\containers\CategoriesList;
     use App\classes\models\Categories as CatModel;
     use App\classes\utility\View;
@@ -44,7 +44,7 @@
             if ($this->list->checkCategoryInBy('url', $this->params['action'])) {
                 $this->chosenCat = $this->list->getCategoryByIndex();
                 if(isset($this->chosenCat)) {
-                    $this->articles = ViewArticle::getAllBy('category', $this->chosenCat->getTitle());
+                    $this->articles = ViewPublishedArticles::getAllBy('category', $this->chosenCat->getTitle());
                     return true;
                 }
             }

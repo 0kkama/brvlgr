@@ -1,5 +1,5 @@
 <?php
-    /** @var \App\classes\models\ViewArticleForAdmin $article */
+    /** @var \App\classes\models\ViewAllArticles $article */
     /** @var \App\classes\utility\containers\ErrorsContainer $errors */
     /** @var array $articles */
 ?>

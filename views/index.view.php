@@ -1,6 +1,6 @@
 <?php
     /** @var App\classes\models\Article $article  */
-    /** @var App\classes\models\ViewArticle $article  */
+    /** @var App\classes\models\ViewPublishedArticles $article  */
     /** @var array $news  */
     /** @var App\classes\models\User $author */
 ?>
