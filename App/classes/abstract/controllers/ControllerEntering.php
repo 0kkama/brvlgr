@@ -1,12 +1,12 @@
 <?php
     namespace App\classes\abstract\controllers;
 
-    use App\classes\abstract\controllers\Controller;
     use App\classes\models\User;
     use App\classes\utility\containers\FormsWithData;
+    use App\classes\testexamples\UserInspector;
     use App\classes\utility\Registrator;
-    use App\classes\utility\UserInspector;
     use App\classes\utility\View;
+    use App\interfaces\InspectorInterface;
 
     /**
      Controller for inheritance to Registration and Login controllers
@@ -16,10 +16,9 @@
         protected string $title;
         protected User $candidate;
         protected Registrator $registrator;
-        protected UserInspector $inspector;
+        protected InspectorInterface $inspector;
         protected FormsWithData $forms;
-        protected static array $checkList = [];
-        protected static array $errorsList = [];
+        protected static array $fields = [];
         protected static string $action = '';
 
         /**
@@ -38,10 +37,9 @@
         protected function entering() : void
         {
             if ('POST' === $_SERVER['REQUEST_METHOD']) {
-                $this->forms->extractPostForms(array_keys(static::$errorsList), $_POST);
+                $this->forms->extractPostForms(static::$fields, $_POST);
                 $this->forms['checkbox'] = isset($_POST['remember']);
-                $this->inspector = new UserInspector($this->forms, $this->errors, static::$errorsList);
-                $this->inspector->conductInspection(static::$checkList);
+                $this->inspector->setForms($this->forms)->setContainer($this->errors)->setModel(new User())->conductInspection();
                 $this->candidate->setFields($this->forms);
 
                 if ($this->errors->isEmpty()) {
