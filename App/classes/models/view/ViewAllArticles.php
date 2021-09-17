@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\classes\models;
+    namespace App\classes\models\view;
 
     use App\classes\abstract\models\AbstractView;
     use App\classes\abstract\models\ViewArticle;

@@ -3,7 +3,7 @@
     namespace App\classes\abstract\models;
 
 
-    use App\classes\models\ViewAllArticles;
+    use App\classes\models\view\ViewAllArticles;
 
     abstract class ViewArticle extends AbstractView
     {

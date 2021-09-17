@@ -1,15 +1,13 @@
 <?php
 
-    namespace App\classes\models;
+    namespace App\classes\models\view;
 
-    use App\classes\abstract\models\AbstractView;
     use App\classes\abstract\models\ViewArticle;
     use App\classes\utility\Db;
 
     class ViewPublishedArticles extends ViewArticle
     {
         protected const TABLE_NAME = 'view_published_articles';
-        protected string $id, $login, $user_id, $title, $text, $category, $moder, $cat_id, $cat_stat, $date;
 
         public static function getLast(int $quantity) : ?array
         {

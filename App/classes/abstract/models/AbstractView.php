@@ -2,6 +2,9 @@
 
     namespace App\classes\abstract\models;
 
+    use App\classes\models\view\ViewAllArticles;
+    use App\classes\models\view\ViewNotArchivedArticles;
+    use App\classes\models\view\ViewPublishedArticles;
     use App\interfaces\ExistenceInterface;
     use App\interfaces\FindInterface;
     use App\interfaces\HasIdInterface;
