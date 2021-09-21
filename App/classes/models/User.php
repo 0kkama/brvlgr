@@ -21,10 +21,9 @@
     {
         protected const TABLE_NAME = 'users';
         protected string $firstName = '', $middleName = '', $lastName = '', $login = '', $email = '';
-        protected ?string $hash = null, $rights = null;
+        protected ?string $hash = null, $rights = null, $date = null;
 
         //                              TODO убрать трейт?
-
         use SetControlTrait;
 
         /**
@@ -136,7 +135,6 @@
         {
             return $this->date;
         }
-
 
         /**
          * @return string|null

@@ -4,38 +4,19 @@
 
 
     use App\classes\models\view\ViewAllArticles;
+    use App\interfaces\ViewArticleInterface;
+    use App\traits\ArticlePresentmentTrait;
 
-    abstract class ViewArticle extends AbstractView
+    abstract class ViewArticle extends AbstractView implements ViewArticleInterface
     {
         protected const TABLE_NAME = 'view_all_articles';
         protected string $id, $login, $user_id, $title, $text, $category, $moder, $cat_id, $cat_stat, $date;
 
+        use ArticlePresentmentTrait;
+
         public function exist() : bool
         {
             return (!empty($this->id) && !empty($this->login));
-        }
-
-        public function  getFormattedContent() : string
-        {
-            $string = $this->text;
-            $paragraphs = [];
-            $arr = explode(PHP_EOL, $string);
-
-            foreach ($arr as $row) {
-                $paragraphs[] = '<p>' . $row . '</p>';
-            }
-
-            return implode(PHP_EOL, $paragraphs);
-        }
-
-        public function getBriefContent() : string
-        {
-            return (mb_substr($this->text, 0, 150) . '...') ?? '';
-        }
-
-        public function __toString() : string
-        {
-            return 'Дата: ' . $this->date . '<br>' . 'Автор: ' . $this->login . '<br>' . 'Категория: '. $this->category . '<br>';
         }
 
         //<editor-fold desc="Getters">
@@ -123,7 +104,5 @@
         {
             return $this->date;
         }
-
-
         //</editor-fold>
     }

@@ -4,7 +4,7 @@
     namespace App\interfaces;
 
 
-    interface ReadableInterface extends HasIdInterface, HasTitleInterface, HasTextInterface
+    interface ReadableInterface extends HasIdInterface, HasTextInterface
     {
 
     }

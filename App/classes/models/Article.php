@@ -5,19 +5,19 @@
     use App\classes\abstract\exceptions\CustomException;
     use App\classes\abstract\models\Model;
     use App\classes\exceptions\MagickException;
-    use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\Db;
-    use App\interfaces\HasTitleInterface;
+    use App\traits\ArticlePresentmentTrait;
     use App\traits\SetControlTrait;
     use Exception;
 
-    class Article extends Model implements HasTitleInterface
+    class Article extends Model
     {
         protected const TABLE_NAME = 'articles';
         protected string $title, $text, $moder;
+        protected ?string $date = null;
 
         //                              TODO убрать трейт?
-        use  SetControlTrait;
+        use  SetControlTrait, ArticlePresentmentTrait;
 
         /**
          * @throws Exception
@@ -99,33 +99,6 @@
 //            $this->author_id = $author_id;
 //        }
         //</editor-fold>
-
-        //<editor-fold desc="getters======================">
-        public function getBriefContent() : string
-        {
-            return (mb_substr($this->text, 0, 150) . '...') ?? '';
-        }
-
-        public function getFormattedContent() : string
-        {
-            $string = $this->text;
-            $paragraphs = [];
-            $arr = explode(PHP_EOL, $string);
-
-            foreach ($arr as $row) {
-                $paragraphs[] = '<p>' . $row . '</p>';
-            }
-
-            return implode(PHP_EOL, $paragraphs);
-        }
-
-        /**
-         * @return ErrorsContainer
-         */
-//        public function getErrorsContainer() : ErrorsContainer
-//        {
-//            return $this->errors;
-//        }
 
         public function getTitle() : string
         {
