@@ -2,9 +2,9 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\models\AbstractModel;
+    use App\classes\abstract\models\Model;
 
-    class Navigation extends AbstractModel
+    class Navigation extends Model
     {
         protected const TABLE_NAME = 'navigation';
         protected string $title = '', $url = '', $order = '', $status = '';

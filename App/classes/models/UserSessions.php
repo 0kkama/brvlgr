@@ -2,9 +2,9 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\models\AbstractModel;
+    use App\classes\abstract\models\Model;
 
-    class UserSessions extends AbstractModel
+    class UserSessions extends Model
     {
 
         protected const TABLE_NAME = 'users_to_sessions';

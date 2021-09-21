@@ -2,9 +2,9 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\models\AbstractModel;
+    use App\classes\abstract\models\Model;
 
-    class Categories extends AbstractModel
+    class Categories extends Model
     {
         protected const TABLE_NAME = 'categories';
         protected string $title = '', $url = '';

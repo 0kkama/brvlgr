@@ -2,10 +2,10 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\models\AbstractModel;
+    use App\classes\abstract\models\Model;
     use phpDocumentor\Reflection\Types\This;
 
-    class ArticleCategories extends AbstractModel
+    class ArticleCategories extends Model
     {
         protected const TABLE_NAME = 'articles_to_categories';
         protected string $art_id, $cat_id;

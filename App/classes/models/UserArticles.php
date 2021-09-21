@@ -2,10 +2,10 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\models\AbstractModel;
+    use App\classes\abstract\models\Model;
 
 
-    class UserArticles extends AbstractModel
+    class UserArticles extends Model
     {
         protected const TABLE_NAME = 'users_to_articles';
         protected string $user_id = '', $art_id = '';

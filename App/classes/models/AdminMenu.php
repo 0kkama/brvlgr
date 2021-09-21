@@ -2,9 +2,9 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\models\AbstractModel;
+    use App\classes\abstract\models\Model;
 
-    class AdminMenu extends AbstractModel
+    class AdminMenu extends Model
     {
         protected string $title = '', $url = '';
         protected const TABLE_NAME = 'admin_menu';

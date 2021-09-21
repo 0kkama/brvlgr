@@ -2,12 +2,12 @@
 
     namespace App\classes\models;
 
-    use App\classes\abstract\models\AbstractModel;
+    use App\classes\abstract\models\Model;
     use App\classes\abstract\exceptions\CustomException;
     use App\classes\utility\Config;
     use App\classes\utility\Time;
 
-    class Sessions extends AbstractModel
+    class Sessions extends Model
     {
         //        TODO допилить этот класс
         //TODO решить проблему с неисчезающим при пустом обновлении всплывающим алертом о неверности логина или пароля
