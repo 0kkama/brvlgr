@@ -6,7 +6,7 @@
     use App\classes\controllers\Error;
     use App\classes\models\Article as ArtModel;
     use App\classes\models\view\ViewAllArticles;
-    use App\classes\utility\ArticleRepresentation as Representation;
+    use App\classes\utility\articles\ArticleRepresentation as Representation;
     use App\classes\utility\loggers\LoggerSelector;
 
     class Articles extends Controller
@@ -55,7 +55,9 @@
 
         public function delete() : void
         {
+            $view = ViewAllArticles::findOneBy('id', $this->id);
             $this->representation = new Representation();
+            $this->representation->checkEditRights($this->user, $view);
             $this->representation->deleteArticle($this->getId());
         }
 

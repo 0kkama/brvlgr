@@ -25,9 +25,9 @@
         protected array $users;
         protected static array $actions =
         [
-            'ban' => ['right' => 1, 'message' => 'забанил'],
-            'regain' => ['right' => 2, 'message' => 'дал права пользователя'] ,
-            'author' => ['right' => 3, 'message' => 'дал права автора'] ,
+            'ban' => ['right' => 1, 'message' => 'забанил пользователя'],
+            'regain' => ['right' => 2, 'message' => 'дал пользовательские права'] ,
+            'author' => ['right' => 3, 'message' => 'дал авторские права'] ,
             'moder' => ['right' => 5, 'message' => 'дал права модератора'] ,
             'admin' => ['right' => 9, 'message' => 'дал права администратора'] ,
         ];
@@ -66,13 +66,17 @@
             if ($this->model->exist() && $this->model->getRights() !== $forbiddenLvl) {
                 if ($this->model->setRights($status)->save()) {
                     $this->writeAndGo($action);
+                } else {
+//                    todo throw new exception
                 }
+            } else {
+                Error::deadend(403, 'Попытка недопустимого действия');
             }
         }
 
         protected function writeAndGo(string $action) : void
         {
-            $message = 'Администратор: ' . $this->user->getId() . ' ' . $this->user->getLogin() . " $action пользователя " . $this->model->getId() . ' ' . $this->model->getLogin();
+            $message = 'Администратор: ' . $this->user->getId() . ' ' . $this->user->getLogin() . " $action " . $this->model->getId() . ' ' . $this->model->getLogin();
             LoggerSelector::publication($message);
             header('Location: /overseer/users');
         }
