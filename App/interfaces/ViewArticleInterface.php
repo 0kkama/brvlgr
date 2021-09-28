@@ -2,7 +2,7 @@
 
     namespace App\interfaces;
 
-    interface ViewArticleInterface
+    interface ViewArticleInterface extends ExistenceInterface
     {
         public function getId(): string;
         public function getLogin(): string;

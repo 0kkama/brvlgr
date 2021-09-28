@@ -5,7 +5,7 @@
     use App\classes\abstract\controllers\Controller;
     use App\classes\models\Categories;
     use App\classes\models\view\ViewModerArticles;
-    use App\classes\utility\ArticleRepresentation as Representation;
+    use App\classes\utility\articles\ArticleRepresentation as Representation;
     use App\classes\utility\containers\CategoriesList;
     use App\classes\utility\containers\FormsForArticleData;
     use App\classes\utility\View;

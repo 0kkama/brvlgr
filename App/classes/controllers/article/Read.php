@@ -4,7 +4,7 @@
 
     use App\classes\abstract\controllers\Controller;
     use App\classes\models\view\ViewNotArchivedArticles;
-    use App\classes\utility\ArticleRepresentation as Representation;
+    use App\classes\utility\articles\ArticleRepresentation as Representation;
     use App\classes\utility\View;
     use App\interfaces\ViewArticleInterface;
 
