@@ -13,7 +13,7 @@
      */
     abstract class ControllerEntering extends Controller
     {
-        protected string $title;
+//        protected string $title;
         protected User $candidate;
         protected Registrator $registrator;
         protected InspectorInterface $inspector;

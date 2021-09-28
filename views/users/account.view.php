@@ -4,10 +4,6 @@
 ?>
 <table>
     <tr>
-        <th>ID</th>
-        <th><?=$user->getId() ?></th>
-    </tr>
-    <tr>
         <th>Логин</th>
         <th><?=$user->getLogin() ?></th>
     </tr>
@@ -34,8 +30,9 @@
 </table>
 
 <ul>
-    <li><a href="/user/change/<?= $user->getId() ?>?property=login">Изменить логин</a></li>
-    <li><a href="/user/change/<?= $user->getId() ?>?property=pass">Изменить пароль</a></li>
-    <li><a href="/user/change/<?= $user->getId() ?>?property=email">Изменить почтовый ящик</a></li>
-    <li><a href="/user/change/<?= $user->getId() ?>?property=fullname">Изменить ФИО</a></li>
+    <li><a href="/user/change?property=login">Изменить логин</a></li>
+    <li><a href="/user/change?property=pass">Изменить пароль</a></li>
+    <li><a href="/user/change?property=email">Изменить почтовый ящик</a></li>
+    <li><a href="/user/change?property=fullname">Изменить ФИО</a></li>
+    <li><a href="/user/articles?q=all">Мои статьи</a></li>
 </ul>

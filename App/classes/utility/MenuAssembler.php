@@ -18,9 +18,10 @@
         protected static array $build = [
             'noname'   => ['noname', 'main'],
             'user'     => ['user', 'main'],
-            'moder'    => ['user', 'admin', 'main'],
-            'admin'    => ['user', 'admin', 'main'],
-            'overseer' => ['user', 'admin', 'main'],
+            'author'   => ['user', 'author', 'main'],
+            'moder'    => ['user', 'author', 'admin', 'main'],
+            'admin'    => ['user', 'author', 'admin', 'main'],
+            'overseer' => ['user', 'author', 'admin', 'main'],
         ];
 
         public static function assemblyMenu(User $user): array

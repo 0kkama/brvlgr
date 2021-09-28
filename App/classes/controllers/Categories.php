@@ -3,7 +3,7 @@
     namespace App\classes\controllers;
 
     use App\classes\abstract\controllers\Controller;
-    use App\classes\models\ViewPublishedArticles;
+    use App\classes\models\view\ViewPublishedArticles;
     use App\classes\utility\containers\CategoriesList;
     use App\classes\models\Categories as CatModel;
     use App\classes\utility\View;
@@ -22,24 +22,22 @@
             parent::__construct($params, $templateEngine);
             $wrap = 'categories';
             $object = $this->list;
-            $pattern = 'admin/categories';
+            $pattern = 'articles/categories';
 
             if ( !empty($this->params['action']) ) {
-//                $this->action = $params['action'];
-                if ($this->choose()) {
+                if ($this->chooseCategory()) {
                     $this->title = $this->chosenCat->getTitle();
-                    $wrap = 'news';
                     $object = $this->articles;
+                    $wrap = 'news';
                     $pattern = 'index';
                 } else {
-                    Error::deadend(404);
+                    Error::deadend(404, 'Такой категории не существует');
                 }
-//                $this->content = $this->page->assign('categories', $this->list)->render('admin/categories');
             }
                 $this->content = $this->page->assign($wrap, $object)->render($pattern);
         }
 
-        protected function choose(): bool
+        protected function chooseCategory(): bool
         {
             if ($this->list->checkCategoryInBy('url', $this->params['action'])) {
                 $this->chosenCat = $this->list->getCategoryByIndex();
@@ -50,11 +48,4 @@
             }
             return false;
         }
-//        protected function makeContent()
-//        {
-//            $this->content = $this->page->assign($wrap, $object)->render($pattern);
-//
-//        }
-
-
     }

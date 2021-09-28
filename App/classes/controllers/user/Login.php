@@ -5,7 +5,7 @@
 
 
     use App\classes\abstract\controllers\ControllerEntering;
-    use App\classes\utility\inspectors\LoginInspector;
+    use App\classes\utility\inspectors\LoginFormsInspector;
 
     class Login extends ControllerEntering
     {
@@ -15,7 +15,7 @@
 
         protected function entering() : void
         {
-            $this->inspector = new LoginInspector();
+            $this->inspector = new LoginFormsInspector();
             parent::entering();
             $this->content = $this->page->assign('errors', $this->errors)->render('users/login');
         }

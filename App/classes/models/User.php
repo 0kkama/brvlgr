@@ -13,7 +13,7 @@
      * has following personal important methods:
      * <ul>
      * <li><b>findByLogin</b> - return null|object</li>
-     * <li><b>CurrentUser</b> - return object containing data of a user by session and cookie or null</li>
+     * <li><b>CurrentUser</b> - return object containing data of a user by session and cookie or empty model of User</li>
      * </ul>
      * @package App\classes\models
      */
@@ -56,11 +56,6 @@
         #[Pure] public function exist() : bool
         {
             return (!empty($this->id) && !empty($this->login));
-        }
-
-        public function hasUserRights() : bool
-        {
-            return (!empty($this->id) && ((int) $this->rights >= 1));
         }
 
         public function hasAdminRights() : bool
@@ -136,11 +131,25 @@
             return $this->date;
         }
 
+        public function getFullName(): string
+        {
+            return $this->firstName . ' ' . $this->middleName . ' ' . $this->lastName;
+        }
+
         /**
          * @return string|null
          */
 
         //</editor-fold>
+
+        /**
+         * @return User
+         */
+        public function makeHash($password) : User
+        {
+            $this->hash = password_hash($password, PASSWORD_BCRYPT);
+            return $this;
+        }
 
         //<editor-fold desc="setters ========================">
         /**
@@ -201,15 +210,6 @@
          * Temporary password fields for the moment when user make registration
          * @param string|null $pass
          */
-
-        /**
-         * @return User
-         */
-        public function makeHash($password) : User
-        {
-            $this->hash = password_hash($password, PASSWORD_BCRYPT);
-            return $this;
-        }
         //</editor-fold>
 
     }

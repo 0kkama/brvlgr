@@ -3,7 +3,7 @@
     namespace App\classes\controllers\user;
 
     use App\classes\abstract\controllers\ControllerEntering;
-    use App\classes\utility\inspectors\RegistrationInspector;
+    use App\classes\utility\inspectors\RegistrationFormsInspector;
 
 
     class Registration extends ControllerEntering
@@ -14,7 +14,7 @@
 
         protected function entering() : void
         {
-            $this->inspector = new RegistrationInspector();
+            $this->inspector = new RegistrationFormsInspector();
             parent::entering();
             $this->content = $this->page->assign('forms', $this->forms)->assign('errors', $this->errors)->render('users/registration');
         }

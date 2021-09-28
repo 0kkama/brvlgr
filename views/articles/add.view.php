@@ -3,9 +3,9 @@
     use App\classes\utility\Config;
     use App\classes\utility\containers\CategoriesList;
     use App\classes\utility\containers\ErrorsContainer;
-    use App\classes\utility\containers\FormsForArticle;
+    use App\classes\utility\containers\FormsForArticleData;
 
-    /** @var FormsForArticle $forms  */
+    /** @var FormsForArticleData $forms  */
     /** @var ErrorsContainer $errors  */
     /** @var CategoriesList $categories  */
 ?>

@@ -5,26 +5,21 @@
     use App\classes\abstract\controllers\Controller;
     use App\classes\controllers\Error;
     use App\classes\models\Article as ArtModel;
-    use App\classes\models\ViewAllArticles;
-    use App\classes\utility\ArticleRepresentation;
+    use App\classes\models\view\ViewAllArticles;
+    use App\classes\utility\ArticleRepresentation as Representation;
     use App\classes\utility\loggers\LoggerSelector;
 
     class Articles extends Controller
     {
         protected array $articles;
         protected ArtModel $art;
-        protected ArticleRepresentation $representation;
-        protected ViewAllArticles $artView;
-
-        //        вывести список статей
-        //        1) список видимых и 2) список закрытых
-        //        закрыть статью
-        //        открыть статью
-        //        удалить статью (есть)
-        //        отредактировать статью (есть)
-
-        //        добавить к таблице статей поле статуса (0 или 1)
-        //        переделать вью с учётом видимости статьи
+        protected Representation $representation;
+        protected static array $actions =
+            [
+                'hide' => ['status' => 0, 'message' => 'отправил в модерацию'],
+                'public' => ['status' => 1, 'message' => 'опубликовал'],
+                'archive' => ['status' => 2, 'message' => 'заархивировал'],
+            ];
 
         public function __invoke()
         {
@@ -33,6 +28,8 @@
 
             if (method_exists($this, $action)) {
                 $this->$action();
+            } elseif (isset(self::$actions[$action])) {
+                $this->modifyArticle(self::$actions[$action]['status'], self::$actions[$action]['message']);
             } else {
                 Error::deadend(400);
             }
@@ -43,22 +40,7 @@
         {
             $this->title = 'Список статей';
             $this->articles = ViewAllArticles::getAllBy();
-            $this->content = $this->page->assign('articles', $this->articles)->assign('errors', $this->errors)->render('admin/articles_list');
-        }
-
-        public function hide() : void
-        {
-            $this->modifyArticle(0, 'скрыл');
-        }
-
-        public function regain() : void
-        {
-            $this->modifyArticle(1, 'открыл');
-        }
-
-        public function archive() : void
-        {
-            $this->modifyArticle(2, 'заархивировал');
+            $this->content = $this->page->assign('articles', $this->articles)->assign('errors', $this->errors)->render('admin/articles');
         }
 
         protected function modifyArticle(int $status, string $action) : void
@@ -73,7 +55,7 @@
 
         public function delete() : void
         {
-            $this->representation = new ArticleRepresentation();
+            $this->representation = new Representation();
             $this->representation->deleteArticle($this->getId());
         }
 

@@ -15,7 +15,7 @@
 <body>
 <div class="root">
     <header id='header'>
-    <?= ($user->hasUserRights()) ? $user->getLogin() : '' ?>
+    <?= ($user->exist()) ? $user->getLogin() : '' ?>
     </header>
 
     <main>

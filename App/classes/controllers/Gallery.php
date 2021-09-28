@@ -6,6 +6,7 @@
     use App\classes\utility\Config;
     use App\classes\exceptions\FileException;
     use App\classes\utility\containers\ErrorsContainer;
+    use App\classes\utility\FaceControl;
     use App\classes\utility\Uploader;
     use Exception;
 
@@ -23,9 +24,12 @@
             $this->errors = new ErrorsContainer();
 
             // TODO подумать, не перемудрил ли я здесь с условием
-            if ( ( $_SERVER['REQUEST_METHOD'] === 'POST' ) && (isset($_FILES['newimage'])) && $this->user->hasUserRights()) {
-                $newImage = new Uploader($_FILES['newimage'], $this->user);
-                $this->errors = $newImage->upload();
+            $userRights = FaceControl::checkUserRights($this->user, 'author');
+            if ( 'POST' === $_SERVER['REQUEST_METHOD']) {
+                if (isset($_FILES['newimage']) && $userRights) {
+                    $newImage = new Uploader($_FILES['newimage'], $this->user);
+                    $this->errors = $newImage->upload();
+                }
             }
 
             $this->title = 'Галерея';

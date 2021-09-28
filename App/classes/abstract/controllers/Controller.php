@@ -4,12 +4,9 @@
     namespace App\classes\abstract\controllers;
 
 
-    use App\classes\models\Navigation;
     use App\classes\models\User;
-    use App\classes\utility\ComplicatedFetchQuery;
     use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\containers\NavigationBar;
-    use App\classes\utility\Db;
     use App\classes\utility\MenuAssembler;
     use App\classes\utility\View;
 

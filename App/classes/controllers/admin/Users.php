@@ -8,11 +8,29 @@
     use App\classes\utility\Config;
     use App\classes\utility\loggers\LoggerSelector;
 
+    /**
+     * this class can change rights of users in administration panel.
+     * there is several rights types and each next one includes the rights of the previous one:
+     * <ul>
+     * <li><b>ban</b> - user is banished and has no rights like an unregistered person.</li>
+     * <li><b>user</b> - person has base rights after registration like comments of articles etc.</li>
+     * <li><b>author</b> - person has user rights and also can create articles</li>
+     * <li><b>moder</b> - has author rights and also can approve, edit or delete articles of other authors</li>
+     * <li><b>admin</b> - has moder rights and also can manage rights all other users (except main admin)</li>
+     * </ul>
+     */
     class Users extends Controller
     {
         protected UserModel $model;
         protected array $users;
-//        сделать модератором
+        protected static array $actions =
+        [
+            'ban' => ['right' => 1, 'message' => 'забанил'],
+            'regain' => ['right' => 2, 'message' => 'дал права пользователя'] ,
+            'author' => ['right' => 3, 'message' => 'дал права автора'] ,
+            'moder' => ['right' => 5, 'message' => 'дал права модератора'] ,
+            'admin' => ['right' => 9, 'message' => 'дал права администратора'] ,
+        ];
 
         public function __invoke()
         {
@@ -21,6 +39,8 @@
 
             if (method_exists($this, $action)) {
                 $this->$action();
+            } elseif (isset(self::$actions[$action])) {
+                $this->modifyUser(self::$actions[$action]['right'], self::$actions[$action]['message']);
             } else {
                 Error::deadend(400);
             }
@@ -33,16 +53,12 @@
             $this->content = $this->page->assign('users', $this->users)->assign('errors', $this->errors)->render('admin/users_list');
         }
 
-        public function regain() : void
-        {
-            $this->modifyUser(2, 'восстановил');
-        }
-
-        public function ban() : void
-        {
-            $this->modifyUser(1, 'забанил');
-        }
-
+        /**
+         * Method changes the rights of any specified user (exception of the main administrator - overseer)
+         * @param int $status
+         * @param string $action
+         * @throws \App\classes\abstract\exceptions\CustomException
+         */
         protected function modifyUser(int $status, string $action) : void
         {
             $this->model = UserModel::findOneBy('id', $this->id);

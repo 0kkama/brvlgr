@@ -6,9 +6,8 @@
     use App\classes\controllers\Error;
     use App\classes\models\Categories as CatModel;
     use App\classes\utility\containers\CategoriesList;
-    use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\containers\FormsWithData;
-    use App\classes\utility\inspectors\CategoriesInspector;
+    use App\classes\utility\inspectors\CategoriesFormsInspector;
     use App\classes\utility\loggers\LoggerSelector;
     use App\interfaces\InspectorInterface;
 
@@ -37,13 +36,13 @@
             $this->title = 'Список категорий';
             ($this->categories = new CategoriesList())->addArray(CatModel::getAll());
             $this->add();
-            $this->content = $this->page->assign('categories', $this->categories)->assign('errors', $this->errors)->assign('cat', $this->category)->render('admin/categories_list');
+            $this->content = $this->page->assign('categories', $this->categories)->assign('errors', $this->errors)->assign('cat', $this->category)->render('admin/categories');
         }
 
         public function add() : void
         {
             $this->category = new CatModel();
-            ($this->inspector = new CategoriesInspector())->setModel($this->category);
+            ($this->inspector = new CategoriesFormsInspector())->setModel($this->category);
             $this->sendData('добавил');
         }
 
@@ -52,7 +51,7 @@
             $this->title = 'Изменить категорию';
             $this->category = CatModel::findOneBy('id', $this->id);
 //            ($this->inspector = new CategoriesInspector())->setModel($this->category)->setObjectId($this->id);
-            ($this->inspector = new CategoriesInspector())->setModel($this->category);
+            ($this->inspector = new CategoriesFormsInspector())->setModel($this->category);
             if ($this->category->exist()) {
                 $this->sendData('изменил');
             }

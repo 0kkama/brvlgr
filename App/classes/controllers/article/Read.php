@@ -3,14 +3,14 @@
     namespace App\classes\controllers\article;
 
     use App\classes\abstract\controllers\Controller;
-    use App\classes\abstract\models\ViewArticle;
     use App\classes\models\view\ViewNotArchivedArticles;
-    use App\classes\utility\ArticleRepresentationzzz as Representation;
+    use App\classes\utility\ArticleRepresentation as Representation;
     use App\classes\utility\View;
+    use App\interfaces\ViewArticleInterface;
 
     class Read extends Controller
     {
-        protected ViewArticle $viewArt;
+        protected ViewArticleInterface $viewArt;
         protected Representation $representation;
 
         public function __construct(array $params, View $templateEngine)
@@ -23,5 +23,4 @@
             $this->title = $this->viewArt->getTitle();
             $this->content = $this->page->assign('article', $this->viewArt)->render('articles/article');
         }
-
     }

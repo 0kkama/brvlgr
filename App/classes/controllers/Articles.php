@@ -5,7 +5,7 @@
 
 
     use App\classes\abstract\controllers\Controller;
-    use App\classes\models\ViewPublishedArticles;
+    use App\classes\models\view\ViewPublishedArticles;
     use App\classes\utility\View;
 // todo Think about merge this controller and controller Index
     class Articles extends Controller

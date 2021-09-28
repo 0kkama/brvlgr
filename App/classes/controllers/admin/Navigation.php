@@ -8,7 +8,7 @@
     use App\classes\utility\containers\FormsWithData;
     use App\classes\utility\containers\ErrorsContainer;
     use App\classes\utility\containers\NavigationBar;
-    use App\classes\utility\inspectors\NavigationInspector;
+    use App\classes\utility\inspectors\NavigationFormsInspector;
     use App\classes\utility\loggers\LoggerSelector;
     use App\interfaces\InspectorInterface;
 
@@ -23,6 +23,7 @@
                 'noname' => 'назначил статус noname',
                 'main' => 'назначил статус main',
                 'user' => 'назначил статус user',
+                'author' => 'назначил статус author',
                 'admin' => 'назначил статус admin',
                 'forbid' => 'назначил статус forbid',
             ];
@@ -54,7 +55,7 @@
         protected function add(): void
         {
             $this->navi = new NaviModel();
-            ($this->inspector = new NavigationInspector())->setModel($this->navi);
+            ($this->inspector = new NavigationFormsInspector())->setModel($this->navi);
             $this->sendData('добавил');
         }
 
@@ -62,7 +63,7 @@
         {
             $this->title = 'Изменить пункт меню';
             $this->navi = NaviModel::findOneBy('id', $this->id);
-            ($this->inspector = new NavigationInspector())->setModel($this->navi);
+            ($this->inspector = new NavigationFormsInspector())->setModel($this->navi);
             if ($this->navi->exist()) {
                 $this->sendData('изменил');
             }

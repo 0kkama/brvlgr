@@ -20,6 +20,9 @@
         <th>Date</th>
         <th>Ban</th>
         <th>Regain</th>
+        <th>Author</th>
+        <th>Moder</th>
+        <th>Admin</th>
     </tr>
     <?php foreach ($users as $user): ?>
         <tr>
@@ -33,6 +36,9 @@
             <td><?=$user->getDate()?></td>
             <td><a href="/overseer/users/ban/<?=$user->getId()?>">B</a></td>
             <td><a href="/overseer/users/regain/<?=$user->getId()?>">R</a></td>
+            <td><a href="/overseer/users/author/<?=$user->getId()?>">A</a></td>
+            <td><a href="/overseer/users/moder/<?=$user->getId()?>">M</a></td>
+            <td><a href="/overseer/users/admin/<?=$user->getId()?>">A</a></td>
         </tr>
     <?php endforeach;?>
 </table>
