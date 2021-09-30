@@ -42,6 +42,11 @@
             return $this->configurations['RIGHTS'];
         }
 
+        public function getTestData(string $role, string $property) : string
+        {
+            return $this->configurations['TEST'][$role][$property] ?? '';
+        }
+
         public function __isset($param)
         {
 
@@ -49,7 +54,7 @@
 
         public function __set($set, $get)
         {
-//            запрет на магическую установу параметров
+//            close magic set
         }
 
         public function __get($param) : string
