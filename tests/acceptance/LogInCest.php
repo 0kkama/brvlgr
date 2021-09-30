@@ -33,13 +33,30 @@
 
         }
 
-        public function logInSuccess(AcceptanceTester $I)
+        public function logInSuccess(AcceptanceTester $I, $login = 'Testov', $pass = '12345678')
         {
             $I->amOnPage($this->url);
             $I->fillField('Логин', $this->validLogin);
             $I->fillField('Пароль', $this->validPass);
             $I->click($this->buttonName);
             $I->see($this->validLogin);
+        }
+
+        public function logInSuccessUser(AcceptanceTester $I)
+        {
+            $login = 'Sery';
+            $pass = '12345678';
+            $this->logInSuccess($I, $login, $pass);
+//            $I->amOnPage($this->url);
+//            $I->fillField('Логин', $this->validLogin);
+//            $I->fillField('Пароль', $this->validPass);
+//            $I->click($this->buttonName);
+//            $I->see($this->validLogin);
+        }
+
+        protected function logInSeccessAuthor(AcceptanceTester $tester)
+        {
+            $this->logInSuccess($tester, $this->validLogin, $this->validPass);
         }
 
         public function logInEmptyFieldsErrors(AcceptanceTester $I)

@@ -50,7 +50,7 @@ class RegistrationFailCest
     ];
 
     private string $buttonName = 'enter';
-    private string $url = '/user/registration';
+    private string $page = '/user/registration', $logUrl = '/user/login';
     private string $validLogin = 'Testov', $validPass = '12345678';
 
     public function _before(AcceptanceTester $I)
@@ -62,11 +62,22 @@ class RegistrationFailCest
     public function allFieldsEmpty(AcceptanceTester $tester)
     {
         $params = [];
-        $tester->amOnPage($this->url);
+        $tester->amOnPage($this->page);
         $tester->submitForm('#registration-forms', $params);
         foreach ($this->emptyErr as $error) {
             $tester->see($error);
         }
+    }
+
+    public function tyrToRegistrAfterLogIn(AcceptanceTester $tester)
+    {
+        $tester->amOnPage($this->logUrl);
+        $tester->fillField('Логин', $this->validLogin);
+        $tester->fillField('Пароль', $this->validPass);
+        $tester->click($this->buttonName);
+        $tester->see($this->validLogin);
+        $tester->amOnPage($this->page);
+        $tester->seeInTitle('Главная');
     }
 
     public function emptySecondPass(AcceptanceTester $Me)
@@ -78,7 +89,7 @@ class RegistrationFailCest
                    $this->validData['email'],
                    $this->validData['password1'],
             ];
-        $Me->amOnPage($this->url);
+        $Me->amOnPage($this->page);
         $Me->submitForm('#registration-forms', $params);
         $Me->see($this->emptyErr['password2']);
     }
@@ -92,7 +103,7 @@ class RegistrationFailCest
                    $this->validData['email'],
             ];
 
-        $Me->amOnPage($this->url);
+        $Me->amOnPage($this->page);
         $Me->submitForm('#registration-forms', $params);
         $Me->see($this->emptyErr['password1']);
         $Me->see($this->emptyErr['password2']);

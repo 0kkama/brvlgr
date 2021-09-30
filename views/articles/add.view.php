@@ -16,7 +16,7 @@
         </div>
     <?php endif; ?>
 
-        <form method="post">
+        <form method="post" id="article-forms">
             <div class="form-group">
                 <label> Заголовок статьи:
                     <input type="text" name="title" class="form-control" value="<?= $forms->get('title') ?: '' ?>" size="40" placeholder="Title">
@@ -34,7 +34,7 @@
                 </select>
                 </label>
             </div>
-            <button type="submit" class="btn btn-primary">Отправить</button>
+            <button type="submit" class="btn btn-primary" id="send">Отправить</button>
         </form>
         <hr>
         <a href="<?=Config::getInstance()->BASE_URL?>">Вернуться на главную</a>

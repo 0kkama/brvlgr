@@ -46,7 +46,7 @@
         </label>
     </div>
     <hr>
-    <button class="btn btn-primary">Зарегистрироваться</button>
+    <button class="btn btn-primary" name="enter">Зарегистрироваться</button>
 </form>
 </div>
 
