@@ -4,7 +4,7 @@
     /** @var $errors \App\classes\utility\containers\ErrorsContainer */
  ?>
 <div class="registration-forms">
-<form method="post">
+<form method="post" id="registration-forms">
     <?php if($errors->notEmpty()): ?>
         <hr>
         <div class="alert alert-danger">
