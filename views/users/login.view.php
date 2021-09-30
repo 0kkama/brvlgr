@@ -16,7 +16,7 @@
     </div>
 
     <hr>
-    <button class="btn btn-primary">Войти</button>
+    <button class="btn btn-primary" name="enter">Войти</button>
     <?php if($errors->notEmpty()) : ?>
         <hr>
         <div class="alert alert-danger">

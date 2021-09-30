@@ -1,28 +1,31 @@
 {
-  "name": "0kkama/profit",
-  "description": "training project. When a hope becomes a loss",
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "license": "proprietary",
-  "authors": [
-    {
-      "name": "0kkama",
-      "email": "mydeadtime@gmail.com"
+    "name": "0kkama/profit",
+    "description": "training project. When a hope becomes a loss",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "0kkama",
+            "email": "mydeadtime@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "monolog/monolog": "^2.2.0",
+        "intervention/image": "^2.5",
+        "twig/twig": "v3.3.2",
+        "nikic/fast-route": "v1.3.0",
+        "phpunit/phpunit": "9.5.x-dev",
+        "swiftmailer/swiftmailer": "6.2.x-dev",
+        "phpunit/php-timer": "^5.0",
+        "ext-imagick": "*",
+        "ext-pdo": "*",
+        "codeception/codeception": "4.1.22",
+        "codeception/module-phpbrowser": "^1.0.0",
+        "codeception/module-asserts": "^1.0.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
     }
-  ],
-  "require": {
-    "php": ">=8.0",
-    "monolog/monolog": "^2.2.0",
-    "intervention/image": "^2.5",
-    "twig/twig": "v3.3.2",
-    "nikic/fast-route": "v1.3.0",
-    "phpunit/phpunit": "9.5.x-dev",
-    "swiftmailer/swiftmailer": "6.2.x-dev",
-    "phpunit/php-timer": "^5.0",
-    "ext-imagick": "*",
-    "ext-pdo": "*"
-  },
-  "require-dev": {
-    "roave/security-advisories": "dev-latest"
-  }
 }
