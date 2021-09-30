@@ -11,16 +11,15 @@
     use PDOException;
     use PDOStatement;
 
-    // TODO error
-        // 2 - Packets out of order. Expected 1 received 0. Packet size=145 in App/classes/Db.php line:45
     /**
-
+     * The singleton class is interface for working with the database through the PDO extension
      */
-    class Db implements SingletonInterface
+    final class Db implements SingletonInterface
     {
         private PDO $dbh;
+        private static ?Db $instance = null;
 
-        use SingletonTrait; // todo ty-dy-dy
+        use SingletonTrait;
 
         private function __construct()
         {
@@ -29,10 +28,12 @@
 
         public function setInstance($params): void
         {
-            $this->newConnection($params);
+            $this->dbh = $this->newConnection($params);
         }
 
         /**
+         * Create new connection to data base
+         * @param $params
          * @return PDO
          * @throws ExceptionWrapper
          */
@@ -58,6 +59,7 @@
         }
 
         /**
+         * Checks for errors during the execution of the request
          * @param PDOStatement $query
          * @return bool
          * @throws DbException|CustomException
@@ -72,8 +74,8 @@
         }
 
         /**
-         * Метод execute(string $sql) выполняет запрос и возвращает true либо false в зависимости от того,
-         * удалось ли выполнение
+         * Method execute inserts $data into query and return true or false
+         * depending on the execution succeeded or not
          * @param string $sql
          * @param array $data
          * @return bool
@@ -88,8 +90,8 @@
         }
 
         /**
-         * Метод query(string $sql, array $data) выполняет запрос, подставляет в него данные $data,
-         * возвращает данные результата запроса либо false, если выполнение не удалось
+         * The method executes the query, inserts $data into it,
+         * returns the array of the query result, or null if execution failed
          * @param string $sql
          * @param array $data
          * @param $class
@@ -106,10 +108,11 @@
             } catch (\Exception $e) {
                 (new ExceptionWrapper('Ошибка при осуществлении запроса к базе данных', 500, $e))->throwIt();
             }
-                return ($fetchMode === 8) ? $query->fetchAll($fetchMode, $class) : $query->fetchAll($fetchMode);
+                return ($fetchMode === PDO::FETCH_CLASS) ? $query->fetchAll($fetchMode, $class) : $query->fetchAll($fetchMode);
         }
 
         /**
+         * The method executes the request and returns one object of the specified class or null if failed
          * @param string $sql
          * @param array $data
          * @param $class
@@ -127,6 +130,7 @@
         }
 
         /**
+         * Return last insert id
          * @return string
          */
         public function getLastId() : string
