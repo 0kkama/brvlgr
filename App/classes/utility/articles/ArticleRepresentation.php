@@ -78,6 +78,13 @@
             }
         }
 
+        public function checkCreateRights(User $user): void
+        {
+            if(!$user->exist() || !FaceControl::checkUserRights($user, 'author')){
+                Error::deadend(403, 'Для добавления новой статьи необходимы права автора');
+            }
+        }
+
         protected function checkArtID (string $id) : self
         {
             if (!is_numeric($id) || empty($id)) {

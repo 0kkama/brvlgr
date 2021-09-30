@@ -19,8 +19,10 @@
         public function __construct(array $params, View $templateEngine)
         {
             parent::__construct($params, $templateEngine);
+
             $this->forms = new FormsForArticleData();
             $this->representation = new Representation();
+            $this->representation->checkCreateRights($this->user);
             ($this->categories = new CategoriesList())->addArray(Categories::getAllBy('status','1'));
             $this->representation->createArticle($this->forms, self::$fields, $this->errors);
 
