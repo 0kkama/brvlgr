@@ -2,30 +2,32 @@
 //    todo DENISKA
     /** @var \App\classes\models\User $user */
 ?>
-<table>
+
+<div style="display: flex">
+<table class="user-table">
     <tr>
         <th>Логин</th>
-        <th><?=$user->getLogin() ?></th>
+        <td><?=$user->getLogin() ?></td>
     </tr>
     <tr>
         <th>Имя</th>
-        <th><?=$user->getFirstName() ?></th>
+        <td><?=$user->getFirstName() ?></td>
     </tr>
     <tr>
         <th>Фамилия</th>
-        <th><?=$user->getMiddleName() ?></th>
+        <td><?=$user->getMiddleName() ?></td>
     </tr>
     <tr>
         <th>Отчество</th>
-        <th><?=$user->getLastName() ?></th>
+        <td><?=$user->getLastName() ?></td>
     </tr>
     <tr>
         <th>Email</th>
-        <th><?=$user->getEmail() ?></th>
+        <td><?=$user->getEmail() ?></td>
     </tr>
     <tr>
         <th>Дата</th>
-        <th><?=$user->getDate() ?></th>
+        <td><?=$user->getDate() ?></td>
     </tr>
 </table>
 
@@ -36,3 +38,4 @@
     <li><a href="/user/change?property=fullname">Изменить ФИО</a></li>
     <li><a href="/user/articles?q=all">Мои статьи</a></li>
 </ul>
+</div>

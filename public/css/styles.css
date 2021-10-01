@@ -7,8 +7,9 @@ body {
   /*color: #77A8D9;*/
   /*color: #488A9E;*/
   color: #006d8d;
-  font-size: 16px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-family: 'Playfair Display', serif;
+  /*font-family: Arial, Helvetica, sans-serif;*/
   border-top: 2px solid #2A4F6F;
   /*margin-bottom: 15px;*/
 }
@@ -74,10 +75,12 @@ main {
 }
 
 #nav {
-  width: 180px;
-  padding-right: 1.5rem;
+  width: 215px;
+  padding-right: 20px;
   align-self: flex-start;
   flex-shrink: 0;
+  position: sticky;
+  top: 15px;
 }
 
 #nav ul {
@@ -89,6 +92,8 @@ main {
 #nav li {
   padding: 0.3rem 0.5rem;
   cursor: pointer;
+  /*display:inline;*/
+  /*margin-right:15px*/
 }
 
 #nav a:link {
@@ -115,9 +120,10 @@ main {
 #content {
   flex-grow: 1;
   font: 110% Georgia, "Times New Roman", Times, serif;
+
   /*margin-left: 16em;
   margin-right: 10em;*/
-  text-align: justify;
+  /*text-align: justify;*/
 }
 
 
@@ -215,6 +221,26 @@ form {
   color: #778899;
 }
 
-#registration-forms {
-  width: 200%;
+/*#registration-forms {*/
+/*  width: 200%;*/
+/*}*/
+
+.article-form-container {
+  width: 500px;
+}
+
+.article-form-container > form {
+  width: 100%;
+}
+
+.article-form-container label {
+  width: 100%;
+}
+
+table.user-table td {
+  padding: 0 10px;
+}
+
+.table-bordered td, .table-bordered th {
+  border-color: #006d8d;
 }

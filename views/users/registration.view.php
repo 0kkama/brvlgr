@@ -25,7 +25,8 @@
     </div>
     <div class="form-group">
         <label for="auth-login">Логин</label>
-        <input type="text" class="form-control" id="auth-login" name="login" value="<?=$forms->get('login') ?? ''?>" placeholder="От 3 до 20 и может содержать цифры, буквы и символы _%+-!&()">
+        <input type="text" class="form-control" id="auth-login" name="login" value="<?=$forms->get('login') ?? ''?>">
+        <small id="emailHelp" class="form-text text-muted">От 3 до 20 и может содержать цифры, буквы и символы _%+-!&()</small>
     </div>
     <div class="form-group">
         <label for="auth-password">Пароль</label>

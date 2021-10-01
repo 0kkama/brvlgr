@@ -9,7 +9,7 @@
         <p> <?= $errors ?></p>
     </div>
 <?php endif; ?>
- <table>
+ <table class="table table-bordered" style="font-size: 12px">
     <tr>
         <th>ID</th>
         <th>Title</th>
@@ -42,21 +42,24 @@
     <?php endforeach;?>
  </table>
 
-<form method="post">
-    <div class="form-group">
-        <label> Добавить название:
-            <input type="text" name="title" class="form-control" value="<?= $navigation->getTitle() ?: ''?>" size="40" placeholder="Название">
-        </label>
-    </div>
-    <div class="form-group">
-        <label> Добавить URL:
-            <input type="text" name="url" class="form-control" value="<?= $navigation->getUrl() ?: ''?>" size="40" placeholder="/some/navigation">
-        </label>
-    </div>
-    <div class="form-group">
-        <label> Установить порядковый номер:
-            <input type="text" name="order" class="form-control" value="<?= $navigation->getOrder() ?: ''?>" size="40" placeholder="123">
-        </label>
+<form method="post" style="padding: 0">
+    <div class="form-row">
+        <div class="col-6">
+            <label style="width: 100%"> Добавить название:
+                <input type="text" name="title" class="form-control" value="<?= $navigation->getTitle() ?: ''?>" size="40" placeholder="Название">
+            </label>
+        </div>
+        <div class="col-6">
+            <label style="width: 100%"> Добавить URL:
+                <input type="text" name="url" class="form-control" value="<?= $navigation->getUrl() ?: ''?>" size="40" placeholder="/some/navigation">
+            </label>
+        </div>
+        <div class="col-6">
+            <label style="width: 100%"> Установить порядковый номер:
+                <input type="text" name="order" class="form-control" value="<?= $navigation->getOrder() ?: ''?>" size="40" placeholder="123">
+            </label>
+        </div>
     </div>
     <button type="submit" class="btn btn-primary">Создать</button>
 </form>
+

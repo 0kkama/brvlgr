@@ -2,13 +2,14 @@
     /** @var \App\classes\models\view\ViewAllArticles $article */
     /** @var array $articles */
 ?>
-<div>
+
+<div style="margin-bottom: 10px">
     <a href="/user/articles?q=all">Все</a>
     <a href="/user/articles?q=publ">Опубликованные</a>
     <a href="/user/articles?q=unpubl">Не опубликованные</a>
 </div>
 <div>
-    <table>
+    <table class="table table-bordered" style="font-size: 12px">
         <tr>
             <th>ID</th>
             <th>Title</th>

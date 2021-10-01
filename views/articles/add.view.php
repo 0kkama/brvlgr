@@ -16,6 +16,7 @@
         </div>
     <?php endif; ?>
 
+    <div class="article-form-container">
         <form method="post" id="article-forms">
             <div class="form-group">
                 <label> Заголовок статьи:
@@ -36,6 +37,7 @@
             </div>
             <button type="submit" class="btn btn-primary" id="send">Отправить</button>
         </form>
+    </div>
         <hr>
         <a href="<?=Config::getInstance()->BASE_URL?>">Вернуться на главную</a>
 </div>

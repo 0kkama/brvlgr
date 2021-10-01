@@ -8,7 +8,7 @@
         <p> <?= $errors ?></p>
     </div>
 <?php endif; ?>
- <table>
+ <table class="table table-bordered" style="font-size: 12px">
     <tr>
         <th>ID</th>
         <th>Title</th>

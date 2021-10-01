@@ -65,5 +65,3 @@
 
     //    вывод данных о ресурсах
     echo (new ResourceUsageFormatter)->resourceUsageSinceStartOfRequest();
-
-
