@@ -13,7 +13,6 @@
     {
         protected array $articles;
         protected ArtModel $art;
-        protected Representation $representation;
         protected static array $actions =
             [
                 'hide' => ['status' => 0, 'message' => 'отправил в модерацию'],
@@ -56,9 +55,8 @@
         public function delete() : void
         {
             $view = ViewAllArticles::findOneBy('id', $this->id);
-            $this->representation = new Representation();
-            $this->representation->checkEditRights($this->user, $view);
-            $this->representation->deleteArticle($this->getId());
+            Representation::checkEditRights($this->user, $view);
+            Representation::deleteArticle($this->getId());
         }
 
         protected function writeAndGo(string $action) : void

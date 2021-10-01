@@ -14,7 +14,6 @@
 
     class Update extends Controller
     {
-        protected Representation $representation;
         protected FormsForArticleData $forms;
         protected InspectorInterface $inspector;
         protected CategoriesList $categories;
@@ -26,10 +25,10 @@
             parent::__construct($params, $templateEngine);
             $this->id = $this->params['id'];
             ($this->categories = new CategoriesList())->addArray(Categories::getAllBy('status','1'));
-            $this->viewArticle = ($this->representation = new Representation())->readArticle($this->id, new ViewModerArticles());
-            $this->representation->checkEditRights($this->user, $this->viewArticle);
+            $this->viewArticle = Representation::readArticle($this->id, new ViewModerArticles());
+            Representation::checkEditRights($this->user, $this->viewArticle);
             ($this->forms = new FormsForArticleData())->extractDataFrom($this->viewArticle, self::$fields);
-            $this->representation->updateArticle($this->getId(), $this->forms, self::$fields, $this->errors);
+            Representation::updateArticle($this->getId(), $this->forms, self::$fields, $this->errors);
 
             $this->title = 'Редактировать статью';
             $this->content = $this->page->assign('forms', $this->forms)->assign('categories', $this->categories)->assign('errors', $this->errors)->render('articles/add');

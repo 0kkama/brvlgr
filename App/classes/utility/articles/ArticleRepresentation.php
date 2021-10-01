@@ -18,6 +18,9 @@
     use App\classes\utility\loggers\LoggerSelector;
     use App\interfaces\ViewArticleInterface;
 
+    /**
+     * The Facade
+     */
     class ArticleRepresentation
     {
         protected ArticleModel $article;
@@ -32,41 +35,41 @@
         /**
          * @throws DbException
          */
-        public function createArticle(FormsForArticleData $forms, array $fields, ErrorsContainer $errors) : void
+        public static function createArticle(FormsForArticleData $forms, array $fields, ErrorsContainer $errors) : void
         {
             $creator = new ArticleCreator($forms, $errors);
             $creator->execute($fields);
         }
 
-         public function readArticle(string $id, ViewArticleInterface $view) : ViewArticleInterface
+         public static function readArticle(string $id, ViewArticleInterface $view) : ViewArticleInterface
         {
-            $this->checkArtID($id);
+            self::checkArtID($id);
             $reader = new ArticleReader($id , $view);
             return $reader->execute();
         }
 
-        public function updateArticle(string $id, FormsForArticleData $forms, array $fields, ErrorsContainer $errors) : void
+        public static function updateArticle(string $id, FormsForArticleData $forms, array $fields, ErrorsContainer $errors) : void
         {
-            $this->checkArtID($id);
+            self::checkArtID($id);
             $updater = new ArticleUpdater($forms, $errors);
             $updater->execute($id, $fields);
         }
 
-        public function deleteArticle(string $id) : void
+        public static function deleteArticle(string $id) : void
         {
-            $this->checkArtID($id);
+            self::checkArtID($id);
             $remover = new ArticleRemover($id);
             $remover->delete();
         }
 
-        public function archiveArticle(string $id): void
+        public static function archiveArticle(string $id): void
         {
-            $this->checkArtID($id);
+            self::checkArtID($id);
             $remover = new ArticleRemover($id);
             $remover->archive();
         }
 
-        public function checkEditRights(User $user, ViewArticleInterface $view) : void
+        public static function checkEditRights(User $user, ViewArticleInterface $view) : void
         {
             if (!$view->exist()) {
                 Error::deadend(404);
@@ -78,25 +81,21 @@
             }
         }
 
-        public function checkCreateRights(User $user): void
+        public static function checkCreateRights(User $user): void
         {
             if(!$user->exist() || !FaceControl::checkUserRights($user, 'author')){
                 Error::deadend(403, 'Для добавления новой статьи необходимы права автора');
             }
         }
 
-        protected function checkArtID (string $id) : self
+        /**
+         * @param string $id
+         * @return void
+         */
+        protected static function checkArtID (string $id) : void
         {
             if (!is_numeric($id) || empty($id)) {
                 Error::deadend(400);
             }
-            return $this;
-        }
-
-        protected function writeAndGo(string $action, string $destination) : void
-        {
-            $message = 'Пользователь ' . $this->author->getLogin() . " $action статью " .$this->article->getId() .' ' . $this->article->getTitle();
-            LoggerSelector::publication($message);
-            header("Location: $destination");
         }
     }

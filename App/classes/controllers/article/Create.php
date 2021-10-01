@@ -11,7 +11,6 @@
 
     class Create extends Controller
     {
-        protected Representation $representation;
         protected FormsForArticleData $forms;
         protected CategoriesList $categories;
         protected static array $fields = ['title', 'text', 'category'];
@@ -21,10 +20,9 @@
             parent::__construct($params, $templateEngine);
 
             $this->forms = new FormsForArticleData();
-            $this->representation = new Representation();
-            $this->representation->checkCreateRights($this->user);
+            Representation::checkCreateRights($this->user);
             ($this->categories = new CategoriesList())->addArray(Categories::getAllBy('status','1'));
-            $this->representation->createArticle($this->forms, self::$fields, $this->errors);
+            Representation::createArticle($this->forms, self::$fields, $this->errors);
 
             $this->title = 'Добавить публикацию';
             $this->content = $this->page->assign('forms', $this->forms)->assign('categories', $this->categories)->assign('errors', $this->errors)->render('articles/add');
