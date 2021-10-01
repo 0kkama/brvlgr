@@ -15,8 +15,8 @@
     use PDO;
 
     /**
-     * Class AbstractModel has following main methods : <ul>
-     * - <b>findById</b> - return null|object</li>
+     * Class AbstractModel it's super class for other models. It implement ActiveRecord pattern . It has following main methods : <ul>
+     * - <b>findOneBY</b> - return object from table by given field</li>
      * - <b>getAll</b> - return array contain objects of respective class</li>
      * - <b>insert</b> - insert a new record in the table
      * - <b>update</b> - update already existed record in the table
@@ -55,19 +55,8 @@
             return $result ?? new static;
         }
 
-        public static function findOneByExcept(string $type, string $subject, string $exType, )
-        {
-            try {
-                $db = Db::getInstance();
-                $sql = 'SELECT * FROM ' . static::TABLE_NAME . " WHERE `{$type}` = :{$type} AND `id` != :id";
-                $result = $db->queryOne($sql, [$type => $subject], static::class);
-            } catch (Exception $e) {
-                (new DbException($e->getMessage(), 500))->setAlert('Ошибка при запросе к базе данных')->setParam("Ошибка при запросе: `$sql`")->throwIt();
-            }
-            return $result ?? new static;
-        }
-
         /**
+         * Return array with objects from table
          * @return array
          * @throws ExceptionWrapper
          */
@@ -78,6 +67,15 @@
             return $db->queryAll($sql, [], static::class);
         }
 
+
+        /**
+         * Return array with objects from table by given property (id, date or else)
+         * @param string|null $type - name of column in table
+         * @param string|null $subject - needle for search
+         * @param string|null $sort - type of sorting ASC or DESC
+         * @return array
+         * @throws ExceptionWrapper
+         */
         public static function getAllBy(string $type = null, string $subject = null, string $sort = null) : array
         {
             $paramsArr = (isset($type, $subject)) ? [$type => $subject]  : [];
@@ -88,6 +86,13 @@
             return $db->queryAll($sql, $paramsArr, static::class);
         }
 
+        /** Return array with objects from table by sql IN construction specifying a range of conditions.
+         * @param string $type - name of column in table
+         * @param array $params - array of values for search
+         * @param string|null $sort - type of sorting ASC or DESC
+         * @return array
+         * @throws ExceptionWrapper
+         */
         public static function getAllInBy(string $type, array $params, string $sort = null) : array
         {
             $paramsArr = [$type => $params];
@@ -100,27 +105,30 @@
         }
 
         /**
-         * @throws DbException|CustomException
+         * Count number of all records from the specified table ant return it
          * @throws ExceptionWrapper
          */
-        public static function getTotalQuantity()
+        public static function getTotalQuantity() : int
         {
             $db = Db::getInstance();
             $sql = 'SELECT COUNT(*) AS ' . static::TABLE_NAME . ' FROM ' . static::TABLE_NAME;
-            return $db->queryAll($sql, [], static::class, PDO::FETCH_ASSOC);
+            $result = $db->queryAll($sql, [], static::class, PDO::FETCH_ASSOC) ?: [];
+            return ($result === []) ? 0 : array_column($result, static::TABLE_NAME)[0];
         }
 
         /**
-         * метод добавлет новую запись в БД, после чего возвращает <b>$this</b> или <b>null</b>
-         * @return Model
+         * The method add new record into table and assign last insert id to $this->id
+         * @return bool
+         * @throws CustomException
+         * @throws DbException
          */
         private function insert() : bool
         {
-            // делаем строку подобную :title, :text, :author, :category
+            // make string look like :title, :text, :author, :category
             $values = implode($this->meta['separator'], $this->meta['cols']);
-            // делаем строку подобную title, text, author, category
+            // make string look like title, text, author, category
             $insertions = implode($this->meta['separator'], array_flip($this->meta['cols']));
-            // создаем шаблон запроса вида INSERT INTO news (title,text,author,category) VALUES (:title,:text,:author,:category)
+            // make pattern for PDO query such as 'INSERT INTO news (title,text,author,category) VALUES (:title,:text,:author,:category)'
             $sql = "INSERT INTO {$this->meta['table']} ($insertions) VALUES ($values)";
 
             $db = Db::getInstance();
@@ -131,8 +139,10 @@
         }
 
         /**
-         * Обновляет уже существующую запись, которая ранее была получена из базы данных по id
-         * @return Model
+         * Update already existed record, which was taken from DB by id.
+         * @return bool
+         * @throws CustomException
+         * @throws DbException
          */
         private function update() : bool
         {
@@ -150,13 +160,14 @@
             $db = Db::getInstance();
             $db->execute($sql, $this->meta['data']);
             unset($this->meta);
-//            return $this;
             return true;
         }
 
         /**
-         * Удаляет запись из БД
+         * Delete record from table by it $id
          * @return bool
+         * @throws CustomException
+         * @throws DbException
          */
         public function delete() : bool
         {
@@ -175,6 +186,8 @@
          * Defines whether a record is old or new. If the record is new,
          * then the <b>insert</b> method will be called, otherwise the <b>update</b> method.
          * @return boolean
+         * @throws CustomException
+         * @throws DbException
          */
         public function save() : bool
         {
@@ -186,37 +199,35 @@
         }
 
         /**
-         * Внутренний метод, формирующий данные для последующей подстановки в SQL запрос.
-         * Предварительно удаляет данные полей, не являющихся типом string и генерируемых БД автоматически.
-         * В конце работы проверяет заполненность всех полей
-         * Возвращает ассоциативный массив с данными: <ul>
-         * <li><b>table</b> - имя таблицы;</li>
-         * <li><b>cols</b> - массив вида 'index' => ':index' для подготовленных запросов;</li>
-         * <li><b>data</b> - массив данных для подстановки (':user' => 'Ahmed');</li>
+         * The inner method preparing data for sql query.
+         * use getFormsFields for deleteing fields which automatically generated in data base and has
+         * no strings default value.
+         * <li><b>table</b> - table name;</li>
+         * <li><b>cols</b> - array looks like: 'index' => ':index' for prepared queries;</li>
+         * <li><b>data</b> - array with data for substitution (':user' => 'Ahmed');</li>
          * <li><b>separator</b> - символ-разделитель, использующийся в запросе;</li></ul>
          * @return void
          */
         private function makeSql() : void
         {
-            // удаляем значения id, date итд не являющиеся строками и генерируемые БД автоматически или выполняющие служебные цели
+            // delete values like id, date etc. which not strings and generated automatically in DB
             $fields = $this->getFormFields();
             $this->meta['cols'] = $this->meta['data'] = [];
 
             foreach ($fields as $index => $value) {
-                $this->meta['cols']["`$index`"] = ":$index"; // массив вида 'index' => ':index'
-                $this->meta['data'][":$index"] = $value; // данные для внедрения вида ':user' => 'Ahmed'
+                $this->meta['cols']["`$index`"] = ":$index"; // array like: 'index' => ':index'
+                $this->meta['data'][":$index"] = $value; // data for injection: ':user' => 'Ahmed'
             }
 
-            $this->meta['separator'] = ', '; // разделитель, используемый в текущем запросе
-            $this->meta['table'] = static::TABLE_NAME; // имя таблицы в БД
+            $this->meta['separator'] = ', '; // separator for current query
+            $this->meta['table'] = static::TABLE_NAME; // name of current table
         }
 
-        //<editor-fold desc="getters =======================">
         /**
-         * Возвращает <b>string</b> с именем текущей таблицы
-         * @return string
+         * The method extract data from class FormsWithData and return instance of subclass
+         * @param FormsWithData $forms
+         * @return Model
          */
-
         public function setFields(FormsWithData $forms) : static
         {
             foreach ($forms as $index => $form) {
@@ -228,6 +239,7 @@
             return $this;
         }
 
+        //<editor-fold desc="getters =======================">
         public static function getTableName() : string
         {
             return static::TABLE_NAME;
@@ -243,20 +255,16 @@
             return $this->$key ?? '';
         }
 
+        /**
+         * Filters out all fields of the model that are not string
+         * @return array
+         */
         public function getFormFields() : array
         {
             return array_filter(get_object_vars($this), static function ($var) {
                 return is_string($var);
             });
         }
-
-        public function getFieldsName() : array
-        {
-            return array_keys(array_filter(get_object_vars($this), static function ($var) {
-                return is_string($var);
-            }));
-        }
-
         //</editor-fold>
 
         abstract public function exist() : bool;
