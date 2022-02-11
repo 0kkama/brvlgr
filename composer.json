@@ -14,7 +14,7 @@
         "php": ">=8.0",
         "monolog/monolog": "^2.2.0",
         "intervention/image": "^2.5",
-        "twig/twig": "v3.3.2",
+        "twig/twig": "v3.3.8",
         "nikic/fast-route": "v1.3.0",
         "phpunit/phpunit": "9.5.x-dev",
         "swiftmailer/swiftmailer": "6.2.x-dev",
